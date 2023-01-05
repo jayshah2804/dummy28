@@ -1,0 +1,208 @@
+.documents-upload-container {
+  width: 100%;
+  height: calc(100vh-85px);
+  transition-property: width;
+  transition-duration: 0.7s;
+}
+
+.documents-upload-container h3 {
+  padding: 20px 15px;
+}
+
+.documents-upload {
+  background-color: white;
+  border-radius: 10px;
+  margin: 0px 15px;
+  height: 90%;
+  padding: 15px;
+}
+
+.documents-upload .fill {
+  background-color: rgb(255, 237, 212);
+  color: rgb(245, 185, 74);
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.documents-upload .success {
+  background-color: rgb(165, 232, 165);
+  color: green;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.documents-upload main {
+  display: flex;
+  flex-direction: column;
+}
+
+.documents-upload main .border {
+  border-bottom: 1px solid rgb(190, 187, 187);
+}
+
+.documents-upload main .sub-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.documents-upload main .text {
+  font-size: 14.5px;
+  padding: 10px 5px;
+}
+
+.documents-upload .document-details-container header {
+  display: flex;
+  gap: 4%;
+  padding-top: 15px;
+}
+
+.document-details-container .approval-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.documents-upload .document-inputs {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.documents-upload input {
+  margin-top: 5px;
+  /* margin-bottom: 15px; */
+  border: none;
+  border-bottom: 1px solid gray;
+  /* margin-right: 3%; */
+  width: 100%;
+  height: 25px;
+}
+
+.documents-upload input:focus {
+  outline: none;
+}
+
+.documents-upload .file-upload-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.documents-upload .upload-document {
+  border: 1px dashed gray;
+  border-radius: 10px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  font-size: 10px;
+  padding: 10px;
+  color: gray;
+  cursor: pointer;
+}
+
+.upload-button {
+  background-color: rgba(42, 149, 69, 255);
+  border: 1px solid rgba(42, 149, 69, 255);
+  color: white;
+  padding: 7px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  align-self: flex-start;
+  /* justify-self: end; */
+}
+
+.upload-button:hover {
+  background-color: green;
+}
+
+.documents-upload .filename {
+  align-self: flex-start;
+  font-size: 13px;
+  margin-top: 2px;
+  color: rgb(31, 28, 28);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.documents-upload .filename:hover {
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+.documents-upload .pending {
+  color: white;
+  background-color: rgb(241, 88, 33);
+  border-radius: 10px;
+  padding: 3px 6px;
+  font-size: 10.5px;
+}
+
+.documents-upload .approved {
+  color: white;
+  background-color: green;
+  border-radius: 10px;
+  padding: 3px 6px;
+}
+
+.documents-upload .rejected {
+  color: white;
+  background-color: red;
+  border-radius: 10px;
+  padding: 3px 6px;
+}
+
+.documents-upload .fileUpload-icon {
+  font-size: 20px;
+}
+
+.documents-upload input[type="file"] {
+  display: none;
+}
+
+.documents-upload-container .loading-gif {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* z-index: 99; */
+}
+
+.documents-upload .for-input-error-container {
+  display: flex;
+  flex-direction: column;
+  width: 23%;
+}
+
+.documents-upload .for-input-error-container .error {
+  color: red;
+  font-size: 11.5px;
+}
+
+@media only screen and (max-width: 768px) {
+  .documents-upload .document-inputs {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .documents-upload .upload-document {
+    width: 100%;
+    height: 40px;
+    font-size: 7.5px;
+  }
+
+  .documents-upload main {
+    gap: 15px;
+  }
+
+  .documents-upload .filename {
+    font-size: 8px;
+  }
+}

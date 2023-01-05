@@ -1,0 +1,256 @@
+.add-route-fullcontainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(88, 88, 88, 0.5);
+  z-index: 97;
+  /* margin-top: -65px; */
+  top: 0;
+  left: 0;
+  margin-right: -20px;
+  padding-right: -20px;
+}
+
+.add-route-container {
+  position: absolute;
+  box-shadow: 0 0 20px rgba(33, 33, 33, .3);
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  /* width: fit-content; */
+  /* width: min-content; */
+  /* width: 770px; */
+  width: auto;
+  height: max-content;
+  z-index: 98;
+}
+
+.add-route-container header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px;
+  background-color: rgba(34, 137, 203, 255);
+  color: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.add-route-container .closeIcon {
+  cursor: pointer;
+}
+
+.add-route-container .routeInfo-container {
+  margin-top: 50px;
+}
+
+.routeInfo-container input {
+  border: none;
+  border-bottom: 1px solid gray;
+  background: transparent;
+  width: 170px;
+  height: 15px;
+  font-size: 17px;
+  padding: 8px;
+  /* margin-left: 6%; */
+  font-size: 15px;
+}
+
+.routeInfo-subContainer {
+  display: flex;
+  margin: 6%;
+  margin-top: 80px;
+  justify-content: space-between;
+  /* gap: 6px; */
+}
+
+.routeInfo-container input:focus {
+  outline: none;
+}
+
+.routeInfo-container .error {
+  /* position: absolute;
+  color: red;
+  font-size: 13px;
+  margin-left: 7%; */
+  display: flex;
+  flex-direction: column;
+  /* margin-left: 6%; */
+  font-size: 13px;
+  color: red;
+}
+
+.routeInfo-container .error-routeType {
+  position: relative;
+}
+
+.add-route-container select {
+  border: none;
+  border-bottom: 1px solid gray;
+  background: transparent;
+  width: 170px;
+  height: 20px;
+  font-size: 15px;
+  /* margin-left: 30px; */
+  cursor: pointer;
+}
+
+.add-route-container select:focus {
+  outline: none;
+}
+
+select {
+  color: gray;
+}
+
+option:not(:first-of-type) {
+  color: black;
+}
+
+.add-route-container .nextButton {
+  color: rgba(42, 149, 69, 255);
+  background-color: white;
+  border: 1px solid rgba(42, 149, 69, 255);
+  padding: 4px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  /* margin: 30px 0px; */
+  margin-left: 80%;
+  padding: 5px 25px;
+  margin-bottom: 15px;
+  /* font-weight: bold; */
+}
+
+.add-route-container .nextButton:hover {
+  color: white;
+  background-color: rgba(42, 149, 69, 255);
+  font-weight: normal;
+}
+
+.wizard-progress {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  position: relative;
+  /* padding-left: 5%; */
+}
+
+.wizard-progress .step {
+  display: table-cell;
+  /* text-align: center; */
+  vertical-align: top;
+  overflow: visible;
+  position: relative;
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+  padding-left: 10%;
+}
+
+.wizard-progress .step:not(:last-child):before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 42%;
+  top: 37px;
+  background-color: rgb(206, 204, 204);
+  height: 3px;
+  width: 100%;
+}
+
+.wizard-progress .step .node {
+  display: inline-block;
+  border: 10px solid rgb(206, 204, 204);
+  background-color: #fff;
+  border-radius: 18px;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  top: 29px;
+  left: 42%;
+  margin-left: -18px;
+}
+
+.wizard-progress .step.complete:before {
+  background-color: #07c;
+}
+
+.wizard-progress .step.complete .node {
+  border-color: #07c;
+  background-color: #07c;
+  border: 1px solid #07c;
+}
+
+.wizard-progress .step.complete .node:before {
+  content: "\2713";
+  color: white;
+  padding: 3px;
+
+}
+
+.wizard-progress .step.in-progress:before {
+  /* background: #07c;
+  background: -moz-linear-gradient(left, #07c 0%, #fff 100%);
+  background: -webkit-linear-gradient(left, #07c 0%, rgb(126, 123, 123) 100%);
+  background: linear-gradient(to right, #07c 0%, #fff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#07c", endColorstr="#fff",GradientType=1); */
+}
+
+.wizard-progress .step.in-progress .node {
+  border-color: #07c;
+  background-color: white;
+  border: 6px solid #07c;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .add-route-container {
+    /* min-width: 330px; */
+    transform: none;
+    left: 2%;
+    right: 2%;
+    top: 30%;
+  }
+
+  .add-route-container .routeInfo-container {
+    margin-top: 0;
+  }
+
+  .routeInfo-container input {
+    width: 90%;
+    margin-left: 6%;
+    margin-bottom: 15px;
+  }
+
+  .routeInfo-container select {
+    width: 90%;
+    margin-left: 6%;
+    margin-bottom: 15px;
+  }
+
+  .routeInfo-container {
+    /* min-width: 330px; */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .routeInfo-subContainer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .routeInfo-container .nextButton {
+    margin-left: 70%;
+    margin-right: 20px;
+  }
+
+  .routeInfo-container select {
+    /* margin-left: 6%; */
+  }
+
+  .wizard-progress .step {
+    font-size: 11px;
+  }
+}

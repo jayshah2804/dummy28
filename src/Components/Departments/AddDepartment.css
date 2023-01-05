@@ -1,0 +1,268 @@
+.add-department-container {
+    width: 100%;
+    transition-property: width;
+    transition-duration: 0.7s;
+        /* transform: ; */
+}
+
+.add-department-subcontainer {
+    display: flex;
+    gap: 10px;
+    color: black;
+    margin: 15px;
+    justify-content: space-between;
+}
+
+.add-department-container h3 {
+    padding: 15px;
+    padding-bottom: 5px;
+}
+
+.add-department-subcontainer>div {
+    width: 23.5%;
+    height: 150px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* position: relative; */
+}
+
+.add-department-subcontainer div footer {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: 4.5px;
+}
+
+.add-department-subcontainer div:nth-child(1) footer {
+    background-color: rgba(34, 137, 203, 255);
+}
+
+.add-department-subcontainer div:nth-child(2) footer {
+    background-color: rgb(226, 44, 29);
+}
+
+.add-department-subcontainer div:nth-child(3) footer {
+    background-color: rgba(42, 149, 69, 255);
+}
+
+.add-department-subcontainer div:nth-child(4) footer {
+    background-color: rgba(245, 174, 48, 255);
+}
+
+.add-department-container .create-department {
+    width: 98%;
+    border-radius: 10px;
+    margin: 1%;
+    background-color: white;
+    height: 270px;
+    margin-top: 40px;
+}
+
+.create-department header {
+    font-weight: bolder;
+    padding: 25px;
+    padding-bottom: 0;
+    font-size: 18px;
+}
+
+.create-department input {
+    border: none;
+    border-bottom: 1px solid gray;
+    background: transparent;
+    margin-top: 40px;
+    width: 25%;
+    height: 25px;
+    font-size: 15px;
+    padding: 5px;
+    /* margin-left: 25px; */
+}
+
+.create-department input:focus {
+    outline: none;
+}
+
+.create-department .sub-container {
+    display: flex;
+    gap: 50px;
+    /* justify-content: space-around; */
+    padding: 0 5px;
+    margin: 0 40px;
+    margin-top: 10px;
+}
+
+.add-department-subcontainer select {
+    border: none;
+    border-bottom: 1px solid gray;
+    width: 100%;
+    height: 20px;
+    margin-top: 10px;
+}
+
+.add-department-subcontainer select:focus {
+    outline: none;
+}
+
+.add-department-subcontainer main {
+    padding: 10px 15px;
+}
+
+.add-department-container main header span {
+    font-size: 14.5px;
+    font-weight: bold;
+}
+
+.add-department-container main .text {
+    font-size: 14.5px;
+    margin-top: 10px;
+}
+
+.create-department button {
+    float: right;
+    margin: 40px 60px;
+    padding: 7px 21px;
+    color: white;
+    background-color: rgba(42, 149, 69, 255);
+    border: 1px solid rgba(42, 149, 69, 255);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.create-department button:hover {
+    background-color: green;
+}
+
+.create-department .sub-container span:nth-child(2n) {
+    color: gray;
+}
+
+.create-department .sub-container span:nth-child(2n+1) {
+    color: rgb(82, 80, 80);
+    font-weight: bolder;
+}
+
+.switch {
+    display: inline-block;
+    height: 20px;
+    position: relative;
+    width: 30px;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: -10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 2px;
+    content: "";
+    height: 16px;
+    left: 3px;
+    position: absolute;
+    transition: .4s;
+    width: 16px;
+}
+
+.first:checked+.slider {
+    background-color: #66bb6a;
+}
+
+.first:checked+.slider:before {
+    transform: translateX(18px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.multipleSelection {
+    width: 100%;
+    background-color: white;
+    /* border: 1px solid black; */
+    position: relative;
+}
+
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+
+#checkBoxes {
+    display: none;
+    position: absolute;
+    border: 1px gray solid;
+    border-top: none;
+    background-color: white;
+    width: 100%;
+    padding: 4px 5px;
+    font-size: 14px;
+}
+
+#checkBoxes label {
+    padding-left: 5px;
+    display: inline-block;
+    /* padding-top: -5px; */
+    /* font-size: 15px; */
+}
+
+#checkBoxes input {
+    margin-top: 2px;
+}
+
+.create-department .admin-details {
+    display: flex;
+    align-items: center;
+    gap: 100px;
+    margin: 0 40px;
+}
+
+@media only screen and (max-width: 768px) {
+    .add-department-subcontainer {
+        display: block;
+    }
+    .add-department-subcontainer>div {
+        width: 98%;
+        margin-bottom: 20px;
+    }
+    .create-department .sub-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .create-department .admin-details {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .create-department .admin-details input {
+        width: 90%;
+    }
+    .add-department-container .create-department {
+        height: auto;
+        margin: 10px;
+    }
+}

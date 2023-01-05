@@ -1,0 +1,67 @@
+.menuContainer::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Track */
+.menuContainer::-webkit-scrollbar-track {
+  /* background: #f1f1f1;  */
+}
+
+/* Handle */
+.menuContainer::-webkit-scrollbar-thumb {
+  background: gray;
+}
+
+/* Handle on hover */
+.menuContainer::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.menuContainer {
+  /* width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0; */
+  /* height: 100vh; */
+  /* overflow-y: scroll; */
+  overflow-x: hidden;
+  width: 0;
+  transition-property: width;
+  transition-duration: 0.7s;
+  z-index: 99;
+  background-color: white;
+  /* position: absolute;
+  z-index: 10; */
+}
+
+.subMenu {
+  top: 75px;
+  left: 0px;
+  width: 300px;
+  height: calc(100vh - 65px);
+  /* height: 100vh; */
+  background-color: white;
+  padding-top: 10px;
+  padding-left: 20px;
+}
+
+.closeIcon {
+  text-align: end;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 400px) {
+  .menuContainer {
+    padding-bottom: 20px;
+    overflow-y: hidden;
+    /* width: 100%; */
+  }
+  .subMenu {
+    /* height: 25vh; */
+    overflow-y: scroll;
+    width: 100%;
+  }
+}

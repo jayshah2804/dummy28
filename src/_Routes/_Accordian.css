@@ -1,0 +1,23 @@
+.routes_actions {
+    position: absolute;
+    box-shadow: 0 0 20px rgba(33, 33, 33, .3);
+    z-index: 99;
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px
+}
+
+.routes_actions_timings:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}   
+
+.routes_actions_stops:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
+.App {
+  text-align: center;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background-color: #f3f6f9;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.myContainer {
+  display: flex;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .myContainer {
+    display: block;
+    /* overflow-x: hidden;
+    overflow-y: scroll; */
+    /* height: 100vh; */
+  }
+
+  #myContainer {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  #mySidemenu {
+    position: absolute;
+    /* z-index: 999; */
+    /* height: calc(100vh-80px); */
+  }
+}
+
+#input {
+  border: none;
+  border-bottom: 1px solid gray;
+  background: transparent;
+  margin-top: 30px;
+  width: 320px;
+  height: 30px;
+  font-size: 17px;
+}
+
+#input:focus {
+  outline: none;
+}
+
+#loginButton {
+  border-radius: 20px;
+  width: max-content;
+  padding: 11px 28px;
+  cursor: pointer;
+  border: 1px solid gray;
+  color: gray;
+  margin: 25px auto;
+  background: transparent;
+}
+
+#loginButton:hover {
+  background-color: rgba(42, 149, 69, 255);
+  border: 1px solid rgba(42, 149, 69, 255);
+  color: white;
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+}
+
+#true {
+  color: green;
+}
+
+#false {
+  color: red;
+}

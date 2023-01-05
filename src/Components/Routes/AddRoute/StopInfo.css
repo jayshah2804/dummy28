@@ -1,0 +1,309 @@
+.stop-subcontainer::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+/* Track */
+.stop-subcontainer::-webkit-scrollbar-track {
+    /* background: #f1f1f1;  */
+    /* border-radius: 30px; */
+}
+
+/* Handle */
+.stop-subcontainer::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+.stop-subcontainer::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.stop-main-container {
+    display: flex;
+}
+
+.stopInfo-container {
+    margin: 50px 2%;
+    margin-bottom: 20px;
+    /* width: 70%; */
+    width: 1000px;
+    height: 470px;
+}
+
+.stopInfo-container .sub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: rgb(75, 73, 73);
+    width: 90%;
+}
+
+.stopInfo-container .route-operation {
+    font-size: 14px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-bottom: -10px;
+    gap: 15px;
+    color: rgb(226, 44, 29);
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+.stopInfo-container .route-operation span {
+    text-decoration: underline;
+}
+
+.stopInfo-container .route-operation span:hover {
+    text-decoration: none;
+}
+
+#stops-map {
+    margin-top: 10px;
+    position: relative;
+    height: 82%;
+    min-height: 350px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.stopInfo-container .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.stopInfo-container .footer button {
+    border-radius: 5px;
+    padding: 5px 25px;
+    background-color: white;
+    /* margin-right: 15px; */
+    cursor: pointer;
+}
+
+.stopInfo-container .footer .preview {
+    color: rgba(34, 137, 203, 255);
+    border: 1px solid rgba(34, 137, 203, 255);
+}
+
+.stopInfo-container .footer .preview:hover {
+    color: white;
+    background-color: rgba(34, 137, 203, 255);
+}
+
+.stopInfo-container .footer .back {
+    color: gray;
+    border: 1px solid gray;
+}
+
+.stopInfo-container .footer .back:hover {
+    font-weight: bold;
+}
+
+.stopInfo-container .footer .next {
+    color: rgba(42, 149, 69, 255);
+    border: 1px solid rgba(42, 149, 69, 255);
+}
+
+.stopInfo-container .footer .next:hover {
+    color: white;
+    background-color: rgba(42, 149, 69, 255);
+}
+
+#infowindow-success {
+    color: green;
+    margin-left: 5px;
+}
+
+#infowindow-assign {
+    margin-left: 5px;
+    color: rgba(34, 137, 203, 255);
+    background-color: white;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+#infowindow-assign:hover {
+    text-decoration: none;
+}
+
+.stop-container {
+    margin-top: 55px;
+    /* margin-left: 2%; */
+    width: 21%;
+    /* height: 400px; */
+    /* background-color: whitesmoke; */
+    /* height: calc(100vh-100px); */
+    /* overflow-y: scroll; */
+    /* overflow-x: hidden; */
+}
+
+.stop-subcontainer {
+    margin-top: 30px;
+    margin-left: 15px;
+    width: 100%;
+    text-overflow: clip;
+    height: 400px;
+    /* max-height: 400px; */
+    overflow-y: auto;
+    /* overflow-x: visible; */
+    /* overflow-y: auto; */
+    /* height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden; */
+}
+
+.stop-container li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    width: 200px;
+    height: 30px;
+    align-self: flex-end;
+}
+
+.stop-container li p {
+    font-size: 13px;
+}
+
+.stop-container li:hover {
+    cursor: move;
+}
+
+.stop-container .stopNames-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.stopNames-container .connectedPoint {
+    display: inline-block;
+    height: 30px;
+    width: 13px;
+    align-self: flex-end;
+    /* margin-left: -15px; */
+}
+
+.stop-subcontainer .stopNames {
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.stop-subcontainer .stopNames:hover {
+    border: 1px solid black;
+}
+
+.my {
+    cursor: move;
+    border: 2px solid blue !important;
+}
+
+.stop-subcontainer .cross {
+    cursor: pointer;
+    display: inline-block;
+    /* display: none; */
+    visibility: hidden;
+    align-self: center;
+    border: 1px solid black;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    margin-top: 8px;
+    padding-left: 4px;
+}
+
+.myClassName {
+    /* display: inline-block !important; */
+    visibility: visible !important;
+}
+
+.stop-container .threedots {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    align-self: center;
+    margin-left: 14px;
+}
+
+.stop-container .student-info {
+    display: flex;
+    margin-left: -23px;
+    gap: 5px;
+}
+
+.studenNames-contaner {
+    /* background-color: gray; */
+    width: 200px;
+}
+
+.studenNames-contaner p {
+    display: inline-block;
+    width: auto;
+    font-size: 13px;
+    margin-left: 10px;
+    cursor: pointer;
+    /* background-color: rgb(226, 221, 221); */
+}
+
+.myStudentClass {
+    /* display: inline-block !important; */
+    visibility: visible !important;
+    font-weight: bold !important;
+}
+
+.studenNames-contaner p:hover {
+    font-weight: bold;
+}
+
+.studenNames-contaner span {
+    /* margin-left: 10px; */
+    margin-left: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    padding-right: 5px;
+    /* display: none; */
+    visibility: hidden;
+}
+
+#stopsInfo-map {
+    margin-top: 10px;
+    position: relative;
+    height: auto;
+    min-height: 350px;
+    width: 73%;
+    border-radius: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+    .stop-main-container {
+        flex-direction: column;
+    }
+
+    .stop-container {
+        width: 95%;
+    }
+
+    .stop-subcontainer {
+        width: 90%;
+    }
+
+    .stopInfo-container {
+        width: 90%;
+    }
+
+}

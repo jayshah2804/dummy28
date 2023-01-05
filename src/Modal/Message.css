@@ -1,0 +1,102 @@
+.modal-background {
+    /* width: 100vw;
+    height: 100vh;
+    overflow: hidden; */
+}
+
+.modal-background .modal-data {
+    width: 350px;
+    height: auto;
+    /* min-width: 200px;
+    min-height: 300px; */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 20px rgba(33, 33, 33, .3);
+    background-color: white;
+    border-radius: 10px;
+    gap: 10px;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* justify-content: space-between; */
+}
+
+.modal-background .modal-data>div header {
+    padding: 8px;
+    text-transform: capitalize;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-background .modal-data>div header .cross {
+    cursor: pointer;
+}
+
+.modal-background .modal-data main {
+    align-self: flex-start;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.container-success-msg {
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.35);
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    top: -65px;
+    left: 0;
+}
+
+.success-sub-container {
+    /* box-shadow: 0 0 20px rgba(33, 33, 33, .3); */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 20px;
+    background-color: white;
+    border-radius: 10px;
+    width: 400px;
+    min-height: 215px;
+    height: auto;
+}
+
+.success-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.success-msg img {
+    width: 70px;
+    height: 70px;
+}
+
+.success-msg .data-save {
+    padding: 0 10px;
+}
+
+.success-sub-container button {
+    background-color: rgba(47, 175, 75, 255);
+    border: rgba(47, 175, 75, 255);
+    color: white;
+    padding: 7px 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.success-sub-container .error {
+    background-color: rgba(217, 34, 41, 255);
+    border: rgba(217, 34, 41, 255);
+}

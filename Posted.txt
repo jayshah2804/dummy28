@@ -1,0 +1,7 @@
+Trxtype	OurBranchID	AccountID	Amount	TrxdesCiptionID	Description			
+D	200	515013	-24510	550	 UDB appraisal Fees Oct 2022			
+D	201	515013	-24510	550	 UDB appraisal Fees Oct 2022			
+D	202	515013	-24510	550	 UDB appraisal Fees Oct 2022			
+D	203	515013	-24510	550	 UDB appraisal Fees Oct 2022			
+D	204	515013	-24510	550	 UDB appraisal Fees Oct 2022			
+D	205	515013	-245
