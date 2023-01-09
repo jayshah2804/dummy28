@@ -60,7 +60,7 @@ const Records = ({ isLoading, data, headers }) => {
             history.push(`/trips?staff=${staffMoNumber}`);
         }
         else if (e.target.alt === "edit") {
-            window.open(`http://localhost:3001/?type=${sessionStorage.getItem("type").toLowerCase() === "corporate" ? "cp" : "sc"}&name=${sessionStorage.getItem("cpName")}&corpId=${sessionStorage.getItem("corpId")}&edit=${staffMoNumber}`);
+            window.open(`https://students.little.global/?type=${sessionStorage.getItem("type").toLowerCase() === "corporate" ? "cp" : "sc"}&name=${sessionStorage.getItem("cpName")}&corpId=${sessionStorage.getItem("corpId")}&edit=${staffMoNumber}`);
         }
     }
     return (

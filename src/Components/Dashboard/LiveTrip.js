@@ -42,23 +42,23 @@ const LiveTrip = () => {
         // });
         // INSTANTIATE MAP
         const map = new window.google.maps.Map(document.getElementById("map-modal"), {
-            zoom: 13,
+            zoom: 10,
             center: { lat: 23.0358311, lng: 72.5579656 },
             mapTypeId: window.google.maps.MapTypeId.ROADMAP,
             mapTypeControl: false
         });
-        let waypts = [];
-        waypts.push({
-            location: new window.google.maps.LatLng(23.0264486, 72.5555701), //KP
-            stopover: true
-        });
+        // let waypts = [];
+        // waypts.push({
+        //     location: new window.google.maps.LatLng(23.0264486, 72.5555701), //KP
+        //     stopover: true
+        // });
 
         // setInterval(() => {
         //     // marker.setMap(null);
-        //     map.setCenter({ lat: flightPlanCoordinates[flightPlanCoordinates.length - 1].lat, lng: flightPlanCoordinates[flightPlanCoordinates.length - 1].lng }, 13);
+        //     // map.setCenter({ lat: flightPlanCoordinates[flightPlanCoordinates.length - 1].lat, lng: flightPlanCoordinates[flightPlanCoordinates.length - 1].lng }, 13);
         //     flightPlanCoordinates.push({
-        //         lat: valLat + 10.0001115,
-        //         lng: valLng + 0.0000015
+        //         lat: valLat,
+        //         lng: valLng
         //     })
         //     valLat = valLat + 0.0001115;
         //     valLng = valLng + 0.0000015;
@@ -91,67 +91,67 @@ const LiveTrip = () => {
         //         optimized: false,
         //     });
         //     markers.push(marker);
-        // }, 1000);
+        // }, 4000);
 
         // console.log(flightPlanCoordinates);
         // DEFINE THE POLYLINE
-        const polyline1 = {
-            strokeColor: 'rgba(34, 137, 203, 255)',
-            strokeOpacity: 10.0,
-            strokeWeight: 4
-        };
-        const polyline2 = {
-            strokeColor: 'black',
-            strokeOpacity: 10.0,
-            strokeWeight: 6
-        };
+        // const polyline1 = {
+        //     strokeColor: 'rgba(34, 137, 203, 255)',
+        //     strokeOpacity: 10.0,
+        //     strokeWeight: 4
+        // };
+        // const polyline2 = {
+        //     strokeColor: 'black',
+        //     strokeOpacity: 10.0,
+        //     strokeWeight: 6
+        // };
 
-        //DIRECTION SERVICE
-        let directionsService = new window.google.maps.DirectionsService();
-        // let directionsRenderer = new window.google.maps.DirectionsRenderer();
-        let directionsRenderer1 = new window.google.maps.DirectionsRenderer({
-            polylineOptions: polyline1, suppressMarkers: true
-        });
-        let directionsRenderer2 = new window.google.maps.DirectionsRenderer({
-            polylineOptions: polyline2, suppressMarkers: true
-        });
+        // //DIRECTION SERVICE
+        // let directionsService = new window.google.maps.DirectionsService();
+        // // let directionsRenderer = new window.google.maps.DirectionsRenderer();
+        // let directionsRenderer1 = new window.google.maps.DirectionsRenderer({
+        //     polylineOptions: polyline1, suppressMarkers: true
+        // });
+        // let directionsRenderer2 = new window.google.maps.DirectionsRenderer({
+        //     polylineOptions: polyline2, suppressMarkers: true
+        // });
 
-        directionsRenderer1.setMap(map);
-        directionsRenderer2.setMap(map);
+        // directionsRenderer1.setMap(map);
+        // directionsRenderer2.setMap(map);
 
-        const request = {
-            origin: { lat: parseFloat(23.0448498), lng: parseFloat(72.52949269999999) }, //Eximious
-            destination: { lat: parseFloat(23.0338), lng: parseFloat(72.546584) }, //LD
-            waypoints: waypts,
-            travelMode: window.google.maps.TravelMode.DRIVING
-        }
+        // const request = {
+        //     origin: { lat: parseFloat(23.0448498), lng: parseFloat(72.52949269999999) }, //Eximious
+        //     destination: { lat: parseFloat(23.0338), lng: parseFloat(72.546584) }, //LD
+        //     waypoints: waypts,
+        //     travelMode: window.google.maps.TravelMode.DRIVING
+        // }
 
-        const infoWindow = new window.google.maps.InfoWindow();
+        // const infoWindow = new window.google.maps.InfoWindow();
 
-        directionsService.route(request, function (response, status) {
-            if (status == window.google.maps.DirectionsStatus.OK) {
+        // directionsService.route(request, function (response, status) {
+        //     if (status == window.google.maps.DirectionsStatus.OK) {
 
-                directionsRenderer2.setDirections(response); // Add route to the map
-                directionsRenderer1.setDirections(response); // Add route to the map
-                // console.log(response.routes[0].start_location);
-                console.log(waypts[0].location.lat());
+        //         directionsRenderer2.setDirections(response); // Add route to the map
+        //         directionsRenderer1.setDirections(response); // Add route to the map
+        //         // console.log(response.routes[0].start_location);
+        //         console.log(waypts[0].location.lat());
 
-                // var leg = response.routes[0];
+        //         // var leg = response.routes[0];
 
-                let marker = new window.google.maps.Marker({
-                    position: { lat: waypts[0].location.lat(), lng: waypts[0].location.lng() },
-                    map: map,
-                    icon: studentDummyImage,
-                    myTitle: "Jay"
-                })
-                marker.addListener("mouseover", () => {
-                    console.log(marker);
-                    infoWindow.close();
-                    infoWindow.setContent(marker.myTitle);
-                    infoWindow.open(marker.getMap(), marker);
-                });
-            }
-        });
+        //         let marker = new window.google.maps.Marker({
+        //             position: { lat: waypts[0].location.lat(), lng: waypts[0].location.lng() },
+        //             map: map,
+        //             icon: studentDummyImage,
+        //             myTitle: "Jay"
+        //         })
+        //         marker.addListener("mouseover", () => {
+        //             console.log(marker);
+        //             infoWindow.close();
+        //             infoWindow.setContent(marker.myTitle);
+        //             infoWindow.open(marker.getMap(), marker);
+        //         });
+        //     }
+        // });
     }
 
     window.myInitMap = myInitMap;

@@ -235,7 +235,7 @@ function Routes() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ display: "inline-block" }} className="title">Staff Members</div>
                 {sessionStorage.getItem("userType") !== "AccountManager" &&
-                    <button onClick={() => window.open(`http://localhost:3001/?type=${sessionStorage.getItem("type").toLowerCase() === "corporate" ? "cp" : "sc"}&name=${sessionStorage.getItem("cpName")}&corpId=${sessionStorage.getItem("corpId")}`)} style={{ marginRight: "40px", padding: "7px 14px", backgroundColor: "rgba(34, 137, 203, 255)", color: "white", border: "rgba(34, 137, 203, 255)", borderRadius: "5px", cursor: "pointer" }}>{sessionStorage.getItem("type") === "School" ? "Add Student" : "Add Staff Member"}</button>
+                    <button onClick={() => window.open(`https://students.little.global/?type=${sessionStorage.getItem("type").toLowerCase() === "corporate" ? "cp" : "sc"}&name=${sessionStorage.getItem("cpName")}&corpId=${sessionStorage.getItem("corpId")}`)} style={{ marginRight: "40px", padding: "7px 14px", backgroundColor: "rgba(34, 137, 203, 255)", color: "white", border: "rgba(34, 137, 203, 255)", borderRadius: "5px", cursor: "pointer" }}>{sessionStorage.getItem("type") === "School" ? "Add Student" : "Add Staff Member"}</button>
                 }
             </div>
             <div className="table-container-routes">
