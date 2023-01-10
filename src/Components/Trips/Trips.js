@@ -78,7 +78,7 @@ function App(props) {
     let date = new Date();
     console.log(date.getMonth());
     let today = date.getFullYear().toString().concat("-", +date.getMonth() + 1, "-", date.getDate());
-    if (tripListFlag > 0) {
+    // if (tripListFlag > 0) {
       console.log(tripListFlag);
       sendRequest({
         url: "/api/v1/ShuttleTrips/GetShuttleTrips",
@@ -95,7 +95,7 @@ function App(props) {
           toDate: today
         }
       }, authenticateUser);
-    }
+    // }
     tripListFlag++;
   }, [sendRequest, id]);
 

@@ -82,7 +82,7 @@ const Main = () => {
 
   useEffect(() => {
     // alert("jay");
-    if (divFlag % 2 === 0)
+    // if (divFlag % 2 === 0)
       sendRequest(
         {
           url: "/api/v1/Dashboard/GetDashboard",

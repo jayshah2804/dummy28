@@ -130,7 +130,7 @@ function Admin() {
 
   useEffect(() => {
     console.log(corpId);
-    if (adminListFlag > 0) {
+    // if (adminListFlag > 0) {
       sendRequest({
         url: "/api/v1/AdminRole/GetAdminInformation",
         method: "POST",
@@ -143,7 +143,7 @@ function Admin() {
           departmentID: id ? id : ""
         }
       }, authenticateUser);
-    }
+    // }
     adminListFlag++;
   }, [sendRequest, id, corpId]);
 
