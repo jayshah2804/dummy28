@@ -24,7 +24,7 @@
     position: absolute;
     right: 35px;
     top: 70px;
-    width: 350px;
+    width: 250px;
     height: auto;
     border: 1px solid white;
     border-radius: 10px;
@@ -115,7 +115,7 @@
     color: grey;
     position: absolute;
     top: 53%;
-    left: 27%;
+    left: 20%;
     /* transform: translate(-50%, -50%); */
 }
 
