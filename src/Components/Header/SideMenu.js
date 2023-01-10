@@ -73,7 +73,7 @@ const SideMenu = (props) => {
     setSideMenuData(sideMenu);
   };
   useEffect(() => {
-    if (sideMenuFlag > 0) {
+    // if (sideMenuFlag > 0) {
       sendRequest({
         url: "/api/v1/Menu/GetMenuList",
         method: "POST",
@@ -84,7 +84,7 @@ const SideMenu = (props) => {
           emailID: sessionStorage.getItem("user")
         }
       }, authenticateUser);
-    }
+    // }
     sideMenuFlag++;
   }, []);
 
