@@ -24,7 +24,7 @@
     position: absolute;
     right: 35px;
     top: 70px;
-    width: 250px;
+    width: 350px;
     height: auto;
     border: 1px solid white;
     border-radius: 10px;
@@ -122,6 +122,7 @@
 @media only screen and (max-width: 768px) {
     .notificationPanel {
         right: 20px;
+        width: 250px;
     }
 
     .notificationCount {
