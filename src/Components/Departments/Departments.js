@@ -72,7 +72,7 @@ function Routes() {
 
     useEffect(() => {
         // alert("here");
-        if (deptListFlag > 0)
+        // if (deptListFlag > 0)
             sendRequest({
                 url: "/api/v1/Department/DepartmentList",
                 method: "POST",

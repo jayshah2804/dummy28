@@ -215,7 +215,7 @@ function Routes() {
     const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
-        if (routeListFlag > 0)
+        // if (routeListFlag > 0)
             sendRequest({
                 url: "/api/v1/Route/GetRoutList",
                 method: "POST",

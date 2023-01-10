@@ -177,7 +177,7 @@ function Routes() {
     const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
-        if (staffListFlag > 0)
+        // if (staffListFlag > 0)
             sendRequest({
                 url: "/api/v1/Staff/GetStaffList",
                 method: "POST",
