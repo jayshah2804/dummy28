@@ -31,7 +31,7 @@ const Nav = (props) => {
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
-    if (headerFlag > 0) {
+    // if (headerFlag > 0) {
       sendRequest({
         url: "/api/v1/Dashboard/GetDashboard",
         method: "POST",
@@ -42,7 +42,7 @@ const Nav = (props) => {
           emailID: sessionStorage.getItem("user")
         }
       }, authenticateUser);
-    }
+    // }
     headerFlag++;
   }, [sendRequest]);
 
