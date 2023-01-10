@@ -124,7 +124,7 @@ const Main = () => {
             title="Click to see Monthly Trip details"
             onClick={() => history.push("/trips")}
           >
-            <p>Trips</p>
+            <p>Org Trips</p>
             {isApiError && (
               <span style={{ fontWeight: "normal", fontSize: "14px" }}>
                 {isApiError}
