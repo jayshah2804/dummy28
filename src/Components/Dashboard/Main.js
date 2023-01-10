@@ -83,19 +83,19 @@ const Main = () => {
   useEffect(() => {
     // alert("jay");
     // if (divFlag % 2 === 0)
-      sendRequest(
-        {
-          url: "/api/v1/Dashboard/GetDashboard",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: {
-            emailID: sessionStorage.getItem("user"),
-          },
+    sendRequest(
+      {
+        url: "/api/v1/Dashboard/GetDashboard",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        authenticateUser
-      );
+        body: {
+          emailID: sessionStorage.getItem("user"),
+        },
+      },
+      authenticateUser
+    );
     divFlag++;
   }, [sendRequest]);
 
@@ -194,7 +194,15 @@ const Main = () => {
               <p className={classes.viewMoreDriverList} onClick={() => history.push("/drivers")} >View All</p>
             </div>
             {isLoading && <Loading driver="true" />}
-            {(!driverList && !isLoading) && <div className={classes.driverError}>No drivers found</div>}
+            {window.screen.width >= 768 ?
+              <React.Fragment>
+                {(!driverList && !isLoading) && <div className={classes.driverError}>No drivers found</div>}
+              </React.Fragment>
+              :
+              <React.Fragment>
+                {(!driverList && !isLoading) && <div className={classes.driverErrorMobile}>No drivers found</div>}
+              </React.Fragment>
+            }
             {driverList?.map((ele, index) => {
               return (
                 <div key={index}>
