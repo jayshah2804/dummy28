@@ -70,20 +70,21 @@ const SideMenu = (props) => {
           })
       }
     }
+    prev_corp = "";
     setSideMenuData(sideMenu);
   };
   useEffect(() => {
     // if (sideMenuFlag > 0) {
-      sendRequest({
-        url: "/api/v1/Menu/GetMenuList",
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          emailID: sessionStorage.getItem("user")
-        }
-      }, authenticateUser);
+    sendRequest({
+      url: "/api/v1/Menu/GetMenuList",
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        emailID: sessionStorage.getItem("user")
+      }
+    }, authenticateUser);
     // }
     sideMenuFlag++;
   }, []);

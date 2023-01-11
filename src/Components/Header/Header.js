@@ -24,8 +24,8 @@ const Nav = (props) => {
   const [isResponse, setIsResponse] = useState(false);
 
   const authenticateUser = (data) => {
-    console.log(data.AdminInformation);
-    setAdminData(data.AdminInformation[0]);
+    console.log(data.AdminImage);
+    setAdminData(data.AdminImage[0]);
   };
 
   const { isLoading, sendRequest } = useHttp();
@@ -33,13 +33,15 @@ const Nav = (props) => {
   useEffect(() => {
     // if (headerFlag > 0) {
       sendRequest({
-        url: "/api/v1/Dashboard/GetDashboard",
+        url: "/api/v1/AdminRole/GetAdminInformation",
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
         },
         body: {
-          emailID: sessionStorage.getItem("user")
+          emailID: sessionStorage.getItem("user"),
+          departmentID: "",
+          corporateID: sessionStorage.getItem("corpId")
         }
       }, authenticateUser);
     // }
