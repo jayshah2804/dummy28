@@ -13,6 +13,7 @@ let DATA_ERROR = {
 };
 let fromIsValid = true;
 let jay = 0;
+
 const Login = ({ login }) => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
@@ -34,7 +35,10 @@ const Login = ({ login }) => {
     }
   };
 
-  const { sendRequest } = useHttp();
+  const { isLoading, sendRequest } = useHttp();
+  setTimeout(() => {
+    isLoading ? document.getElementById("loginButton").disabled = true : document.getElementById("loginButton").disabled = false;
+  })
 
   useEffect(() => {
     if (isCall)
@@ -136,8 +140,9 @@ const Login = ({ login }) => {
               Forgot password?
             </div>
             <input
+              id="loginButton"
               type="submit"
-              value="Login"
+              value={isLoading ? "Loading..." : "Login"}
               className={classes.loginButton}
               onClick={loginHandler}
             />
