@@ -48,7 +48,7 @@ function RouteInfo(props) {
     const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
-        if (props.routeId && flag > 0) {
+        if (props.routeId) {
             sendRequest({
                 url: "/api/v1/Route/GetRouteDetails",
                 method: "POST",
