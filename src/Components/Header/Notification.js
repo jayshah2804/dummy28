@@ -38,9 +38,18 @@ const Notification = (props) => {
         let date = new Date();
         let current = date.getDate();
         let notificationData = [];
-        count = data.NotificationList?.length;
+        count = null;
+        // count = data.NotificationList?.length;
         let time;
         let status;
+
+        function formatToMMDDYYYYfromYYYYMMDD(inputDate) {
+            var date = new Date(inputDate);
+            return (
+                date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear()
+            );
+        }
+
         for (let i = 0; i < data.NotificationList.length; i++) {
             let createdon = data.NotificationList[i].CreatedOn;
             // let digits = createdon.split(" ")[0];
@@ -52,10 +61,16 @@ const Notification = (props) => {
             } else M = +M + 30
             if (+H + 5 > 24) H = +H + 5 - 24
             else H = +H + 5
+            if (M.toString().length === 1) M = "0" + M.toString();
             if (H > 12) {
                 H = H - 12;
+                if (H.toString().length === 1) H = "0" + H.toString();
                 status = " at " + H + ":" + M + " PM";
-            } else status = " at " + H + ":" + M + " AM";
+            } else {
+                if (H.toString().length === 1) H = "0" + H.toString();
+                status = " at " + H + ":" + M + " AM";
+            }
+
             if (+data.NotificationList[i].CreatedDate.split("-")[2] === current) time = "Today";
             else if (+data.NotificationList[i].CreatedDate.split("-")[2] === current - 1) time = "Yesterday";
             else time = "2 days ago";
@@ -64,6 +79,14 @@ const Notification = (props) => {
                 status,
                 time
             })
+
+            let newDate = data.NotificationList[i].CreatedDate.replaceAll("-", "/");
+            let myDate = formatToMMDDYYYYfromYYYYMMDD(newDate);
+            let d = new Date(myDate);
+            d.setHours(H);
+            d.setMinutes(M);
+            if (+localStorage.getItem("notificationClickedTime") < d.getTime()) count += 1;
+
         }
         setNotificationData(notificationData);
     };
@@ -94,7 +117,8 @@ const Notification = (props) => {
     }, [props.isAdminPhotoClicked]);
 
     const notificationIconClicked = () => {
-        // count = null;
+        count = null;
+        localStorage.setItem("notificationClickedTime", new Date().getTime());
         props.setIsAdminPhotoClicked(false);
         setIsNotificationIconClicked((prev) => !prev);
     };

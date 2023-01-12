@@ -120,7 +120,6 @@ const StopInfo = (props) => {
       if (data.Message && data.Message.toLowerCase() === "success")
         props.routeCreationStatus("Success");
       else {
-        alert("here");
         props.routeCreationStatus("Error");
       }
       props.setIsAddRouteClicked(false);
@@ -224,7 +223,7 @@ const StopInfo = (props) => {
       for (let i = 0; i < 7; i++) {
         shuttleTiming.push({
           Weekday: i + 1,
-          StartTime: `${new Date().getFullYear().toString().concat("-", new Date().getMonth(), "-", new Date().getDate())} ${time[days[i]]}`,
+          StartTime: `${new Date().getFullYear().toString().concat("-", new Date().getMonth()+1, "-", new Date().getDate())} ${time[days[i]]}`,
         })
       }
       let shuttleRoute = [];
