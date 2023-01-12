@@ -248,7 +248,7 @@ function App(props) {
                 onBlur={inputToDateBlurHandler}
               />
             </div>
-            <CSVLink data={filteredData} className="export_csv">
+            <CSVLink data={filteredData} className="export_csv" filename={"data.csv"} >
               Export
             </CSVLink>
           </div>

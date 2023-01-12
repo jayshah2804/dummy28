@@ -248,7 +248,7 @@ function Routes() {
                                 ref={searchInputRef}
                             />
                         </div>
-                        <CSVLink data={staff_details} className="export_csv">
+                        <CSVLink data={staff_details} className="export_csv" filename={"data.csv"} >
                             Export
                         </CSVLink>
                     </div>
