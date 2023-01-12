@@ -83,7 +83,7 @@ const Notification = (props) => {
             else if (+data.NotificationList[i].CreatedDate.split("-")[2] === current - 1) time = "Yesterday";
             else time = "2 days ago";
             notificationData.push({
-                title: data.NotificationList[i].Description + ",",
+                title: data.NotificationList[i].Description,
                 status,
                 time
             })
@@ -138,13 +138,15 @@ const Notification = (props) => {
                                     <div className={classes.data} >
                                         <div>
                                             <span className={classes.title} >{ele.title}</span>
+                                        </div>
+                                        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px"}}>
                                             <span className={classes.status}>
                                                 {ele.status}
                                             </span>
-                                        </div>
                                         <p className={classes.time} >
                                             {ele.time}
                                         </p>
+                                        </div>
                                     </div>
                                 );
                             }) : <p className={classes.content}>No new notifications</p>
