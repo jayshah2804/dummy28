@@ -58,7 +58,7 @@ const AddDepartment = () => {
                     document.getElementsByTagName("input")[1].click();
                 if (data.DepartMentDetails[0].AllowedVehicleTypes?.toLowerCase().includes("basic"))
                     document.getElementsByTagName("input")[2].click();
-                if (data.DepartMentDetails[0].AllowedVehicleTypes?.toLowerCase().includes("comfort"))
+                if (data.DepartMentDetails[0].AllowedVehicleTypes?.toLowerCase() === "comfort")
                     document.getElementsByTagName("input")[3].click();
                 if (data.DepartMentDetails[0].AllowedVehicleTypes?.toLowerCase().includes("plus"))
                     document.getElementsByTagName("input")[4].click();
@@ -76,7 +76,7 @@ const AddDepartment = () => {
                 department_data.adminName = data.DepartMentDetails[0].AdminName;
                 department_data.adminEmail = data.DepartMentDetails[0].AdminEmailID;
                 setDepartmentDefaultDetails(department_data);
-                setIsCall(false);
+                setIsCall(true);
             }
         } else if (type === "create") {
             if (data?.Message === "Success") {
@@ -92,7 +92,7 @@ const AddDepartment = () => {
     const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
-        if (!isCall && id && addDeptFlag > 0)
+        if (!isCall && id && addDeptFlag % 2 !== 0)
             sendRequest({
                 url: "/api/v1/Department/GetDepartmentDetails",
                 method: "POST",
@@ -105,7 +105,7 @@ const AddDepartment = () => {
                 }
             }, authenticateUser);
 
-        if (addDeptFlag > 0 && isCall)
+        if (isCall === "Success")
             sendRequest({
                 url: "/api/v1/Department/AddEditDepartment",
                 method: "POST",
@@ -190,7 +190,7 @@ const AddDepartment = () => {
 
     const createDepartmentClickedHandler = () => {
         type = "create";
-        setIsCall(true);
+        setIsCall("Success");
     }
 
     return (

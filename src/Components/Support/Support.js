@@ -90,7 +90,7 @@ const Support = () => {
                 <form ref={formRef} >
                     <header>Contact us</header>
                     <p>Have any questions? We'd love to hear from you</p>
-                    <input type="text" style={{ display: "none" }} name="orgName" defaultValue="Eximious" />
+                    <input type="text" style={{ display: "none" }} name="orgName" defaultValue={sessionStorage.getItem("cpName")} />
                     <input type="text" placeholder='First Name' name='firstName' ref={firstNameInputRef} onChange={firstNameChangeHandler} autoComplete="off" />
                     {isError.firstNameError && <span className={classes.error}>{isError.firstNameError}</span>}
                     <input type="text" placeholder='Last Name' name='lastName' ref={lastNameInputRef} onChange={lastNameChangeHandler} autoComplete="off" />

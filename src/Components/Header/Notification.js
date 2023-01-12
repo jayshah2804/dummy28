@@ -62,6 +62,14 @@ const Notification = (props) => {
             if (+H + 5 > 24) H = +H + 5 - 24
             else H = +H + 5
             if (M.toString().length === 1) M = "0" + M.toString();
+
+            let newDate = data.NotificationList[i].CreatedDate.replaceAll("-", "/");
+            let myDate = formatToMMDDYYYYfromYYYYMMDD(newDate);
+            let d = new Date(myDate);
+            d.setHours(H);
+            d.setMinutes(M);
+            if (+localStorage.getItem("notificationClickedTime") < d.getTime()) count += 1;
+
             if (H > 12) {
                 H = H - 12;
                 if (H.toString().length === 1) H = "0" + H.toString();
@@ -79,14 +87,6 @@ const Notification = (props) => {
                 status,
                 time
             })
-
-            let newDate = data.NotificationList[i].CreatedDate.replaceAll("-", "/");
-            let myDate = formatToMMDDYYYYfromYYYYMMDD(newDate);
-            let d = new Date(myDate);
-            d.setHours(H);
-            d.setMinutes(M);
-            if (+localStorage.getItem("notificationClickedTime") < d.getTime()) count += 1;
-
         }
         setNotificationData(notificationData);
     };
