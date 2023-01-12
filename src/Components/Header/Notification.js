@@ -128,31 +128,34 @@ const Notification = (props) => {
             <div className={classes.notificationIcon} >
                 <IoMdNotificationsOutline onClick={notificationIconClicked} />
                 {isNotificationIconClicked && (
-                    <div className={classes.notificationPanel}>
-                        <div className={classes.topBorder}></div>
-                        <div className={classes.header} >Notification</div>
-                        <hr />
-                        <div className={classes.notificationdataContainer}>
-                            {notificationData.length > 0 ? notificationData.map((ele) => {
-                                return (
-                                    <div className={classes.data} >
-                                        <div>
-                                            <span className={classes.title} >{ele.title}</span>
+                    <React.Fragment>
+                        <div className={classes.backdrop} onClick={() => setIsNotificationIconClicked(false)} ></div>
+                        <div className={classes.notificationPanel}>
+                            <div className={classes.topBorder}></div>
+                            <div className={classes.header} >Notification</div>
+                            <hr />
+                            <div className={classes.notificationdataContainer}>
+                                {notificationData.length > 0 ? notificationData.map((ele) => {
+                                    return (
+                                        <div className={classes.data} >
+                                            <div>
+                                                <span className={classes.title} >{ele.title}</span>
+                                            </div>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px" }}>
+                                                <span className={classes.status}>
+                                                    {ele.status}
+                                                </span>
+                                                <p className={classes.time} >
+                                                    {ele.time}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px"}}>
-                                            <span className={classes.status}>
-                                                {ele.status}
-                                            </span>
-                                        <p className={classes.time} >
-                                            {ele.time}
-                                        </p>
-                                        </div>
-                                    </div>
-                                );
-                            }) : <p className={classes.content}>No new notifications</p>
-                            }
+                                    );
+                                }) : <p className={classes.content}>No new notifications</p>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    </React.Fragment>
                 )}
             </div>
             {count &&

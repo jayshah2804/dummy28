@@ -32,18 +32,18 @@ const Nav = (props) => {
 
   useEffect(() => {
     // if (headerFlag > 0) {
-      sendRequest({
-        url: "/api/v1/AdminRole/GetAdminInformation",
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          emailID: sessionStorage.getItem("user"),
-          departmentID: "",
-          corporateID: sessionStorage.getItem("corpId")
-        }
-      }, authenticateUser);
+    sendRequest({
+      url: "/api/v1/AdminRole/GetAdminInformation",
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        emailID: sessionStorage.getItem("user"),
+        departmentID: "",
+        corporateID: sessionStorage.getItem("corpId")
+      }
+    }, authenticateUser);
     // }
     headerFlag++;
   }, [sendRequest]);
@@ -96,31 +96,34 @@ const Nav = (props) => {
             onClick={adminPhotoClickHandler}
           />
           {isAdminPhotoClicked && (
-            <div className={classes.adminPanel}>
-              <div className={classes.header}>
-                <p className={classes.adminName}>
-                  {adminData?.AdminName}
-                </p>
-                <p className={classes.adminOrg}>
-                  {sessionStorage.getItem("userType") !== "AccountManager" ?
-                    `Admin of ${adminData?.Corporate}` : "Account Manager"
-                  }
+            <React.Fragment>
+              <div className={classes.backdrop} onClick={() => setIsAdminPhotoClicked(false)} ></div>
+              <div className={classes.adminPanel}>
+                <div className={classes.header}>
+                  <p className={classes.adminName}>
+                    {adminData?.AdminName}
+                  </p>
+                  <p className={classes.adminOrg}>
+                    {sessionStorage.getItem("userType") !== "AccountManager" ?
+                      `Admin of ${adminData?.Corporate}` : "Account Manager"
+                    }
+                  </p>
+                </div>
+                <p className={classes.changePassword} onClick={editProfileClickHandler} id="a" >Edit Profile</p>
+                <hr />
+                <p className={classes.logout}
+                  onClick={() => {
+                    // history.push("/login");
+                    sessionStorage.setItem("login", "false");
+                    sessionStorage.removeItem("splashFlag");
+                    // props.setIsLoggedIn(false);
+                    window.location.reload();
+                  }}
+                >
+                  Logout
                 </p>
               </div>
-              <p className={classes.changePassword} onClick={editProfileClickHandler} id="a" >Edit Profile</p>
-              <hr />
-              <p className={classes.logout}
-                onClick={() => {
-                  // history.push("/login");
-                  sessionStorage.setItem("login", "false");
-                  sessionStorage.removeItem("splashFlag");
-                  // props.setIsLoggedIn(false);
-                  window.location.reload();
-                }}
-              >
-                Logout
-              </p>
-            </div>
+            </React.Fragment>
           )}
         </div>
       </div>

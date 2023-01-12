@@ -84,6 +84,16 @@
     color: rgba(245, 174, 48, 255);
 }
 
+.backdrop {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    right: 0px;
+    top: 0px;
+    z-index: 9;
+    cursor: default;
+}
+
 .notificationPanel .time {
     font-size: 11px;
     color: gray;
@@ -115,7 +125,7 @@
     color: grey;
     position: absolute;
     top: 53%;
-    left: 20%;
+    left: 30%;
     /* transform: translate(-50%, -50%); */
 }
 
