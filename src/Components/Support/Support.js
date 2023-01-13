@@ -14,6 +14,7 @@ let valid = true;
 const Support = () => {
     const [isError, setIsError] = useState(error);
     const [emailResponse, setEmailResponse] = useState();
+    const [isLoading, setIsLoading] = useState();
     const firstNameInputRef = useRef();
     const lastNameInputRef = useRef();
     const subjectInputRef = useRef();
@@ -65,13 +66,16 @@ const Support = () => {
         }
         if (valid) {
             setIsError(error);
+            setIsLoading(true);
             emailjs.sendForm('service_x9bezza', 'template_3q3kddr', formRef.current, '3A3-M7uZF0uJGRWub')
                 .then((result) => {
                     formRef.current.reset();
                     setEmailResponse({message:"Your response has been successfully recorded.",success: "true"});
+                    setIsLoading(false);
                 }, (error) => {
                     formRef.current.reset();
                     setEmailResponse({message:"Error occured. Please try again after some time.", success: "false"});
+                    setIsLoading(false);
                 });
             // window.location.href = `https://mail.google.com/mail/?view=cm&fs=1&to=someone@example.com&su=${subjectInputRef.current.value}&body=Hello I am ${firstNameInputRef.current.value} ${lastNameInputRef.current.value} from xxx Organization.${messageInputRef.current.value}`;
         }
@@ -100,7 +104,7 @@ const Support = () => {
                     <textarea placeholder='Message' name='message' ref={messageInputRef} onChange={messageChangeHandler} autoComplete="off" />
                     {isError.messageError && <span className={classes.error}>{isError.messageError}</span>}
                     {emailResponse?.message && <p id={emailResponse.success} >{emailResponse.message}</p>}
-                    <button type="submit" onClick={querySubmitHandler}>Submit</button>
+                    <button type="submit" onClick={querySubmitHandler}>{isLoading ? "Loading..." : "Submit"}</button>
                 </form>
             </div>
         </div>

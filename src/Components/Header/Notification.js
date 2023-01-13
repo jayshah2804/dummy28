@@ -4,6 +4,9 @@ import classes from "./Notification.module.css";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { useEffect } from 'react';
 import useHttp from '../../Hooks/use-http';
+import notification_live_trip from "../../Assets/notification_live_trip.png";
+import notification_department_add from "../../Assets/notification_department_add.png";
+import notification_rider from "../../Assets/notification_rider.png";
 
 const NOTIFICATION_DATA = [
     {
@@ -138,16 +141,20 @@ const Notification = (props) => {
                                 {notificationData.length > 0 ? notificationData.map((ele) => {
                                     return (
                                         <div className={classes.data} >
-                                            <div>
-                                                <span className={classes.title} >{ele.title}</span>
-                                            </div>
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px" }}>
-                                                <span className={classes.status}>
-                                                    {ele.status}
-                                                </span>
-                                                <p className={classes.time} >
-                                                    {ele.time}
-                                                </p>
+                                            <img className={classes.icon} src={ele.title.toLowerCase().includes("department") ? notification_department_add : (ele.title.toLowerCase().includes("rider") ? notification_rider : notification_live_trip)} ></img>
+                                            <div style={{width: "-webkit-fill-available"}}>
+                                                {/* <div> */}
+                                                    <span className={classes.title} >{ele.title}</span>
+                                                {/* </div> */}
+                                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px", marginTop: "3px" }}>
+                                                    <span className={classes.status}>
+                                                        {ele.status}
+                                                    </span>
+                                                    <p className={classes.time} >
+                                                        {ele.time}
+                                                    </p>
+                                                </div>
+                                                <div style={{ marginTop: "10px", borderTop: "1px solid #80808073" }}></div>
                                             </div>
                                         </div>
                                     );

@@ -70,17 +70,26 @@
     overflow-y: auto;
 }
 
+.icon {
+    width: 25px;
+    height: 25px;
+}
+
 .notificationPanel .data {
+    display: flex;
+    /* justify-content: space-between; */
+    gap: 15px;
+    align-items: center;
     padding: 15px;
     padding-bottom: 0;
 }
 
 .notificationPanel .title {
-    font-size: 13px;
+    font-size: 13.5px;
 }
 
 .notificationPanel .status {
-    font-size: 11px;
+    font-size: 12px;
     color: rgba(245, 174, 48, 255);
 }
 
@@ -95,7 +104,7 @@
 }
 
 .notificationPanel .time {
-    font-size: 11px;
+    font-size: 12px;
     color: gray;
 }
 
