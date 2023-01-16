@@ -20,7 +20,7 @@ const SideMenu = (props) => {
     if (data.MenuList) {
       sessionStorage.setItem("corpId", data.MenuList[0].CorporateID);
       sideMenu.push({
-        main: "Dashboard"
+        main: "Dashboard",
       });
       if (data.MenuList[0].DepartMentName) {
         for (let i = 0; i < data.MenuList.length; i++) {
@@ -28,14 +28,14 @@ const SideMenu = (props) => {
             sideMenu.push({
               main: data.MenuList[i].CorporateName,
               corpId: data.MenuList[i].CorporateID,
-              sub: ["Departments", "Admins", "Trips"]
+              sub: ["Departments", "Admins", "Trips"],
             });
           prev_corp = data.MenuList[i].CorporateName;
           if (data.MenuList[i].DepartMentName)
             sideMenu.push({
               main: data.MenuList[i].DepartMentName,
               deptId: data.MenuList[i].DepartmentID,
-              sub: ["Staff Members"]
+              sub: ["Staff Members"],
             });
         }
       } else {
@@ -43,31 +43,33 @@ const SideMenu = (props) => {
           sideMenu.push({
             main: data.MenuList[i].CorporateName,
             corpId: data.MenuList[i].CorporateID,
-            sub: ["Departments", "Admins", "Trips"]
+            sub: ["Departments", "Admins", "Trips"],
           });
         }
       }
       sideMenu.push({
         main: "Private Driver",
-        sub: ["Trips", "Live Map"]
-      })
-      sideMenu.push({
-        main: "Departments",
-      },
+        sub: ["Trips", "Live Map"],
+      });
+      sideMenu.push(
+        {
+          main: "Departments",
+        },
         {
           main: "All Staff",
         },
         {
-          main: "Routes"
+          main: "Routes",
         },
         {
-          main: "Query & Support"
-        })
+          main: "Query & Support",
+        }
+      );
       {
         sessionStorage.getItem("userType") !== "AccountManager" &&
           sideMenu.splice(sideMenu.length - 1, 0, {
-            main: "Documents Upload"
-          })
+            main: "Documents Upload",
+          });
       }
     }
     prev_corp = "";
@@ -75,16 +77,19 @@ const SideMenu = (props) => {
   };
   useEffect(() => {
     // if (sideMenuFlag > 0) {
-    sendRequest({
-      url: "/api/v1/Menu/GetMenuList",
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
+    sendRequest(
+      {
+        url: "/api/v1/Menu/GetMenuList",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          emailID: sessionStorage.getItem("user"),
+        },
       },
-      body: {
-        emailID: sessionStorage.getItem("user")
-      }
-    }, authenticateUser);
+      authenticateUser
+    );
     // }
     sideMenuFlag++;
   }, []);
@@ -103,16 +108,15 @@ const SideMenu = (props) => {
   if (props.property) {
     if (window.screen.width < 400)
       document.getElementById("mySidemenu").style.width = "100%";
-    else
-      document.getElementById("mySidemenu").style.width = "300px";
+    else document.getElementById("mySidemenu").style.width = "22%";
     window.addEventListener("popstate", function (event) {
       // alert(document.getElementById("mySidemenu").style.width);
       if (window.screen.width < 400) {
         if (document.getElementById("mySidemenu").style.width == "100%")
           document.getElementById("mySidemenu").style.minWidth = "100%";
       } else {
-        if (document.getElementById("mySidemenu").style.width == "300px")
-          document.getElementById("mySidemenu").style.minWidth = "300px";
+        if (document.getElementById("mySidemenu").style.width == "22%")
+          document.getElementById("mySidemenu").style.minWidth = "22%";
       }
       // The URL changed...
       this.window.removeEventListener("popstate");
@@ -137,9 +141,11 @@ const SideMenu = (props) => {
         >
           <GrClose />
         </div>
-        {!sideMenuData[0] &&
-          <div style={{ textAlign: "center", marginTop: "20px" }}>No Data Available</div>
-        }
+        {!sideMenuData[0] && (
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            No Data Available
+          </div>
+        )}
         {sideMenuData.map(({ main, corpId, sub, deptId }, index) => {
           return (
             <SideMenuData

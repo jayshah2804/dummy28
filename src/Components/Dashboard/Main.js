@@ -11,7 +11,6 @@ import little from "../../Assets/little.gif";
 import LiveTrip from "./LiveTrip";
 // import studentDummyImage from "../../Assets/new_student_marker.png";
 
-
 const DUMMY_DATA = [
   {
     driverName: "Dharmik Gurav",
@@ -57,7 +56,7 @@ const Main = () => {
   setTimeout(() => {
     document.getElementById("splash").style.display = "none";
     sessionStorage.setItem("splashFlag", "1");
-  }, 2000)
+  }, 2000);
 
   const authenticateUser = (data) => {
     console.log(data);
@@ -104,19 +103,21 @@ const Main = () => {
       <div className={classes.container} id="myContainer">
         <header>
           <div>
-            <p className={classes.adminName}>{"Welcome " + sessionStorage.getItem("adminName")}</p>
+            <p className={classes.adminName}>
+              {"Welcome " + sessionStorage.getItem("adminName")}
+            </p>
             <p className={classes.adminText}>
               You can check all data of your Organization in Dashboard!
             </p>
           </div>
-          {sessionStorage.getItem("userType") === "AccountManager" &&
+          {sessionStorage.getItem("userType") === "AccountManager" && (
             <button
               onClick={() => history.push("/new-registration")}
               className={classes.newCorpButton}
             >
               Add New Corporate
             </button>
-          }
+          )}
         </header>
         <div className={classes.cards}>
           <div
@@ -124,7 +125,7 @@ const Main = () => {
             title="Click to see Monthly Trip details"
             onClick={() => history.push("/trips")}
           >
-            <p>Org Trips</p>
+            <p>Trips</p>
             {isApiError && (
               <span style={{ fontWeight: "normal", fontSize: "14px" }}>
                 {isApiError}
@@ -170,7 +171,10 @@ const Main = () => {
               </span>
             )}
           </div>
-          <div className={classes.text} title="Click to see Active Trips details">
+          <div
+            className={classes.text}
+            title="Click to see Active Trips details"
+          >
             <p>Active Trips</p>
             {isApiError && (
               <span style={{ fontWeight: "normal", fontSize: "14px" }}>
@@ -191,24 +195,39 @@ const Main = () => {
           <div className={classes.driverList}>
             <div className={classes.driverListHeader}>
               <p>Driver List</p>
-              <p className={classes.viewMoreDriverList} onClick={() => history.push("/drivers")} >View All</p>
+              <p
+                className={classes.viewMoreDriverList}
+                onClick={() => history.push("/drivers")}
+              >
+                View All
+              </p>
             </div>
             {isLoading && <Loading driver="true" />}
-            {window.screen.width >= 768 ?
+            {window.screen.width >= 768 ? (
               <React.Fragment>
-                {(!driverList && !isLoading) && <div className={classes.driverError}>No drivers found</div>}
+                {!driverList && !isLoading && (
+                  <div className={classes.driverError}>No drivers found</div>
+                )}
               </React.Fragment>
-              :
+            ) : (
               <React.Fragment>
-                {(!driverList && !isLoading) && <div className={classes.driverErrorMobile}>No drivers found</div>}
+                {!driverList && !isLoading && (
+                  <div className={classes.driverErrorMobile}>
+                    No drivers found
+                  </div>
+                )}
               </React.Fragment>
-            }
+            )}
             {driverList?.map((ele, index) => {
               return (
                 <div key={index}>
                   <div className={classes.driverDetails}>
                     <div className={classes.driverInfo}>
-                      <img src={ele.DriverImage} alt="" className={classes.driverPhoto} />
+                      <img
+                        src={ele.DriverImage}
+                        alt=""
+                        className={classes.driverPhoto}
+                      />
                       <div>
                         <p className={classes.driverName}>{ele.DriverName}</p>
                         <p className={classes.carNumber}>{ele.CarNumber}</p>
@@ -231,11 +250,31 @@ const Main = () => {
           </div>
         </div>
       </div>
-      {!sessionStorage.getItem("splashFlag") &&
-        <div id="splash" style={{ position: "absolute", backgroundColor: "white", top: "0", left: "0", height: "100vh", width: "100vw" }}>
-          <img src={little} style={{ width: "150px", height: "150px", position: "absolute", top: "45%", left: "50%", transform: "translate(-50%, -50%)" }} />
+      {!sessionStorage.getItem("splashFlag") && (
+        <div
+          id="splash"
+          style={{
+            position: "absolute",
+            backgroundColor: "white",
+            top: "0",
+            left: "0",
+            height: "100vh",
+            width: "100vw",
+          }}
+        >
+          <img
+            src={little}
+            style={{
+              width: "150px",
+              height: "150px",
+              position: "absolute",
+              top: "45%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
         </div>
-      }
+      )}
     </React.Fragment>
   );
 };
