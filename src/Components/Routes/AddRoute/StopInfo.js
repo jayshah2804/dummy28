@@ -557,18 +557,15 @@ const StopInfo = (props) => {
         icon = studentDummyImage;
         if (position.status)
           // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><p id="infowindow-success">Assigned</div>`;
-          myTitle = `<div id="infowindow-container" ><h3>${
-            myStopNumberInfo[position.mNumber[0]]
+          myTitle = `<div id="infowindow-container" ><h3>${myStopNumberInfo[position.mNumber[0]]
               ? myStopNumberInfo[position.mNumber[0]] + ". "
               : ""
-          }${
-            position.stop.split(",")[0]
-          }</h3><p id="infowindow-success">Assigned</div>`;
+            }${position.stop.split(",")[0]
+            }</h3><p id="infowindow-success">Assigned</div>`;
         // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><div id=${i}><span id='infowindow-assign'>Assign rider</span></div></div>`;
         else
-          myTitle = `<div><div id="infowindow-container" ><h3>${
-            position.stop.split(",")[0]
-          }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
+          myTitle = `<div><div id="infowindow-container" ><h3>${position.stop.split(",")[0]
+            }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
       }
 
       const marker = new window.google.maps.Marker({
@@ -777,6 +774,7 @@ const StopInfo = (props) => {
               dst.pop();
               // dst.push(waypts.pop().location);
               waypts.pop();
+              previewRouteFlag = false;
             }
             let s = STOP_DETAILS.splice(+indexToBeShift, 1);
             // STOP_DETAILS.splice(+indexToBeShift, 0, STOP_DETAILS[+indexToBeMove]);
@@ -811,6 +809,7 @@ const StopInfo = (props) => {
               dst.pop();
               // dst.push(waypts.pop().location);
               waypts.pop();
+              previewRouteFlag = false;
             }
             let s = STOP_DETAILS.splice(+indexToBeMove, 1);
             // STOP_DETAILS.splice(+indexToBeShift, 0, STOP_DETAILS[+indexToBeMove]);
@@ -865,18 +864,18 @@ const StopInfo = (props) => {
       if (i !== 0) {
         document
           .getElementsByClassName("stopNames-container")
-          [i].addEventListener("mouseover", () => {
-            document
-              .getElementsByClassName("cross")
-              [i].classList.add("myClassName");
-          });
+        [i].addEventListener("mouseover", () => {
+          document
+            .getElementsByClassName("cross")
+          [i].classList.add("myClassName");
+        });
         document
           .getElementsByClassName("stopNames-container")
-          [i].addEventListener("mouseleave", () => {
-            document
-              .getElementsByClassName("cross")
-              [i].classList.remove("myClassName");
-          });
+        [i].addEventListener("mouseleave", () => {
+          document
+            .getElementsByClassName("cross")
+          [i].classList.remove("myClassName");
+        });
       }
     }
     for (
@@ -886,18 +885,18 @@ const StopInfo = (props) => {
     ) {
       document
         .getElementsByClassName("tempMyStudents")
-        [i].addEventListener("mouseover", () => {
-          document
-            .getElementsByClassName("studentCross")
-            [i].classList.add("myStudentClass");
-        });
+      [i].addEventListener("mouseover", () => {
+        document
+          .getElementsByClassName("studentCross")
+        [i].classList.add("myStudentClass");
+      });
       document
         .getElementsByClassName("tempMyStudents")
-        [i].addEventListener("mouseleave", () => {
-          document
-            .getElementsByClassName("studentCross")
-            [i].classList.remove("myStudentClass");
-        });
+      [i].addEventListener("mouseleave", () => {
+        document
+          .getElementsByClassName("studentCross")
+        [i].classList.remove("myStudentClass");
+      });
     }
     setTimeout(() => {
       document.getElementById("asdf").click();
