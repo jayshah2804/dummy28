@@ -46,11 +46,14 @@ const DUMMY_DATA = [
 
 let divFlag = 0;
 let driverList = [];
+let prev_driverId = "";
+
 const Main = () => {
   // const [options, setOptions] = useState(initial);
   const [isRender, setIsRender] = useState();
   const [listData, setListData] = useState({});
   const [isApiError, setIsApiError] = useState();
+  const [isDriverEmail, setIsDriverEmail] = useState();
   const history = useHistory();
 
   setTimeout(() => {
@@ -97,6 +100,16 @@ const Main = () => {
     );
     divFlag++;
   }, [sendRequest]);
+
+  const activeDriverClickHandler = (driverId, live) => {
+    // console.log(driverId);
+    if (live == "1") {
+      document.getElementById(prev_driverId)?.classList.remove("currentDriver");
+      document.getElementById(driverId).classList.add("currentDriver");
+      prev_driverId = driverId;
+      setIsDriverEmail(driverId);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -220,7 +233,7 @@ const Main = () => {
             )}
             {driverList?.map((ele, index) => {
               return (
-                <div key={index}>
+                <div key={index} id={ele.DriverEmailID} onClick={() => activeDriverClickHandler(ele.DriverEmailID, ele.LiveStatus)} className={ele.LiveStatus == "1" ? classes.driverContainer : ""} >
                   <div className={classes.driverDetails}>
                     <div className={classes.driverInfo}>
                       <img
@@ -246,7 +259,7 @@ const Main = () => {
             })}
           </div>
           <div className={classes.mapContainer}>
-            <LiveTrip />
+            <LiveTrip driverEmail={isDriverEmail} />
           </div>
         </div>
       </div>

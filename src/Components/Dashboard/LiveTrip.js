@@ -2,18 +2,24 @@ import React, { useEffect, useState } from 'react';
 import classes from "./LiveTrip.module.css";
 import icon from "../../Assets/live_car.png";
 import studentDummyImage from "../../Assets/new_student_marker.png";
+import useHttp from '../../Hooks/use-http';
 
 let valLat = 23.0350155;
 let valLng = 72.5672725;
 
 let flightPlanCoordinates = [
-    { lat: 23.0358311, lng: 72.5579656 },
-    { lat: 23.0350155, lng: 72.5672725 }
 ];
 let markers = [];
+let prev_driverEmail = "";
+let driverFlag = true;
 
-const LiveTrip = () => {
-    const [isRender, setIsRender] = useState(false);
+const LiveTrip = (props) => {
+    const [isRender, setIsRender] = useState("first");
+
+    if (prev_driverEmail !== props.driverEmail) {
+        driverFlag = false;
+        prev_driverEmail = props.driverEmail;
+    } else driverFlag = true;
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -22,6 +28,37 @@ const LiveTrip = () => {
         script.async = true;
         document.body.appendChild(script);
     }, [])
+
+    const authenticateUser = (data) => {
+        console.log(data);
+        flightPlanCoordinates.push({
+            lat: 12,
+            lng: 21
+        });
+        setIsRender(prev => !prev);
+    };
+
+    const { isLoading, sendRequest } = useHttp();
+
+    useEffect(() => {
+        setInterval(() => {
+            sendRequest(
+                {
+                    url: "/api/v1/LiveTrip/GetLiveTripDetails",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: {
+                        emailID: props.driverEmail,
+                        Isall: driverFlag == true ? 1 : 0
+                    },
+                },
+                authenticateUser
+            );
+        }, 10000);
+    }, [props.driverEmail, sendRequest])
+
 
     function myInitMap() {
         const map = new window.google.maps.Map(document.getElementById("map-modal"), {
@@ -38,6 +75,17 @@ const LiveTrip = () => {
             icon,
             optimized: false,
         });
+        const flightPath = new window.google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: "#397273",
+            strokeOpacity: 1.0,
+            strokeWeight: 5,
+        });
+        flightPath.setMap(map);
+        marker.setPosition(flightPlanCoordinates[flightPlanCoordinates.length - 1]);
+
+
 
         // setInterval(() => {
         //     // map.setCenter({ lat: flightPlanCoordinates[flightPlanCoordinates.length - 1].lat, lng: flightPlanCoordinates[flightPlanCoordinates.length - 1].lng }, 13);

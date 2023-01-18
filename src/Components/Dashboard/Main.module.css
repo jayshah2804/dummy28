@@ -131,6 +131,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  padding: 5px 15px;
 }
 
 .driverDetails {
@@ -138,6 +139,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  padding: 0 20px;
 }
 
 .driverInfo {
@@ -165,10 +167,18 @@
   color: rgb(24, 24, 156);
 }
 
+.driverContainer {
+  cursor: pointer;
+}
+
+.driverContainer:hover {
+  background-color: rgb(212, 201, 201);
+}
+
 .driverList {
   background-color: white;
   border-radius: 15px;
-  padding: 10px 20px;
+  padding: 10px 0px;
   width: 24%;
   height: 100%;
   overflow-y: auto;
