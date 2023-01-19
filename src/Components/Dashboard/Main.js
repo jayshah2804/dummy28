@@ -102,7 +102,7 @@ const Main = () => {
   }, [sendRequest]);
 
   const activeDriverClickHandler = (driverId, live) => {
-    // console.log(driverId);
+    console.log(driverId);
     if (live == "1") {
       document.getElementById(prev_driverId)?.classList.remove("currentDriver");
       document.getElementById(driverId).classList.add("currentDriver");
