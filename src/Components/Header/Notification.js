@@ -53,7 +53,7 @@ const Notification = (props) => {
             );
         }
 
-        for (let i = 0; i < data.NotificationList.length; i++) {
+        for (let i = 0; i < data.NotificationList?.length; i++) {
             let createdon = data.NotificationList[i].CreatedOn;
             // let digits = createdon.split(" ")[0];
             let H = createdon.split(":")[0]

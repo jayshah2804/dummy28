@@ -46,14 +46,12 @@ const DUMMY_DATA = [
 
 let divFlag = 0;
 let driverList = [];
-let prev_driverId = "";
 
 const Main = () => {
   // const [options, setOptions] = useState(initial);
   const [isRender, setIsRender] = useState();
   const [listData, setListData] = useState({});
   const [isApiError, setIsApiError] = useState();
-  const [isDriverEmail, setIsDriverEmail] = useState();
   const history = useHistory();
 
   setTimeout(() => {
@@ -101,15 +99,6 @@ const Main = () => {
     divFlag++;
   }, [sendRequest]);
 
-  const activeDriverClickHandler = (driverId, live) => {
-    console.log(driverId);
-    if (live == "1") {
-      document.getElementById(prev_driverId)?.classList.remove("currentDriver");
-      document.getElementById(driverId).classList.add("currentDriver");
-      prev_driverId = driverId;
-      setIsDriverEmail(driverId);
-    }
-  }
 
   return (
     <React.Fragment>
@@ -204,64 +193,7 @@ const Main = () => {
         {/* <div className={classes.tripChart}>
         <Chart options={options.options} series={options.series} type="line" height={270} className={classes.chart} />
       </div> */}
-        <div className={classes.footer}>
-          <div className={classes.driverList}>
-            <div className={classes.driverListHeader}>
-              <p>Driver List</p>
-              <p
-                className={classes.viewMoreDriverList}
-                onClick={() => history.push("/drivers")}
-              >
-                View All
-              </p>
-            </div>
-            {isLoading && <Loading driver="true" />}
-            {window.screen.width >= 768 ? (
-              <React.Fragment>
-                {!driverList && !isLoading && (
-                  <div className={classes.driverError}>No drivers found</div>
-                )}
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                {!driverList && !isLoading && (
-                  <div className={classes.driverErrorMobile}>
-                    No drivers found
-                  </div>
-                )}
-              </React.Fragment>
-            )}
-            {driverList?.map((ele, index) => {
-              return (
-                <div key={index} id={ele.DriverEmailID} onClick={() => activeDriverClickHandler(ele.DriverEmailID, ele.LiveStatus)} className={ele.LiveStatus == "1" ? classes.driverContainer : ""} >
-                  <div className={classes.driverDetails}>
-                    <div className={classes.driverInfo}>
-                      <img
-                        src={ele.DriverImage}
-                        alt=""
-                        className={classes.driverPhoto}
-                      />
-                      <div>
-                        <p className={classes.driverName}>{ele.DriverName}</p>
-                        <p className={classes.carNumber}>{ele.CarNumber}</p>
-                      </div>
-                    </div>
-                    <div>
-                      {ele.LiveStatus == "1" ? (
-                        <p className={classes.activeDriver}></p>
-                      ) : (
-                        <p className={classes.inActiveDriver}></p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className={classes.mapContainer}>
-            <LiveTrip driverEmail={isDriverEmail} />
-          </div>
-        </div>
+        <LiveTrip driverList={isLoading ? [] : driverList} isLoading={isLoading} />
       </div>
       {!sessionStorage.getItem("splashFlag") && (
         <div

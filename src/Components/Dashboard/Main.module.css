@@ -223,12 +223,6 @@
   background-color: rgb(226, 44, 29);
 }
 
-.footer {
-  display: flex;
-  justify-content: space-between;
-  height: 68%;
-}
-
 .mapContainer {
   position: relative;
   width: 74.5%;
