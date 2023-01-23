@@ -198,6 +198,7 @@ const LiveTrip = (props) => {
         });
 
         pathInterval = setInterval(() => {
+            document.getElementsByClassName("gm-fullscreen-control")[0].style.marginTop = "45px";
             flightPath1 = new window.google.maps.Polyline({
                 path: flightPlanCoordinates,
                 geodesic: true,
