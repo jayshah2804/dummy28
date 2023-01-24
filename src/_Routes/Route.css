@@ -126,7 +126,7 @@
 .table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: calc(100vw - 55px);
+  width: 100%;
   /* height: auto; */
   overflow: scroll;
 }
@@ -139,7 +139,6 @@
 .routes_records tr:hover {
   /* cursor: pointer; */
   background-color: rgb(247, 245, 245);
-
 }
 
 td {

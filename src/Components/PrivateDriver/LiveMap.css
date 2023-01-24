@@ -1,107 +1,108 @@
 .main-container {
-    display: flex;
-    width: 100%;
-    padding: 15px;
-    justify-content: space-between;
-    transition-property: width;
-    transition-duration: 0.7s;
-    /* flex: 1 3; */
+  display: flex;
+  width: 100%;
+  padding: 15px;
+  justify-content: space-between;
+  transition-property: width;
+  transition-duration: 0.7s;
+  /* flex: 1 3; */
 }
 
 .driverlist {
-    background-color: white;
-    /* margin: 15px; */
-    padding: 15px;
-    border-radius: 10px;
-    height: calc(100vh-80px);
-    overflow-y: auto;
-    width: 20%;
+  background-color: white;
+  /* margin: 15px; */
+  padding: 15px;
+  border-radius: 10px;
+  height: calc(100vh-80px);
+  overflow-y: auto;
+  width: 20%;
 }
 
 .driverPhoto {
-    border-radius: 50%;
-    height: 35px;
-    width: 35px;
-    object-fit: cover;
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  object-fit: cover;
 }
 
 .ontrip {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: rgba(34, 137, 203, 255);
-    align-self: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(34, 137, 203, 255);
+  align-self: center;
 }
 
 .online {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: rgba(42, 149, 69, 255);
-    align-self: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(42, 149, 69, 255);
+  align-self: center;
 }
 
 .driverDetails .drivername {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .driverDetails .carnumber {
-    font-size: 10.5px;
-    color: grey;
+  font-size: 10.5px;
+  color: grey;
 }
 
 #live-map {
-    position: relative;
-    height: 100%;
-    width: 78%;
-    border-radius: 10px;
-    margin-bottom: 10px
+  position: relative;
+  height: 100%;
+  width: 78%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  min-height: 650px;
 }
 
 .driverlist .filter-buttons {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
 .search {
-    width: 100%;
-    height: 23px;
-    border: 1px solid grey;
-    border-radius: 5px;
-    padding-left: 3px;
+  width: 100%;
+  height: 23px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding-left: 3px;
 }
 
 .search:focus {
-    outline: none;
+  outline: none;
 }
 
 .driverlist .filter-buttons button {
-    color: white;
-    border-radius: 5px;
-    width: 75px;
-    padding: 5px;
-    cursor: pointer;
-    margin: 10px 0;
-    /* display: flex;
+  color: white;
+  border-radius: 5px;
+  width: 75px;
+  padding: 5px;
+  cursor: pointer;
+  margin: 10px 0;
+  /* display: flex;
     flex-direction: column;
     align-items: center; */
 }
 
 .driverlist .filter-buttons button:hover {
-    /* transform: scale(1.02); */
+  /* transform: scale(1.02); */
 }
 
 .driverlist .filter-buttons button:nth-child(1) {
-    background-color: rgba(245, 174, 48, 255);
-    border: rgba(245, 174, 48, 255);
+  background-color: rgba(245, 174, 48, 255);
+  border: rgba(245, 174, 48, 255);
 }
 
 .driverlist .filter-buttons button:nth-child(2) {
-    background-color: rgba(42, 149, 69, 255);
-    border: rgba(42, 149, 69, 255);
+  background-color: rgba(42, 149, 69, 255);
+  border: rgba(42, 149, 69, 255);
 }
 
 .driverlist .filter-buttons button:nth-child(3) {
-    background-color: rgba(34, 137, 203, 255);
-    border: rgba(34, 137, 203, 255);
+  background-color: rgba(34, 137, 203, 255);
+  border: rgba(34, 137, 203, 255);
 }

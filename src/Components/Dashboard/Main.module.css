@@ -21,7 +21,7 @@
 }
 
 .container {
-  width: 100%;
+  /* width: 100%; */
   height: calc(100vh - 75px);
   margin: 0 25px;
   padding: 10px 0;
