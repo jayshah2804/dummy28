@@ -27,41 +27,46 @@ const Login = ({ login }) => {
     sessionStorage.setItem("userType", data.UserType);
     sessionStorage.setItem("user", emailInputRef.current.value);
     sessionStorage.setItem("adminName", data.Username);
-    if (!data.Message)
-      setIsApiError(data + " Please try again later");
+    if (!data.Message) setIsApiError(data + " Please try again later");
     else {
       setIsCall(false);
-      data.Message === "Success" ? login(true) : setIsApiError("Please enter valid email or password");
+      data.Message === "Success"
+        ? login(true)
+        : setIsApiError("Please enter valid email or password");
     }
   };
 
   const { isLoading, sendRequest } = useHttp();
   setTimeout(() => {
-    isLoading ? document.getElementById("loginButton").disabled = true : document.getElementById("loginButton").disabled = false;
-  })
+    isLoading
+      ? (document.getElementById("loginButton").disabled = true)
+      : (document.getElementById("loginButton").disabled = false);
+  });
 
   useEffect(() => {
     if (isCall)
-      sendRequest({
-        url: "/api/v1/Authentication/AuthenticateUser",
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
+      sendRequest(
+        {
+          url: "/api/v1/Authentication/AuthenticateUser",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            emailID: emailInputRef.current.value,
+            password: passwordInputRef.current.value,
+          },
         },
-        body: {
-          emailID: emailInputRef.current.value,
-          password: passwordInputRef.current.value
-        }
-      }, authenticateUser);
-  }, [isCall, sendRequest])
+        authenticateUser
+      );
+  }, [isCall, sendRequest]);
 
   const loginHandler = (event) => {
     event.preventDefault();
     // !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3,4,5,6,7})+$/.test(
-    if (                      // eslint-disable-next-line 
-      !/\S+@\S+\.\S+/.test(
-        emailInputRef.current.value
-      )
+    if (
+      // eslint-disable-next-line
+      !/\S+@\S+\.\S+/.test(emailInputRef.current.value)
     ) {
       // eslint-disable-line
       fromIsValid = false;
@@ -71,18 +76,19 @@ const Login = ({ login }) => {
       fromIsValid = false;
       setFormError((prev) => ({
         ...prev,
-        passwordError: "Password must be of 8 characters",
+        passwordError: "Password must be of 8 character",
       }));
     }
     if (emailInputRef.current.value && passwordInputRef.current.value) {
       // fromIsValid && login(true);
-      fromIsValid && setIsCall(prev => !prev);
+      fromIsValid && setIsCall((prev) => !prev);
     }
   };
 
   const emailChangeHandler = () => {
     setIsApiError("");
-    if (                            // eslint-disable-next-line
+    if (
+      // eslint-disable-next-line
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
         emailInputRef?.current?.value
       )
