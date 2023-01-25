@@ -35,23 +35,25 @@ function App() {
   }, []);
 
   window.addEventListener("mousemove", () => {
-    prev = initial;
-  })
+    prev = Math.round(new Date().getTime() / 1000);
+  });
 
-  if (flag) {
-    let interval = setInterval(() => {
-      if (initial - prev > 1800) {
-        sessionStorage.setItem("login", false);
-        history.push("/");
-        setTimeout(() => {
-          alert("Your session has been expired");
-        }, 10000);
-        clearInterval(interval);
-      }
-      initial = Math.round(new Date().getTime() / 1000);
-    }, 15000);
-    flag = false;
-  }
+  useEffect(() => {
+    if (flag) {
+      let interval = setInterval(() => {
+        if (Math.round(new Date().getTime() / 1000) - prev > 1800) {
+          sessionStorage.setItem("login", false);
+          history.push("/");
+          setTimeout(() => {
+            alert("Your session has been expired");
+          }, 1000);
+          clearInterval(interval);
+        }
+        // initial = Math.round(new Date().getTime() / 1000);
+      }, 60000);
+      flag = false;
+    }
+  }, []);
 
   if (window.screen.width >= 768) {
     if (isSideMenuOpen) {
