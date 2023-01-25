@@ -19,8 +19,10 @@ import DriverList from "./Components/Drivers/DriverList";
 import PrivateTrips from "./Components/PrivateDriver/PrivateTrips";
 import LiveMap from "./Components/PrivateDriver/LiveMap";
 
-let flag = false;
+let flag = true;
 let prevURL = "";
+let initial = 0;
+let prev = 0;
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
@@ -31,6 +33,25 @@ function App() {
     if (status === null) setIsLoggedIn(false);
     else status === "false" ? setIsLoggedIn(false) : setIsLoggedIn(true);
   }, []);
+
+  window.addEventListener("mousemove", () => {
+    prev = initial;
+  })
+
+  if (flag) {
+    let interval = setInterval(() => {
+      if (initial - prev > 1800) {
+        sessionStorage.setItem("login", false);
+        history.push("/");
+        setTimeout(() => {
+          alert("Your session has been expired");
+        }, 10000);
+        clearInterval(interval);
+      }
+      initial = Math.round(new Date().getTime() / 1000);
+    }, 15000);
+    flag = false;
+  }
 
   if (window.screen.width >= 768) {
     if (isSideMenuOpen) {

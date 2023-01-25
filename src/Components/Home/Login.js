@@ -23,14 +23,14 @@ const Login = ({ login }) => {
   const [isApiError, setIsApiError] = useState();
 
   const authenticateUser = (data) => {
-    console.log(data);
-    sessionStorage.setItem("userType", data.UserType);
-    sessionStorage.setItem("user", emailInputRef.current.value);
-    sessionStorage.setItem("adminName", data.Username);
-    if (!data.Message) setIsApiError(data + " Please try again later");
+    // console.log(data);
+    if (!data.table1) setIsApiError(data + " Please try again later");
     else {
+      sessionStorage.setItem("userType", data.table1[0].userType);
+      sessionStorage.setItem("user", emailInputRef.current.value);
+      sessionStorage.setItem("adminName", data.table1[0].username);
       setIsCall(false);
-      data.Message === "Success"
+      data.table1[0].message === "Success"
         ? login(true)
         : setIsApiError("Please enter valid email or password");
     }
