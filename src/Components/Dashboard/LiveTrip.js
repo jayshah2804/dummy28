@@ -198,7 +198,8 @@ const LiveTrip = (props) => {
         });
 
         pathInterval = setInterval(() => {
-            document.getElementsByClassName("gm-fullscreen-control")[0].style.marginTop = "45px";
+            if (document.getElementsByClassName("gm-fullscreen-control"))
+                document.getElementsByClassName("gm-fullscreen-control")[0].style.marginTop = "45px";
             flightPath1 = new window.google.maps.Polyline({
                 path: flightPlanCoordinates,
                 geodesic: true,
@@ -342,7 +343,7 @@ const LiveTrip = (props) => {
             <div className={classes.mapContainer}>
                 <div id="map-modal" className={classes.map}></div>
                 <div className={classes.mapText}>Live Trip Tracker</div>
-                {isLoadingRoute && <div style={{position: "absolute", top: "0", left: "0", width: "100%",height: "100%", backgroundColor: "white", opacity: "0.5"}}></div>}
+                {isLoadingRoute && <div style={{ position: "absolute", top: "0", left: "0", width: "100%", height: "100%", backgroundColor: "white", opacity: "0.5" }}></div>}
                 {isLoadingRoute && <Loading driver="true" />}
             </div>
         </div>

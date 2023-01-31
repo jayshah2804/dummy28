@@ -72,7 +72,7 @@ const ForgotPassword = (props) => {
       emailInputRef?.current?.value
     )) {
       if (buttonValue === "Verify") {
-        alert(OTP);
+        // alert(OTP);
         if (otpInputRef.current.value == OTP) {
           setIsVerifyClicked(true);
           buttonValue = "Go to Login Page";
