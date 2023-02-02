@@ -4,6 +4,7 @@ import photo from "../../Assets/admin.jpg";
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import useHttp from '../../Hooks/use-http';
 
 const DUMMY_DATA = [
     {
@@ -43,6 +44,31 @@ let driver_data = structuredClone(DUMMY_DATA);
 const LiveMap = () => {
     const [filteredData, setFilteredData] = useState(DUMMY_DATA);
     const searchInputRef = useRef();
+
+
+    const authenticateUser = (data) => {
+        console.log(data);
+    };
+
+    const { isLoading, sendRequest } = useHttp();
+
+    useEffect(() => {
+        sendRequest({
+            url: "/api/v1/DriverList/GetPrivateDriverList",
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: {
+                emailID: "nihal@little.global",
+                userType: "corporate"
+            }
+        }, authenticateUser);
+        // }
+        // tripListFlag++;
+    }, [sendRequest]);
+
+
 
     useEffect(() => {
         const script = document.createElement("script");
