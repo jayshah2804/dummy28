@@ -71,6 +71,10 @@
   background-color: green;
 }
 
+.driverDetails {
+  position: relative;
+}
+
 .driverDetails .drivername {
   font-size: 14px;
 }
@@ -92,6 +96,7 @@
 .driverlist .filter-buttons {
   display: flex;
   gap: 5px;
+  justify-content: space-between;
 }
 
 .search {

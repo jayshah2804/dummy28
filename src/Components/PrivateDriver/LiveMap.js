@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import useHttp from "../../Hooks/use-http";
 import DriverBooking from "./DriverBooking";
+import Loading from "../../Loading/Loading";
 
 const DUMMY_DATA = [
   {
@@ -40,55 +41,10 @@ const DUMMY_DATA = [
   },
 ];
 
-let driver_data = [];
-
-const LiveMap = () => {
+const LiveMap = (props) => {
   const [filteredData, setFilteredData] = useState(DUMMY_DATA);
-  const [driverData, setDriverData] = useState([]);
   const [bookedDriver, setBookedDriver] = useState(false);
   const searchInputRef = useRef();
-
-  const authenticateUser = (data) => {
-    console.log(data);
-    let collectedDriverData = [];
-    for (let i = 0; i < data.PrivetDriverlist.length; i++) {
-      collectedDriverData.push({
-        driverName: data.PrivetDriverlist[i].DriverName,
-        driverEmail: data.PrivetDriverlist[i].DriverEmailID,
-        carNumber: data.PrivetDriverlist[i].CarNumber,
-        driverImage: data.PrivetDriverlist[i].DriverImage,
-        status:
-          data.PrivetDriverlist[i].LiveStatus == "1"
-            ? "on trip"
-            : data.PrivetDriverlist[i].IsOnline === true
-            ? "online"
-            : "",
-      });
-    }
-    driver_data = structuredClone(collectedDriverData);
-    setDriverData(collectedDriverData);
-  };
-
-  const { isLoading, sendRequest } = useHttp();
-
-  useEffect(() => {
-    sendRequest(
-      {
-        url: "/api/v1/DriverList/GetPrivateDriverList",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          emailID: "nihal@little.global",
-          userType: "corporate",
-        },
-      },
-      authenticateUser
-    );
-    // }
-    // tripListFlag++;
-  }, [sendRequest]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -111,8 +67,8 @@ const LiveMap = () => {
   window.myInitMap = myInitMap;
 
   const driverSearchHandler = (e) => {
-    setDriverData(
-      driver_data.filter(
+    props.setDriverData(
+      props.driver_data.filter(
         (data) =>
           data.driverName
             ?.toLowerCase()
@@ -125,28 +81,38 @@ const LiveMap = () => {
   const filterButtonClickHandler = (e) => {
     console.log(e.target.innerText);
     searchInputRef.current.value = "";
-    if (e.target.innerText.toLowerCase() === "all") setDriverData(driver_data);
+    if (e.target.innerText.toLowerCase() === "all")
+      props.setDriverData(props.driver_data);
     else if (e.target.innerText.toLowerCase() === "on trip")
-      setDriverData(
-        driver_data.filter(
+      props.setDriverData(
+        props.driver_data.filter(
           (data) => data.status === e.target.innerText.toLowerCase()
         )
       );
     else if (e.target.innerText.toLowerCase() === "online")
-      setDriverData(
-        driver_data.filter(
+      props.setDriverData(
+        props.driver_data.filter(
           (data) => data.status === e.target.innerText.toLowerCase()
         )
       );
   };
 
-  const bookButtonClickHandler = (e) => {
+  const bookButtonClickHandler = (
+    driverImage,
+    driverEmail,
+    carNumber,
+    carType
+  ) => {
     // alert(e.target.parentElement.id);
-    setBookedDriver(
-      driverData.filter(
-        (data) => data.driverEmail === e.target.parentElement.id
-      )
-    );
+    console.log(driverEmail, carNumber, carType);
+    setBookedDriver([
+      {
+        driverImage,
+        driverEmail,
+        carNumber,
+        carType,
+      },
+    ]);
   };
 
   return (
@@ -168,7 +134,11 @@ const LiveMap = () => {
           />
           <div className="driverDetails">
             <br />
-            {driverData.map((ele, index) => {
+            {props.isLoading && <Loading driver="true" />}
+            {props.driverData.length < 1 && !props.isLoading && (
+              <div style={{ textAlign: "center" }}>No Drivers Available</div>
+            )}
+            {props.driverData.map((ele, index) => {
               return (
                 <div
                   style={{
@@ -205,7 +175,14 @@ const LiveMap = () => {
                   {ele.status === "online" && ele.status !== "on trip" && (
                     <button
                       className="bookButton"
-                      onClick={bookButtonClickHandler}
+                      onClick={() =>
+                        bookButtonClickHandler(
+                          ele.driverImage,
+                          ele.driverName,
+                          ele.carNumber,
+                          ele.vehicleType
+                        )
+                      }
                     >
                       Book
                     </button>
@@ -217,7 +194,12 @@ const LiveMap = () => {
         </div>
         <div className="livetrip" id="live-map"></div>
       </div>
-      {bookedDriver && <DriverBooking />}
+      {bookedDriver && (
+        <DriverBooking
+          bookedDriver={bookedDriver}
+          setBookedDriver={setBookedDriver}
+        />
+      )}
     </React.Fragment>
   );
 };

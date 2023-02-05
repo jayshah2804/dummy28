@@ -9,3 +9,29 @@
   background-color: white;
   border-radius: 10px;
 }
+
+.driverBooking-container header {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.driverBooking-container header .driverInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.driverBooking-container header .driverInfo img {
+  border-radius: 50%;
+  object-fit: contain;
+  width: 50px;
+  height: 50px;
+}
+
+.driverBooking-container header .carInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

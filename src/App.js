@@ -18,6 +18,7 @@ import DocumentsUpload from "./Components/Documents Upload/DocumentsUpload";
 import DriverList from "./Components/Drivers/DriverList";
 import PrivateTrips from "./Components/PrivateDriver/PrivateTrips";
 import LiveMap from "./Components/PrivateDriver/LiveMap";
+import DriverData from "./Components/PrivateDriver/DriverData";
 
 let flag = true;
 let prevURL = "";
@@ -192,7 +193,7 @@ function App() {
                 <AddDepartment />
               </Route>
               <Route path="/privatedrive/livemap">
-                <LiveMap />
+                <DriverData />
               </Route>
               <Route path="/edit">
                 <AddDepartment />
