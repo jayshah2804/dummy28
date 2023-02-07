@@ -217,8 +217,8 @@ function RouteInfo(props) {
                   <option disabled selected>
                     Route Type
                   </option>
-                  <option>Pickup</option>
-                  <option>Drop</option>
+                  <option>Picking</option>
+                  <option>dropping</option>
                 </select>
                 {isError.routeType && (
                   <p className="error">{isError.routeType}</p>

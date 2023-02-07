@@ -97,6 +97,10 @@ const LiveMap = (props) => {
       );
   };
 
+  const onTripDriverClickHandler = () => {
+    
+  } 
+
   const bookButtonClickHandler = (
     driverImage,
     driverEmail,
@@ -147,6 +151,10 @@ const LiveMap = (props) => {
                     alignItems: "center",
                   }}
                   id={ele.driverEmail}
+                  className={ele.status === "on trip" ? "driverContainer" : ""}
+                  onClick={() =>
+                    onTripDriverClickHandler(ele.driverEmail, ele.status)
+                  }
                 >
                   <div
                     style={{
@@ -162,8 +170,8 @@ const LiveMap = (props) => {
                           ele?.status === "online"
                             ? "online"
                             : ele.status === "on trip"
-                            ? "ontrip"
-                            : ""
+                              ? "ontrip"
+                              : ""
                         }
                       ></p>
                     </div>
