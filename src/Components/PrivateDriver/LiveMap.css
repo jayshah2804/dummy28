@@ -79,6 +79,20 @@
   background-color: green;
 }
 
+.onTripButtton {
+  border-radius: 5px;
+  padding: 2px 4px;
+  background-color: rgba(34, 137, 203, 255);
+  border: 1px solid rgba(34, 137, 203, 255);
+  cursor: pointer;
+  color: white;
+  font-size: 12px;
+}
+
+.onTripButtton:hover {
+  background-color: rgba(34, 137, 203, 255);
+}
+
 .driverDetails {
   position: relative;
 }
@@ -99,6 +113,10 @@
   border-radius: 10px;
   margin-bottom: 10px;
   min-height: 650px;
+}
+
+.currentDriver {
+  background-color: rgb(228, 222, 222);
 }
 
 .driverlist .filter-buttons {
