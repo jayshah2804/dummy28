@@ -352,7 +352,7 @@ const LiveMap = (props) => {
                           : ""
                       }
                     >
-                      Book
+                      {ele.status === "online" ? "Book" : "On Trip"}
                     </button>
                   )}
                 </div>

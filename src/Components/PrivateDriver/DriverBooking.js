@@ -6,25 +6,33 @@ import "./DriverBooking.css";
 let autocomplete = [];
 const DriverBooking = (props) => {
   const [isDriverBookingClicked, setIsDriverBookingClicked] = useState(false);
+  const [isToken, setIsToken] = useState("");
 
   const authenticateUser = (data) => {
     console.log(data);
   };
 
-  const { isLoading, sendRequest } = useHttp();
-
   useEffect(() => {
-    isDriverBookingClicked &&
-      sendRequest({
-        url: "/api/v1/Dispatch/GetShuttleTrips",
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-        }
-      }, authenticateUser);
-  }, [sendRequest, isDriverBookingClicked]);
+    if (isDriverBookingClicked) {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", "Basic NmViNzcwZmVhYmZlZDhlYzpMRUpSaTFFcEJRY1FQUjZLOW1jMTFnPT0=");
+
+      var raw = "";
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        // body: raw,
+        redirect: 'follow'
+      };
+
+      fetch("https://api.little.bz/app/token", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+    }
+
+  }, [isDriverBookingClicked]);
 
 
   useEffect(() => {

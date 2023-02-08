@@ -81,6 +81,13 @@ const Main = () => {
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
+    if (sessionStorage.getItem("interval")) {
+      clearInterval(sessionStorage.getItem("interval"));
+      sessionStorage.removeItem("interval");
+    }
+  }, []);
+
+  useEffect(() => {
     // alert("jay");
     // if (divFlag % 2 === 0)
     sendRequest(
