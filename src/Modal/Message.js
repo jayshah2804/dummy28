@@ -35,7 +35,7 @@ const Message = (props) => {
             <div className="success-sub-container">
                 <div className="success-msg">
                     <img src={props.type.toLowerCase() === "success" ? TickmarkImage : ErrorImage} />
-                    <p className="data-save">{props.type.toLowerCase() === "success" ? props.message : "Some Error Occured. Please Try Again Later"}</p>
+                    <p className="data-save">{props.type.toLowerCase() === "success" ? props.message : (props.driveErrorMessage ? props.driveErrorMessage : "Some Error Occured. Please Try Again Later")}</p>
                 </div>
                 <hr />
                 <div

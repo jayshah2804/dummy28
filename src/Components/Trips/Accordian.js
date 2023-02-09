@@ -119,8 +119,8 @@ const Accordian = (props) => {
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
-    console.log(rider_dataFlag);
-    if (rider_dataFlag > 1) {
+    // console.log(rider_dataFlag);
+    // if (rider_dataFlag > 1) {
       console.log("here");
       if (currentId !== previous_id || (currentId === previous_id && !prev_active_status)) {
         // console.log(currentId, previous_id, prev_active_status);
@@ -137,7 +137,7 @@ const Accordian = (props) => {
             journeyID: current_journeyId
           }
         }, authenticateUser);
-      }
+      // }
     }
     rider_dataFlag++;
   }, [sendRequest, isActive]);

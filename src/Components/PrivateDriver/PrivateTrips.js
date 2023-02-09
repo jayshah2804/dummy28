@@ -23,14 +23,15 @@ const TRIP_DATA = [
 ];
 
 const TRIP_TITLE = [
-  "Driver Name",
+  "Driver Info",
   "Journey_ID",
   "Trip Date",
-  "Reporting location",
+  // "Reporting location",
   "Start Time",
   "End Time",
+  "Total Trip Time",
+  "Trip Status",
   "Total Trip KM",
-  "Status",
 ];
 
 let myClick = false;
@@ -51,7 +52,7 @@ function PrivateTrips(props) {
   const endDateRef = useRef();
 
   const authenticateUser = (data) => {
-    console.log("data");
+    console.log(data);
     let trip_list = [];
     if (data.TripList) {
       for (let i = 0; i < data.TripList.length; i++) {
@@ -64,7 +65,8 @@ function PrivateTrips(props) {
           pickup_time: data.TripList[i].StartedOnTime,
           drop_time: data.TripList[i].EndedOnTime,
           total_trip_time: data.TripList[i].TotalTripTime,
-          total_trip_km: data.TripList[i].TripDistance
+          total_trip_km: data.TripList[i].TripDistance,
+          trip_status: data.TripList[i].TripStatus
         })
       }
     }
@@ -81,16 +83,15 @@ function PrivateTrips(props) {
     if (tripListFlag > 0) {
       // console.log(tripListFlag);
       sendRequest({
-        url: "/api/v1/ShuttleTrips/GetShuttleTrips",
+        url: "/api/v1/PrivateTrip/GetPrivateTrip",
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
         },
         body: {
-          emailID: sessionStorage.getItem("user"),
-          corporateID: sessionStorage.getItem("corpId"),
-          departmentID: "",
-          staffMobileNumber: staffMoNumber ? staffMoNumber : "",
+          // emailID: sessionStorage.getItem("user"),
+          emailID: "nihal@little.global",
+          userType: "corporate",
           fromDate: "2018-01-01",
           toDate: today
         }
@@ -216,7 +217,7 @@ function PrivateTrips(props) {
 
   return (
     <div className="trips-details" id="trip-table">
-      <div className="title">{sessionStorage.getItem("type") + " shuttle trips"}</div>
+      <div className="title">Private Driver trips</div>
       <div className="table-container">
         <div className="header">
           <div onClick={filterButtonClickHandler} className="filter-buttons">

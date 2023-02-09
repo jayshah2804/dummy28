@@ -81,6 +81,7 @@ const Main = () => {
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
+    // debugger;
     if (sessionStorage.getItem("interval")) {
       clearInterval(sessionStorage.getItem("interval"));
       sessionStorage.removeItem("interval");

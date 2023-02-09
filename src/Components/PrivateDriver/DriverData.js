@@ -3,6 +3,7 @@ import useHttp from "../../Hooks/use-http";
 import LiveMap from "./LiveMap";
 
 let driver_data = [];
+let rider_data = [];
 
 const DriverData = () => {
   const [driverData, setDriverData] = useState([]);
@@ -15,6 +16,7 @@ const DriverData = () => {
   const authenticateUser = (data) => {
     console.log(data);
     let collectedDriverData = [];
+    if(data.RidersList?.length > 0) rider_data = data.RidersList; 
     for (let i = 0; i < data.PrivetDriverlist?.length; i++) {
       collectedDriverData.push({
         driverName: data.PrivetDriverlist[i].DriverName,
@@ -60,6 +62,7 @@ const DriverData = () => {
       driver_data={driver_data}
       setDriverData={setDriverData}
       isLoading={isLoading}
+      riderData={rider_data}
     />
   );
 };

@@ -88,6 +88,7 @@ function App(props) {
         },
         body: {
           emailID: sessionStorage.getItem("user"),
+          // emailID: "nihal@little.global",
           corporateID: id ? id : (sessionStorage.getItem("userType") === "AccountManager" ? "" : sessionStorage.getItem("corpId")),
           departmentID: "",
           staffMobileNumber: staffMoNumber ? staffMoNumber : "",
