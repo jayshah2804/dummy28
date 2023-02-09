@@ -210,13 +210,17 @@ const LiveMap = (props) => {
         strokeWeight: 4,
       });
 
-      setTimeout(() => {
+      if (flightPlanCoordinates.length > 1) {
+        setTimeout(() => {
+          flightPath2.setMap(map);
+        }, 3000);
+        transition();
+      } else if (flightPlanCoordinates.length > 0) {
         flightPath2.setMap(map);
-      }, 3000);
-      transition();
-      // marker.setPosition(
-      //   flightPlanCoordinates[flightPlanCoordinates.length - 1]
-      // );
+        marker.setPosition(
+          flightPlanCoordinates[flightPlanCoordinates.length - 1]
+        );
+      }
 
       if (
         prev_driverEmail &&
