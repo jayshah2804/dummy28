@@ -162,7 +162,7 @@ function Routes() {
                     id: i + 1,
                     name: data.StaffList[i].OfficialName,
                     mobile_no: data.StaffList[i].MobileNumber,
-                    superviser_name: data.StaffList[i].SupervisorName,
+                    // superviser_name: data.StaffList[i].SupervisorName,
                     department: data.StaffList[i].DepartmentName,
                     status: data.StaffList[i].Status
                 })

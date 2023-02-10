@@ -94,7 +94,7 @@ const StopInfo = (props) => {
       myStopNumberInfo = {};
       stop_number = 0;
 
-      for (let i = 1; i < details.length; i++) {
+      for (let i = 1; i < details?.length; i++) {
         editedStopDetails.push({
           stop: details[i].StopName,
           lat: details[i].StopLatitude,
@@ -137,6 +137,7 @@ const StopInfo = (props) => {
   }, []);
 
   const authenticateUser = (data) => {
+    debugger;
     if (type === "submit") {
       console.log(data);
       if (data.Message && data.Message.toLowerCase() === "success")
@@ -163,18 +164,18 @@ const StopInfo = (props) => {
         for (let i = 0; i < data.StaffList.length; i++) {
           studentData.push({
             stop:
-              sessionStorage.getItem("routeType").toLowerCase() === "pickup"
+              sessionStorage.getItem("routeType").toLowerCase() === "picking"
                 ? data.StaffList[i].PickupPoint
                 : data.StaffList[i].DropPoint,
             name: [data.StaffList[i].StaffName],
             mNumber: [data.StaffList[i].MobileNumber],
             location: {
               lat:
-                sessionStorage.getItem("routeType").toLowerCase() === "pickup"
+                sessionStorage.getItem("routeType").toLowerCase() === "picking"
                   ? +data.StaffList[i].PickupLL.split(",")[0]
                   : +data.StaffList[i].DropLL.split(",")[0],
               lng:
-                sessionStorage.getItem("routeType").toLowerCase() === "pickup"
+                sessionStorage.getItem("routeType").toLowerCase() === "picking"
                   ? +data.StaffList[i].PickupLL.split(",")[1]
                   : +data.StaffList[i].DropLL.split(",")[1],
             },

@@ -80,7 +80,7 @@ function PrivateTrips(props) {
     let date = new Date();
     // console.log(date.getMonth());
     let today = date.getFullYear().toString().concat("-", +date.getMonth() + 1, "-", date.getDate());
-    if (tripListFlag > 0) {
+    // if (tripListFlag > 0) {
       // console.log(tripListFlag);
       sendRequest({
         url: "/api/v1/PrivateTrip/GetPrivateTrip",
@@ -89,14 +89,14 @@ function PrivateTrips(props) {
           'Content-Type': 'application/json',
         },
         body: {
-          // emailID: sessionStorage.getItem("user"),
-          emailID: "nihal@little.global",
+          emailID: sessionStorage.getItem("user"),
+          // emailID: "nihal@little.global",
           userType: "corporate",
           fromDate: "2018-01-01",
           toDate: today
         }
       }, authenticateUser);
-    }
+    // }
     tripListFlag++;
   }, [sendRequest]);
 

@@ -47,8 +47,8 @@ const DriverData = () => {
           "Content-Type": "application/json",
         },
         body: {
-          emailID: "nihal@little.global",
-          //   emailID: "sjay2804@gmail.com",
+          // emailID: "nihal@little.global",
+            emailID: "sjay2804@gmail.com",
           userType: "corporate",
         },
       },

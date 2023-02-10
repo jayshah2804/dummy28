@@ -135,7 +135,7 @@ const DriverBooking = (props) => {
     else if (isRequestSentToDriver === "yes") {
       setIsLoading(true);
       setTimeout(() => {
-        document.getElementById("progressBarText").innerText = "Sending Trip Request...";
+        document.getElementById("progressBarText").innerText = "Sending Trip Request ...";
       });
       move(0, 50);
       setTimeout(() => {
@@ -233,7 +233,7 @@ const DriverBooking = (props) => {
       {isLoading &&
         <div id="myProgress">
           <div id="myBar"></div>
-          <span id="progressBarText" style={{ position: "absolute", top: "15%", left: "30%" }}>Connecting to driver...</span>
+          <span id="progressBarText" style={{ position: "absolute", top: "15%", left: "30%", fontSize: "13.5px" }}>Connecting to driver ...</span>
         </div>
       }
       {isRequestSentToDriver === "no" && <div className="tripRequestError">{"Driver is unreachable. Please try again after some time"}</div>}

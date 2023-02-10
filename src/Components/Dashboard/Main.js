@@ -132,7 +132,7 @@ const Main = () => {
         <div className={classes.cards}>
           <div
             className={classes.text}
-            title="Click to see Monthly Trip details"
+            title="Monthly Trip details"
             onClick={() => history.push("/trips")}
           >
             <p>Trips</p>
