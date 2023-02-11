@@ -78,7 +78,6 @@ const RIDER_DATA = [
   },
 ];
 
-
 let parent_prev_id;
 let prev_active_status;
 let rider_dataFlag = 0;
@@ -105,12 +104,18 @@ const Accordian = (props) => {
         pickup_location: data.TripdetailList[i].PickupAddress,
         shuttle_arrival_time: data.TripdetailList[i].ShuttleArriveTime,
         boarding_time: data.TripdetailList[i].BoardingTime,
-        boarding_lat_lng: data.TripdetailList[i].PickupLatitude + "," + data.TripdetailList[i].PickupLongitude,
+        boarding_lat_lng:
+          data.TripdetailList[i].PickupLatitude +
+          "," +
+          data.TripdetailList[i].PickupLongitude,
         drop_location: data.TripdetailList[i].DropOffAddress,
         alighting_time: data.TripdetailList[i].AlightingTime,
-        alighting_lat_lng: data.TripdetailList[i].DropoffLatitude + "," + data.TripdetailList[i].DropoffLongitude,
-        route_name: data.TripdetailList[i].RouteName
-      })
+        alighting_lat_lng:
+          data.TripdetailList[i].DropoffLatitude +
+          "," +
+          data.TripdetailList[i].DropoffLongitude,
+        route_name: data.TripdetailList[i].RouteName,
+      });
     }
     rider_details = trip_rider_list;
     setRiderData(rider_details);
@@ -121,48 +126,54 @@ const Accordian = (props) => {
   useEffect(() => {
     // console.log(rider_dataFlag);
     // if (rider_dataFlag > 1) {
-      console.log("here");
-      if (currentId !== previous_id || (currentId === previous_id && !prev_active_status)) {
-        // console.log(currentId, previous_id, prev_active_status);
-        console.log("here2");
-        console.log(current_journeyId);
-        sendRequest({
+    console.log("here");
+    if (
+      currentId !== previous_id ||
+      (currentId === previous_id && !prev_active_status)
+    ) {
+      // console.log(currentId, previous_id, prev_active_status);
+      console.log("here2");
+      console.log(current_journeyId);
+      sendRequest(
+        {
           url: "/api/v1/ShuttleTrips/ShuttleTripsDetails",
           method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            journeyID: current_journeyId
-          }
-        }, authenticateUser);
+            journeyID: current_journeyId,
+          },
+        },
+        authenticateUser
+      );
       // }
     }
     rider_dataFlag++;
   }, [sendRequest, isActive]);
 
   const tableRowClickHandler = (e) => {
-    console.log(e.target);
-    if (evenFlag % 2 === 0) {
-      current_journeyId = e.target.parentElement.children[1].innerText;
-    }
     if (parent_prev_id !== e.target.parentElement.id && !prev_active_status)
       props.formyRender(parent_prev_id);
-    setIsActive(prev => !prev);
+    setIsActive((prev) => !prev);
     parent_prev_id = e.target.parentElement.id;
-    previous_id = currentId;;
+    previous_id = currentId;
     currentId = e.target.parentElement.id;
     prev_active_status = isActive;
     evenFlag++;
-  }
+
+    if (evenFlag % 2 !== 0) {
+      current_journeyId = e.target.parentElement.children[1].innerText;
+    }
+  };
 
   return (
     <React.Fragment>
       {/* {console.log(riderData)} */}
-      <tr onClick={tableRowClickHandler} id={props.id + "tr"} >
+      <tr onClick={tableRowClickHandler} id={props.id + "tr"}>
         <td>
-          <div className={classes.driverInfo} >
+          <div className={classes.driverInfo}>
             {/* <img
               src={photo}
               alt=""
@@ -190,42 +201,43 @@ const Accordian = (props) => {
       </tr>
       {isActive && (
         <td colSpan="7">
-          {isLoading ? <Loading datatable="true" /> :
-            (riderData.length > 0 ?
-              <React.Fragment>
-                <RiderInfoMap RIDER_DATA={riderData} driverPath={driverPath} />
-                <div className={classes.rideTableContainer}>
-                  <table className={classes.riderTable}>
-                    <tr>
-                      {RIDER_TITLE.map((data) => (
-                        <th>{data}</th>
-                      ))}
-                    </tr>
-                    <tbody>
-                      {riderData.map((data) => {
-                        return (
-                          <tr id="myHandler">
-                            <td className={classes.riderName} >
-                              {/* <img src={photo} alt="" /> */}
-                              <p>{data.rider_name}</p>
-                            </td>
-                            <td>{data.pickup_location} </td>
-                            <td>{data.shuttle_arrival_time} </td>
-                            <td>{data.boarding_time} </td>
-                            <td>{data.boarding_lat_lng} </td>
-                            <td>{data.drop_location} </td>
-                            <td>{data.alighting_time} </td>
-                            <td>{data.alighting_lat_lng} </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </React.Fragment> :
-              <div>No Data Available</div>
-            )
-          }
+          {isLoading ? (
+            <Loading datatable="true" />
+          ) : riderData.length > 0 ? (
+            <React.Fragment>
+              <RiderInfoMap RIDER_DATA={riderData} driverPath={driverPath} />
+              <div className={classes.rideTableContainer}>
+                <table className={classes.riderTable}>
+                  <tr>
+                    {RIDER_TITLE.map((data) => (
+                      <th>{data}</th>
+                    ))}
+                  </tr>
+                  <tbody>
+                    {riderData.map((data) => {
+                      return (
+                        <tr id="myHandler">
+                          <td className={classes.riderName}>
+                            {/* <img src={photo} alt="" /> */}
+                            <p>{data.rider_name}</p>
+                          </td>
+                          <td>{data.pickup_location} </td>
+                          <td>{data.shuttle_arrival_time} </td>
+                          <td>{data.boarding_time} </td>
+                          <td>{data.boarding_lat_lng} </td>
+                          <td>{data.drop_location} </td>
+                          <td>{data.alighting_time} </td>
+                          <td>{data.alighting_lat_lng} </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </React.Fragment>
+          ) : (
+            <div>No Data Available</div>
+          )}
         </td>
       )}
     </React.Fragment>
