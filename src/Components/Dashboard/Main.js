@@ -107,7 +107,6 @@ const Main = () => {
     divFlag++;
   }, [sendRequest]);
 
-
   return (
     <React.Fragment>
       <div className={classes.container} id="myContainer">
@@ -132,7 +131,7 @@ const Main = () => {
         <div className={classes.cards}>
           <div
             className={classes.text}
-            title="Monthly Trip details"
+            title="Click to see Monthly Trip details"
             onClick={() => history.push("/trips")}
           >
             <p>Trips</p>
@@ -201,7 +200,10 @@ const Main = () => {
         {/* <div className={classes.tripChart}>
         <Chart options={options.options} series={options.series} type="line" height={270} className={classes.chart} />
       </div> */}
-        <LiveTrip driverList={isLoading ? [] : driverList} isLoading={isLoading} />
+        <LiveTrip
+          driverList={isLoading ? [] : driverList}
+          isLoading={isLoading}
+        />
       </div>
       {!sessionStorage.getItem("splashFlag") && (
         <div
