@@ -189,7 +189,7 @@ function App(props) {
       enddate = new Date(enddate);
       // console.log(startdate, enddate);
       setFilteredData(
-        filteredData.filter(
+        total_trip_data.filter(
           (data) =>
             new Date(data.trip_date) > startdate &&
             new Date(data.trip_date) < enddate

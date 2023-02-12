@@ -81,21 +81,21 @@ function PrivateTrips(props) {
     // console.log(date.getMonth());
     let today = date.getFullYear().toString().concat("-", +date.getMonth() + 1, "-", date.getDate());
     // if (tripListFlag > 0) {
-      // console.log(tripListFlag);
-      sendRequest({
-        url: "/api/v1/PrivateTrip/GetPrivateTrip",
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          emailID: sessionStorage.getItem("user"),
-          // emailID: "nihal@little.global",
-          userType: "corporate",
-          fromDate: "2018-01-01",
-          toDate: today
-        }
-      }, authenticateUser);
+    // console.log(tripListFlag);
+    sendRequest({
+      url: "/api/v1/PrivateTrip/GetPrivateTrip",
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        emailID: sessionStorage.getItem("user"),
+        // emailID: "nihal@little.global",
+        userType: "corporate",
+        fromDate: "2018-01-01",
+        toDate: today
+      }
+    }, authenticateUser);
     // }
     tripListFlag++;
   }, [sendRequest]);
@@ -189,7 +189,7 @@ function PrivateTrips(props) {
       enddate = new Date(enddate);
       // console.log(startdate, enddate);
       setFilteredData(
-        filteredData.filter(
+        total_trip_data.filter(
           (data) =>
             new Date(data.trip_date) > startdate &&
             new Date(data.trip_date) < enddate
