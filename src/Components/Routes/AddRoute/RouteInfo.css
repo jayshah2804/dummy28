@@ -7,14 +7,15 @@
   /* margin-top: -65px; */
   top: 0;
   left: 0;
-  margin-right: -20px;
-  padding-right: -20px;
+  /* margin-right: -20px; */
+  /* padding-right: -20px; */
 }
 
 .add-route-container {
   position: absolute;
-  box-shadow: 0 0 20px rgba(33, 33, 33, .3);
-  top: 100%;
+  box-shadow: 0 0 20px rgba(33, 33, 33, 0.3);
+  /* top: 100%; */
+  top: 40vh;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
@@ -150,7 +151,7 @@ option:not(:first-of-type) {
 }
 
 .wizard-progress .step:not(:last-child):before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   left: 42%;
@@ -187,7 +188,6 @@ option:not(:first-of-type) {
   content: "\2713";
   color: white;
   padding: 3px;
-
 }
 
 .wizard-progress .step.in-progress:before {
@@ -203,7 +203,6 @@ option:not(:first-of-type) {
   background-color: white;
   border: 6px solid #07c;
 }
-
 
 @media only screen and (max-width: 768px) {
   .add-route-container {
