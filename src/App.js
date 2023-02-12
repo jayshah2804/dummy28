@@ -35,26 +35,26 @@ function App() {
     else status === "false" ? setIsLoggedIn(false) : setIsLoggedIn(true);
   }, []);
 
-  window.addEventListener("mousemove", () => {
-    prev = Math.round(new Date().getTime() / 1000);
-  });
+  // window.addEventListener("mousemove", () => {
+  //   prev = Math.round(new Date().getTime() / 1000);
+  // });
 
-  useEffect(() => {
-    if (flag) {
-      let interval = setInterval(() => {
-        if (Math.round(new Date().getTime() / 1000) - prev > 1800) {
-          sessionStorage.setItem("login", false);
-          history.push("/");
-          setTimeout(() => {
-            alert("Your session has been expired");
-          }, 1000);
-          clearInterval(interval);
-        }
-        // initial = Math.round(new Date().getTime() / 1000);
-      }, 60000);
-      flag = false;
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (flag) {
+  //     let interval = setInterval(() => {
+  //       if (Math.round(new Date().getTime() / 1000) - prev > 1800) {
+  //         sessionStorage.setItem("login", false);
+  //         history.push("/");
+  //         setTimeout(() => {
+  //           alert("Your session has been expired");
+  //         }, 1000);
+  //         clearInterval(interval);
+  //       }
+  //       // initial = Math.round(new Date().getTime() / 1000);
+  //     }, 60000);
+  //     flag = false;
+  //   }
+  // }, []);
 
   if (window.screen.width >= 768) {
     if (isSideMenuOpen) {

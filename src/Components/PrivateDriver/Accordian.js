@@ -71,9 +71,10 @@ const Accordian = (props) => {
     // if (rider_dataFlag > 1) {
     // console.log("here");
     if (
-      currentId !== previous_id ||
-      (currentId === previous_id && !prev_active_status)
+      (currentId !== previous_id ||
+        (currentId === previous_id && !prev_active_status)) && current_journeyId
     ) {
+      // debugger;
       // console.log(currentId, previous_id, prev_active_status);
       // console.log("here2");
       // console.log(current_journeyId);
