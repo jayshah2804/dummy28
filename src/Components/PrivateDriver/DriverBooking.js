@@ -147,7 +147,7 @@ const DriverBooking = (props) => {
             // props.setBookedDriver(false);
           })
           .catch(error => console.log('error', error));
-      }, 30000);
+      }, 40000);
     }
 
   }, [isDriverBookingClicked, isToken]);

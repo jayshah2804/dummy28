@@ -190,7 +190,7 @@ tbody tr:hover {
 }
 
 .trips-details {
-  position: relative;
+  /* position: relative; */
 }
 
 .trips-details .route-search {
