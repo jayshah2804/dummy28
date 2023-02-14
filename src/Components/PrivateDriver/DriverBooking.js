@@ -140,7 +140,7 @@ const DriverBooking = (props) => {
       move(0, 50);
       setTimeout(() => {
         paraMeters();
-        fetch(url, requestOptions)
+        fetch("https://corp.little.global/server" + url, requestOptions)
           .then(response => response.text())
           .then(result => {
             setTripRequestStatus(JSON.parse(result).tripStatus.toLowerCase())
