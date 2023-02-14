@@ -120,7 +120,7 @@ const DriverBooking = (props) => {
     }
     else if (isToken) {
       paraMeters();
-      fetch(url, requestOptions)
+      fetch("https://corp.little.global/server" + url, requestOptions)
         .then(response => response.text())
         .then(result => {
           JSON.parse(result).tripId ? setIsRequestSentToDriver("yes") : setIsRequestSentToDriver("no");
