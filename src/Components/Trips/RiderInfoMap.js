@@ -56,7 +56,7 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     const flightPathBorder = new window.google.maps.Polyline({
       path: flightPlanCoordinates,
       geodesic: true,
-      strokeColor: "#176cd5",
+      strokeColor: "black",
       strokeOpacity: 1.0,
       strokeWeight: 6,
     });

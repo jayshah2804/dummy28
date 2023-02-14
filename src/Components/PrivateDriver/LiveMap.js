@@ -205,9 +205,9 @@ const LiveMap = (props) => {
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
         geodesic: true,
-        strokeColor: "#909090",
+        strokeColor: "#00b0ff",
         strokeOpacity: 1.0,
-        strokeWeight: 4,
+        strokeWeight: 5,
       });
 
       if (flightPlanCoordinates.length > 1) {
@@ -437,7 +437,7 @@ const LiveMap = (props) => {
         />
       )}
       {tripRequestStatus &&
-        <Message type={tripRequestStatus === "accepted" ? "success" : "fail"} message="Driver has accepted your request" driveErrorMessage="Driver has not accepted your request" />
+        < Message type={/accepted|arrived|started/.test(tripRequestStatus) ? "success" : "fail"} message="Driver has accepted your request" driveErrorMessage="Driver has not accepted your request" />
       }
     </React.Fragment>
   );

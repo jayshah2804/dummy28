@@ -252,9 +252,9 @@ const LiveTrip = (props) => {
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
         geodesic: true,
-        strokeColor: "#909090",
+        strokeColor: "#00b0ff",
         strokeOpacity: 1.0,
-        strokeWeight: 4,
+        strokeWeight: 5,
       });
       // debugger;
       // if (prev_driverEmail && prev_driverEmail !== props.driverEmail)
