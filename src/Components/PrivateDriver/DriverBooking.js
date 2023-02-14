@@ -4,6 +4,11 @@ import useHttp from "../../Hooks/use-http";
 import Message from "../../Modal/Message";
 import "./DriverBooking.css";
 
+import building from "../../Assets/buildings.png";
+import pickupicon from "../../Assets/pickupicon.png";
+import dropicon from "../../Assets/drop-icon.png";
+import user from "../../Assets/user.png";
+
 let autocomplete = [];
 let url;
 let requestOptions = {};
@@ -33,21 +38,23 @@ const DriverBooking = (props) => {
     if (isDriverBookingClicked) {
       url = "/map/app/token";
       myHeaders = new Headers();
-      myHeaders.append("Authorization", "Basic NmViNzcwZmVhYmZlZDhlYzpMRUpSaTFFcEJRY1FQUjZLOW1jMTFnPT0=");
+      myHeaders.append(
+        "Authorization",
+        "Basic NmViNzcwZmVhYmZlZDhlYzpMRUpSaTFFcEJRY1FQUjZLOW1jMTFnPT0="
+      );
       requestOptions = {
-        method: 'GET',
+        method: "GET",
         headers: myHeaders,
-        redirect: 'follow'
-      }
-    }
-    else if (isToken) {
+        redirect: "follow",
+      };
+    } else if (isToken) {
       url = "/map/service/ride/book";
       myHeaders = {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + isToken
-      }
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + isToken,
+      };
       requestOptions = {
-        method: 'POST',
+        method: "POST",
         headers: myHeaders,
         body: JSON.stringify({
           type: "CORPORATE",
@@ -56,7 +63,7 @@ const DriverBooking = (props) => {
             mobileNumber: "+" + riderInfo.mobileNumber,
             name: riderInfo.name,
             email: sessionStorage.getItem("user"),
-            picture: "https://google.com/mypicture.com"
+            picture: "https://google.com/mypicture.com",
           },
           skipDrivers: [],
           vehicle: {
@@ -69,38 +76,44 @@ const DriverBooking = (props) => {
               recipientAddress: "the place",
               contactPerson: "My Person",
               deliveryNotes: "another one",
-              typeOfAddress: "Home"
-            }
+              typeOfAddress: "Home",
+            },
           },
           pickUp: {
             // latlng: "22.9929777,72.5013096",
-            latlng: (autocomplete[0].getPlace().geometry.location.lat() + "," + autocomplete[0].getPlace().geometry.location.lng()).toString(),
-            address: document.getElementById("pac-input1").value
+            latlng: (
+              autocomplete[0].getPlace().geometry.location.lat() +
+              "," +
+              autocomplete[0].getPlace().geometry.location.lng()
+            ).toString(),
+            address: document.getElementById("pac-input1").value,
           },
           dropOff: {
             // latlng: "22.9929777,72.5013096",
-            latlng: (autocomplete[1].getPlace().geometry.location.lat() + "," + autocomplete[1].getPlace().geometry.location.lng()).toString(),
-            address: document.getElementById("pac-input2").value
+            latlng: (
+              autocomplete[1].getPlace().geometry.location.lat() +
+              "," +
+              autocomplete[1].getPlace().geometry.location.lng()
+            ).toString(),
+            address: document.getElementById("pac-input2").value,
           },
-          dropOffs: [
-          ],
+          dropOffs: [],
           corporate: {
-            corporateId: sessionStorage.getItem("corpId")
-          }
+            corporateId: sessionStorage.getItem("corpId"),
+          },
         }),
-        redirect: 'follow'
-      }
-    }
-    else if (isRequestSentToDriver === "yes") {
+        redirect: "follow",
+      };
+    } else if (isRequestSentToDriver === "yes") {
       url = "/map/service/ride/" + requestTripId + "/status";
       myHeaders = {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + authToken
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + authToken,
       };
       requestOptions = {
-        method: 'GET',
+        method: "GET",
         headers: myHeaders,
-        redirect: 'follow'
+        redirect: "follow",
       };
     }
   }
@@ -110,48 +123,47 @@ const DriverBooking = (props) => {
       move();
       paraMeters();
       fetch("https://corp.little.global/server" + url, requestOptions)
-        .then(response => response.text())
-        .then(result => {
+        .then((response) => response.text())
+        .then((result) => {
           setIsToken(JSON.parse(result).token);
           authToken = JSON.parse(result).token;
           setIsDriverBookingClicked(false);
         })
-        .catch(error => console.log('error', error));
-    }
-    else if (isToken) {
+        .catch((error) => console.log("error", error));
+    } else if (isToken) {
       paraMeters();
       fetch("https://corp.little.global/server" + url, requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          JSON.parse(result).tripId ? setIsRequestSentToDriver("yes") : setIsRequestSentToDriver("no");
+        .then((response) => response.text())
+        .then((result) => {
+          JSON.parse(result).tripId
+            ? setIsRequestSentToDriver("yes")
+            : setIsRequestSentToDriver("no");
           if (JSON.parse(result).tripId) {
             requestTripId = JSON.parse(result).tripId;
-          };
+          }
           setIsLoading(false);
           setIsToken(false);
         })
-        .catch(error => console.log('error', error));
-    }
-    else if (isRequestSentToDriver === "yes") {
+        .catch((error) => console.log("error", error));
+    } else if (isRequestSentToDriver === "yes") {
       setIsLoading(true);
       setTimeout(() => {
-        document.getElementById("progressBarText").innerText = "Sending Trip Request ...";
+        document.getElementById("progressBarText").innerText =
+          "Sending Trip Request ...";
       });
       move(0, 50);
       setTimeout(() => {
         paraMeters();
         fetch("https://corp.little.global/server" + url, requestOptions)
-          .then(response => response.text())
-          .then(result => {
-            setTripRequestStatus(JSON.parse(result).tripStatus.toLowerCase())
+          .then((response) => response.text())
+          .then((result) => {
+            setTripRequestStatus(JSON.parse(result).tripStatus.toLowerCase());
             // props.setBookedDriver(false);
           })
-          .catch(error => console.log('error', error));
+          .catch((error) => console.log("error", error));
       }, 30000);
     }
-
   }, [isDriverBookingClicked, isToken]);
-
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -173,12 +185,22 @@ const DriverBooking = (props) => {
     setIsLoading(true);
     setIsDriverBookingClicked(true);
     // console.log(autocomplete[0].getPlace().geometry.location.lat());
-  }
+  };
   const riderSearchHandler = () => {
     if (riderInputSearchRef.current.value)
-      setIsSearchedRidersData(props.riderData.filter(data => data.OfficialName.toLowerCase().includes(riderInputSearchRef.current.value.toLowerCase()) || data.MobileNumber.toLowerCase().includes(riderInputSearchRef.current.value.toLowerCase())));
+      setIsSearchedRidersData(
+        props.riderData.filter(
+          (data) =>
+            data.OfficialName.toLowerCase().includes(
+              riderInputSearchRef.current.value.toLowerCase()
+            ) ||
+            data.MobileNumber.toLowerCase().includes(
+              riderInputSearchRef.current.value.toLowerCase()
+            )
+        )
+      );
     else setIsSearchedRidersData(false);
-  }
+  };
 
   const riderSelectedHandler = (riderName, riderNumber) => {
     // console.log(riderNumber);
@@ -186,7 +208,7 @@ const DriverBooking = (props) => {
     riderInfo.mobileNumber = riderNumber;
     riderInputSearchRef.current.value = riderName + "  ( " + riderNumber + " )";
     setIsSearchedRidersData(false);
-  }
+  };
 
   if (isRequestSentToDriver === "no") {
     setTimeout(() => {
@@ -213,7 +235,7 @@ const DriverBooking = (props) => {
           }
         }
       }
-    })
+    });
   }
 
   return (
@@ -224,33 +246,96 @@ const DriverBooking = (props) => {
           <div>{props.bookedDriver[0].driverName}</div>
         </div>
         <div className="carInfo">
-          <div style={{ fontSize: "13px" }} >{props.bookedDriver[0].carNumber}</div>
+          <div style={{ fontSize: "13px" }}>
+            {props.bookedDriver[0].carNumber}
+          </div>
           {/* <div style={{fontSize: "12px", color: "grey"}}>{props.bookedDriver[0].carType && "Car Type: " + props.bookedDriver[0].carType}</div> */}
-          <div style={{ fontSize: "12px", color: "grey" }}>Car Type: Comfort</div>
+          <div style={{ fontSize: "12px" }}>Car Type: Comfort</div>
         </div>
       </header>
       {/* {(isDriverBookingClicked || isRequestSentToDriver === "yes") && */}
-      {isLoading &&
+      {isLoading && (
         <div id="myProgress">
           <div id="myBar"></div>
-          <span id="progressBarText" style={{ position: "absolute", top: "15%", left: "30%", fontSize: "13.5px" }}>Connecting to driver ...</span>
+          <span
+            id="progressBarText"
+            style={{
+              position: "absolute",
+              top: "15%",
+              left: "30%",
+              fontSize: "13.5px",
+            }}
+          >
+            Connecting to driver ...
+          </span>
         </div>
-      }
-      {isRequestSentToDriver === "no" && <div className="tripRequestError">{"Driver is unreachable. Please try again after some time"}</div>}
+      )}
+      {isRequestSentToDriver === "no" && (
+        <div className="tripRequestError">
+          {"Driver is unreachable. Please try again after some time"}
+        </div>
+      )}
       <main>
-        <input type="text" disabled value="City: Ahmedabad" className="tags" />
-        <input type="text" placeholder="Please add any one rider" className="tags" ref={riderInputSearchRef} onChange={riderSearchHandler} ></input>
-        {searchedRidersData &&
-          <div className="searchedRiders">
-            {searchedRidersData.map(data => <p onClick={(e) => riderSelectedHandler(data.OfficialName, data.MobileNumber)} >{data.OfficialName + "  ( " + data.MobileNumber + " )"}</p>)}
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <img src={building} style={{ width: "20px", height: "20px" }} />
+          <input
+            type="text"
+            disabled
+            value="City: Ahmedabad"
+            className="tags"
+          />
+        </div>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <img src={user} style={{ width: "20px", height: "20px" }} />
+          <div style={{ width: "100%" }}>
+            <input
+              type="text"
+              placeholder="Please add any one rider"
+              className="tags"
+              ref={riderInputSearchRef}
+              onChange={riderSearchHandler}
+            ></input>
+            {searchedRidersData && (
+              <div className="searchedRiders">
+                {searchedRidersData.map((data) => (
+                  <p
+                    onClick={(e) =>
+                      riderSelectedHandler(data.OfficialName, data.MobileNumber)
+                    }
+                  >
+                    {data.OfficialName + "  ( " + data.MobileNumber + " )"}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
-        }
-        <input type="text" id="pac-input1" placeholder="Pickup Address" className="tags" />
-        <input type="text" id="pac-input2" placeholder="Drop Address" className="tags" />
+        </div>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <img src={pickupicon} style={{ width: "20px", height: "20px" }} />
+            <img src={dropicon} style={{ width: "20px", height: "20px" }} />
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "100%" }}
+          >
+            <input
+              type="text"
+              id="pac-input1"
+              placeholder="Pickup Address"
+              className="tags"
+            />
+            <input
+              type="text"
+              id="pac-input2"
+              placeholder="Drop Address"
+              className="tags"
+            />
+          </div>
+        </div>
       </main>
       <footer>
         <button onClick={() => props.setBookedDriver(false)}>Cancel</button>
-        <button onClick={tripBookClicked} >Book Now</button>
+        <button onClick={tripBookClicked}>Book Now</button>
       </footer>
     </div>
   );
