@@ -9,15 +9,20 @@ import { useEffect } from "react";
 import RiderInfoMap from "./RiderInfoMap";
 import Loading from "../../Loading/Loading";
 
+import connectionPoint from "../../Assets/start_location_green.png";
+import threedots from "../../Assets/route_3dots.png";
+import endPoint from "../../Assets/place_outline.png";
+
 const RIDER_TITLE = [
   "Rider Name",
+  // "Shuttle Arrival Time",
   "Pickup Location",
-  "Shuttle Arrival Time",
+  "",
   // "Boarding Time",
-  "Boarding (Lat Lng )",
+  // "Boarding (Lat Lng )",
   "Drop Location",
   // "Alighting Time",
-  "Aligthing (Lat Lng)",
+  // "Aligthing (Lat Lng)",
   // "starting (Lat Lng)"
 ];
 
@@ -46,6 +51,7 @@ const Accordian = (props) => {
         rider_name: data.TripdetailList[i].RiderName,
         pickup_location: data.TripdetailList[i].PickupAddress,
         shuttle_arrival_time: data.TripdetailList[i].ShuttleArriveTime,
+        actual_drop_latLng: data.TripdetailList[i].ActualDropOffLatLong,
         // boarding_time: data.TripdetailList[i].BoardingTime,
         boarding_lat_lng:
           data.TripdetailList[i].PickupLatitude +
@@ -158,17 +164,34 @@ const Accordian = (props) => {
                     {riderData.map((data) => {
                       return (
                         <tr id="myHandler">
-                          <td className={classes.riderName}>
+                          <td>{data.rider_name}
                             {/* <img src={photo} alt="" /> */}
-                            <p>{data.rider_name}</p>
+                            {/* <p>{data.rider_name}</p> */}
                           </td>
+                          {/* <td>{data.shuttle_arrival_time} </td> */}
                           <td>{data.pickup_location} </td>
-                          <td>{data.shuttle_arrival_time} </td>
                           {/* <td>{data.boarding_time} </td> */}
-                          <td>{data.boarding_lat_lng} </td>
+                          {/* <td>{data.boarding_lat_lng} </td> */}
+                          <td>
+                            {/* <span className={classes.green}></span>
+                            <span className={classes.line}></span>
+                            <span className={classes.red}></span> */}
+                            <img style={{width: "20px", height: "20px"}} src={connectionPoint} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
+                            <img style={{width: "20px", height: "20px"}} src={endPoint} />
+                          </td>
                           <td>{data.drop_location} </td>
                           {/* <td>{data.alighting_time} </td> */}
-                          <td>{data.alighting_lat_lng} </td>
+                          {/* <td>{data.alighting_lat_lng} </td> */}
                         </tr>
                       );
                     })}

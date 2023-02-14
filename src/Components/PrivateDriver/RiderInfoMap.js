@@ -24,26 +24,36 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
             zoomControl: true
         });
 
-        const tourStops = [
-            { lat: RIDER_DATA[0].lat, lng: RIDER_DATA[0].lng }
-        ];
+        // const tourStops = [
+        //     { lat: RIDER_DATA[0].lat, lng: RIDER_DATA[0].lng }
+        // ];
+        // for (let i = 0; i < RIDER_DATA.length; i++) {
+        //     let a = routeType ? RIDER_DATA[i].alighting_lat_lng.split(",") : RIDER_DATA[i].boarding_lat_lng.split(",");
+        //     let lat = +a[0];
+        //     let lng = +a[1];
+        //     tourStops.push({
+        //         lat: lat,
+        //         lng: lng
+        //     })
+        // }
+        console.log(RIDER_DATA, "rider");
+        const tourStops = [{ lat: driverPath[0].lat, lng: driverPath[0].lng }];
         for (let i = 0; i < RIDER_DATA.length; i++) {
-            let a = routeType ? RIDER_DATA[i].alighting_lat_lng.split(",") : RIDER_DATA[i].boarding_lat_lng.split(",");
-            let lat = +a[0];
-            let lng = +a[1];
             tourStops.push({
-                lat: lat,
-                lng: lng
+                lat: +RIDER_DATA[i].actual_drop_latLng.split(",")[0],
+                lng: +RIDER_DATA[i].actual_drop_latLng.split(",")[1]
             })
         }
+        tourStops.push({ lat: +RIDER_DATA[0]?.alighting_lat_lng?.split(",")[0], lng: +RIDER_DATA[0]?.alighting_lat_lng?.split(",")[1] });
 
-        const flightPlanCoordinates = driverPath ? driverPath : tourStops;
+        // const flightPlanCoordinates = driverPath ? driverPath : tourStops;
+        const flightPlanCoordinates = driverPath;
         // flightPlanCoordinates.push({
         //     lat: flightPlanCoordinates[flightPlanCoordinates.length - 1].lat,
         //     lng: flightPlanCoordinates[flightPlanCoordinates.length - 1].lng + 0.0001
         // });
 
-        console.log(tourStops);
+        console.log(tourStops, "tourStops");
 
         const flightPathBorder = new window.google.maps.Polyline({
             path: flightPlanCoordinates,
@@ -70,15 +80,16 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
         tourStops.forEach((position, i) => {
             if (i === 0) {
                 icon = startPoint;
-                myTitle = routeType ? `<div><h3>${RIDER_DATA[i].pickup_location}</h3></div>` : `<div><h3>${RIDER_DATA[i].drop_location}</h3></div>`;
+                myTitle = `<div><h3>${RIDER_DATA[0].pickup_location.split(",")[0]}</h3></div></h3></div>`;
             }
             else {
-                // if (i === flightPlanCoordinates.length - 1) {
-                //     icon = endPoint;
-                // } else {
+                if (i === tourStops.length - 1) {
+                    icon = endPoint;
+                    myTitle = `<div><h3>${RIDER_DATA[0].drop_location.split(",")[0]}</h3></div></h3></div>`;
+                } else {
                     icon = studentDummyImage;
-                    myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${RIDER_DATA[i - 1]?.rider_name}</h3></div>`;
-                // }
+                    myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${RIDER_DATA[i-1]?.rider_name}</h3></div>`;
+                }
             }
 
             const marker = new window.google.maps.Marker({

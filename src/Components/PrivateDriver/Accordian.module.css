@@ -29,9 +29,9 @@ tr {
 }
 
 .riderTable .riderName {
-    display: flex;
-    align-items: center;
-    gap: 3px;
+    /* display: flex; */
+    /* align-items: center; */
+    /* gap: 3px; */
 }
 
 .riderTable .riderName img {
@@ -84,4 +84,29 @@ tr {
 .toggleIcon {
     font-size: 30px;
     color: rgb(18, 116, 155);
+}
+
+.green {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(42, 149, 69, 255);
+    align-self: center;
+    display: inline-block;
+}
+
+.red {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(226, 44, 29);
+    align-self: center;
+    display: inline-block;
+}
+
+.line {
+    width: 100px;
+    height: 2px;
+    background-color: rgba(34, 137, 203, 255);
+    display: inline-block;
 }
