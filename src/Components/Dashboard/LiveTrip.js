@@ -242,13 +242,13 @@ const LiveTrip = (props) => {
           "gm-fullscreen-control"
         )[0].style.marginTop = "45px";
 
-      // flightPath1 = new window.google.maps.Polyline({
-      //   path: flightPlanCoordinates,
-      //   geodesic: true,
-      //   strokeColor: "black",
-      //   strokeOpacity: 1.0,
-      //   strokeWeight: 7,
-      // });
+      flightPath1 = new window.google.maps.Polyline({
+        path: flightPlanCoordinates,
+        geodesic: true,
+        strokeColor: "black",
+        strokeOpacity: 1.0,
+        strokeWeight: 6,
+      });
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
         geodesic: true,
@@ -264,10 +264,12 @@ const LiveTrip = (props) => {
       // flightPath1.setMap(map);
       if (flightPlanCoordinates.length > 1) {
         setTimeout(() => {
+          flightPath1.setMap(map);
           flightPath2.setMap(map);
         }, 3000);
         transition();
       } else if (flightPlanCoordinates.length > 0) {
+        flightPath1.setMap(map);
         flightPath2.setMap(map);
         marker.setPosition(
           flightPlanCoordinates[flightPlanCoordinates.length - 1]

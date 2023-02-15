@@ -35,14 +35,14 @@ let waypts = [];
 // let dst = [{ lat: 23.0338, lng: 72.546584 }];
 let dst = [];
 const polyline1 = {
-  strokeColor: "rgba(34, 137, 203, 255)",
+  strokeColor: "#00b0ff",
   strokeOpacity: 10.0,
   strokeWeight: 4,
 };
 const polyline2 = {
   strokeColor: "black",
   strokeOpacity: 10.0,
-  strokeWeight: 6,
+  strokeWeight: 5,
 };
 
 const StopInfo = (props) => {

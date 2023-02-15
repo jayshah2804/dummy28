@@ -8,6 +8,9 @@ import building from "../../Assets/buildings.png";
 import pickupicon from "../../Assets/pickupicon.png";
 import dropicon from "../../Assets/drop-icon.png";
 import user from "../../Assets/user.png";
+import threedots from "../../Assets/route_3dots.png";
+import TickmarkImage from "../../Assets/Tickmark.png";
+import ErrorImage from "../../Assets/Error.png";
 
 let autocomplete = [];
 let url;
@@ -27,12 +30,12 @@ const DriverBooking = (props) => {
   const riderInputSearchRef = useRef();
   // console.log(props);
 
-  if (tripRequestStatus) {
-    move(91, 50);
-    setTimeout(() => {
-      props.tripRequestStatusFunc(tripRequestStatus);
-    }, 1000);
-  }
+  // if (tripRequestStatus) {
+  //   move(91, 50);
+  //   setTimeout(() => {
+  //     props.tripRequestStatusFunc(tripRequestStatus);
+  //   }, 1000);
+  // }
 
   function paraMeters() {
     if (isDriverBookingClicked) {
@@ -157,7 +160,7 @@ const DriverBooking = (props) => {
         fetch("https://corp.little.global/server" + url, requestOptions)
           .then((response) => response.text())
           .then((result) => {
-            setTripRequestStatus(JSON.parse(result).tripStatus.toLowerCase());
+            setTripRequestStatus(/accepted|arrived|started/.test(JSON.parse(result).tripStatus.toLowerCase()) ? "success" : "fail");
             // props.setBookedDriver(false);
           })
           .catch((error) => console.log("error", error));
@@ -218,24 +221,24 @@ const DriverBooking = (props) => {
 
   function move(j = 0, time = 20) {
     // debugger;
-    setTimeout(() => {
-      let i = j;
-      if (i == 0) {
-        i = 1;
-        var elem = document.getElementById("myBar");
-        var width = 10;
-        var id = setInterval(frame, time);
-        function frame() {
-          if (width >= 95) {
-            clearInterval(id);
-            i = 0;
-          } else {
-            width++;
-            elem.style.width = width + "%";
-          }
-        }
-      }
-    });
+    // setTimeout(() => {
+    //   let i = j;
+    //   if (i == 0) {
+    //     i = 1;
+    //     var elem = document.getElementById("myBar");
+    //     var width = 10;
+    //     var id = setInterval(frame, time);
+    //     function frame() {
+    //       if (width >= 95) {
+    //         clearInterval(id);
+    //         i = 0;
+    //       } else {
+    //         width++;
+    //         elem.style.width = width + "%";
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   return (
@@ -243,100 +246,139 @@ const DriverBooking = (props) => {
       <header>
         <div className="driverInfo">
           <img src={props.bookedDriver[0].driverImage}></img>
-          <div>{props.bookedDriver[0].driverName}</div>
+          <div className="driverDetailsInfo">
+            <div>{props.bookedDriver[0].driverName}</div>
+            <div style={{ fontSize: "12px" }}>{props.bookedDriver[0].carNumber}</div>
+          </div>
         </div>
         <div className="carInfo">
-          <div style={{ fontSize: "13px" }}>
-            {props.bookedDriver[0].carNumber}
-          </div>
-          {/* <div style={{fontSize: "12px", color: "grey"}}>{props.bookedDriver[0].carType && "Car Type: " + props.bookedDriver[0].carType}</div> */}
-          <div style={{ fontSize: "12px" }}>Car Type: Comfort</div>
+          <div>Honda Amaze</div>
+          <div style={{ fontSize: "12px" }}>Platinum White</div>
+          {/* <div>{props.bookedDriver[0].carModel.toLowerCase()}</div>
+          <div style={{fontSize: "12px"}}>{props.bookedDriver[0].carColor.toLowerCase()}</div> */}
         </div>
       </header>
-      {/* {(isDriverBookingClicked || isRequestSentToDriver === "yes") && */}
-      {isLoading && (
-        <div id="myProgress">
-          <div id="myBar"></div>
-          <span
-            id="progressBarText"
-            style={{
-              position: "absolute",
-              top: "15%",
-              left: "30%",
-              fontSize: "13.5px",
-            }}
-          >
-            Connecting to driver ...
-          </span>
-        </div>
-      )}
-      {isRequestSentToDriver === "no" && (
-        <div className="tripRequestError">
-          {"Driver is unreachable. Please try again after some time"}
-        </div>
-      )}
-      <main>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <img src={building} style={{ width: "20px", height: "20px" }} />
-          <input
-            type="text"
-            disabled
-            value="City: Ahmedabad"
-            className="tags"
-          />
-        </div>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <img src={user} style={{ width: "20px", height: "20px" }} />
-          <div style={{ width: "100%" }}>
-            <input
-              type="text"
-              placeholder="Please add any one rider"
-              className="tags"
-              ref={riderInputSearchRef}
-              onChange={riderSearchHandler}
-            ></input>
-            {searchedRidersData && (
-              <div className="searchedRiders">
-                {searchedRidersData.map((data) => (
-                  <p
-                    onClick={(e) =>
-                      riderSelectedHandler(data.OfficialName, data.MobileNumber)
-                    }
-                  >
-                    {data.OfficialName + "  ( " + data.MobileNumber + " )"}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <img src={pickupicon} style={{ width: "20px", height: "20px" }} />
-            <img src={dropicon} style={{ width: "20px", height: "20px" }} />
+      {tripRequestStatus &&
+        <div className="success-sub-container" style={{ top: "65%" }} >
+          <div className="success-msg">
+            <img src={tripRequestStatus === "success" ? TickmarkImage : ErrorImage} />
+            <p className="data-save">{"Driver has" + (tripRequestStatus === "success" ? " " : " not ") + "accepted your request"}</p>
           </div>
           <div
-            style={{ display: "flex", flexDirection: "column", width: "100%" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
           >
-            <input
-              type="text"
-              id="pac-input1"
-              placeholder="Pickup Address"
-              className="tags"
-            />
-            <input
-              type="text"
-              id="pac-input2"
-              placeholder="Drop Address"
-              className="tags"
-            />
+            <button className={tripRequestStatus === "success" ? "" : "error"} onClick={() => window.location.reload()}>OK</button>
           </div>
         </div>
-      </main>
-      <footer>
-        <button onClick={() => props.setBookedDriver(false)}>Cancel</button>
-        <button onClick={tripBookClicked}>Book Now</button>
-      </footer>
+      }
+      {!tripRequestStatus &&
+        <React.Fragment>
+          <main>
+            {isLoading && (
+              <React.Fragment>
+                <div class="wrapper">
+                  <div class="progressbar">
+                    {/* <div class="stylization"></div> */}
+                  </div>
+                  <span id="progressBarText" style={{display: "inline-block", zIndex: "999", width: "100%", textAlign: "center" }} >Connecting to driver ...</span>
+                  <br />
+                </div>
+              </React.Fragment>
+              // <div class="wrapper">
+              //   <div class="progressbar"><span id="progressBarText" style={{color: "white", zIndex: "999", position: "absolute", width: "100%", textAlign: "center"}} >Connecting to driver ...</span>
+              //     {/* <div class="stylization"></div> */}
+              //   </div>
+              //   <br />
+              // </div>
+              // <div id="myProgress">
+              //   <div id="myBar"></div>
+              //   <span
+              //     id="progressBarText"
+              //     style={{
+              //       position: "absolute",
+              //       top: "15%",
+              //       left: "30%",
+              //       fontSize: "13.5px",
+              //     }}
+              //   >
+              //     Connecting to driver ...
+              //   </span>
+              // </div>
+            )}
+            {isRequestSentToDriver === "no" && (
+              <div className="tripRequestError">
+                {"Driver is unreachable. Please try again after some time"}
+              </div>
+            )}
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <img src={building} style={{ width: "20px", height: "20px" }} />
+              <input
+                type="text"
+                disabled
+                value="Ahmedabad"
+                className="tags"
+              />
+            </div>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <img src={user} style={{ width: "20px", height: "20px" }} />
+              <div style={{ width: "100%" }}>
+                <input
+                  type="text"
+                  placeholder="Please add any one rider"
+                  className="tags"
+                  ref={riderInputSearchRef}
+                  onChange={riderSearchHandler}
+                ></input>
+                {searchedRidersData && (
+                  <div className="searchedRiders">
+                    {searchedRidersData.map((data) => (
+                      <p
+                        onClick={(e) =>
+                          riderSelectedHandler(data.OfficialName, data.MobileNumber)
+                        }
+                      >
+                        {data.OfficialName + "  ( " + data.MobileNumber + " )"}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center" }}>
+                <img src={pickupicon} style={{ width: "20px", height: "20px" }} />
+                <img src={threedots} style={{ width: "20px", height: "20px" }} />
+                <img src={dropicon} style={{ width: "20px", height: "20px" }} />
+              </div>
+              <div
+                style={{ display: "flex", flexDirection: "column", width: "100%" }}
+              >
+                <input
+                  type="text"
+                  id="pac-input1"
+                  placeholder="Pickup Address"
+                  className="tags"
+                />
+                <input
+                  type="text"
+                  id="pac-input2"
+                  placeholder="Dropoff Address"
+                  className="tags"
+                />
+              </div>
+            </div>
+          </main>
+          <footer>
+            <button onClick={() => props.setBookedDriver(false)}>Cancel</button>
+            <button onClick={tripBookClicked}>Book Now</button>
+          </footer>
+        </React.Fragment>
+      }
     </div>
   );
 };

@@ -201,6 +201,13 @@ const LiveMap = (props) => {
           "gm-fullscreen-control"
         )[0].style.marginTop = "45px";
 
+      flightPath1 = new window.google.maps.Polyline({
+        path: flightPlanCoordinates,
+        geodesic: true,
+        strokeColor: "black",
+        strokeOpacity: 1.0,
+        strokeWeight: 6,
+      });
 
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
@@ -212,10 +219,12 @@ const LiveMap = (props) => {
 
       if (flightPlanCoordinates.length > 1) {
         setTimeout(() => {
+          flightPath1.setMap(map);
           flightPath2.setMap(map);
         }, 3000);
         transition();
       } else if (flightPlanCoordinates.length > 0) {
+        flightPath1.setMap(map);
         flightPath2.setMap(map);
         marker.setPosition(
           flightPlanCoordinates[flightPlanCoordinates.length - 1]
@@ -237,7 +246,7 @@ const LiveMap = (props) => {
         !flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
       ) {
         map.setZoom(11);
-        map.setCenter({ lat: 23.0358311, lng: 72.5579656 });
+        // map.setCenter({ lat: 23.0358311, lng: 72.5579656 });
       }
     }, 2000);
   }
@@ -304,7 +313,9 @@ const LiveMap = (props) => {
     driverName,
     carNumber,
     carType,
-    driverEmail
+    driverEmail,
+    carModel,
+    carColor
   ) => {
     // alert(e.target.parentElement.id);
     // console.log(driverEmail, carNumber, carType);
@@ -314,7 +325,9 @@ const LiveMap = (props) => {
         driverName,
         carNumber,
         carType,
-        driverEmail
+        driverEmail,
+        carModel,
+        carColor
       },
     ]);
   };
@@ -393,7 +406,9 @@ const LiveMap = (props) => {
                               ele.driverName,
                               ele.carNumber,
                               ele.vehicleType,
-                              ele.driverEmail
+                              ele.driverEmail,
+                              ele.carModel,
+                              ele.carColor
                             )
                           : ""
                       }

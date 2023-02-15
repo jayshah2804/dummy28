@@ -217,9 +217,9 @@ const Accordian = (props) => {
                     {riderData.map((data) => {
                       return (
                         <tr id="myHandler">
-                          <td className={classes.riderName}>
+                          <td>
                             {/* <img src={photo} alt="" /> */}
-                            <p>{data.rider_name}</p>
+                            {data.rider_name}
                           </td>
                           <td>{data.pickup_location} </td>
                           <td>{data.shuttle_arrival_time} </td>

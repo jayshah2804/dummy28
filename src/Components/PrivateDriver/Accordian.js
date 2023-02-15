@@ -172,22 +172,28 @@ const Accordian = (props) => {
                           <td>{data.pickup_location} </td>
                           {/* <td>{data.boarding_time} </td> */}
                           {/* <td>{data.boarding_lat_lng} </td> */}
-                          <td>
+                          <td style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                             {/* <span className={classes.green}></span>
                             <span className={classes.line}></span>
                             <span className={classes.red}></span> */}
-                            <img style={{width: "20px", height: "20px"}} src={connectionPoint} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px", transform: "rotate(90deg)"}} src={threedots} />
-                            <img style={{width: "20px", height: "20px"}} src={endPoint} />
+                            <div>
+                              <img style={{ width: "20px", height: "20px" }} src={connectionPoint} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
+                              <img style={{ width: "20px", height: "20px" }} src={endPoint} />
+                            </div>
+                            <div style={{display: "flex", justifyContent: "space-between", color: "grey", fontSize: "10px"}}>
+                              <p>{data.startingLocationLat + ", " + data.startingLocationLong}</p>
+                              <p>{data.actual_drop_latLng}</p>
+                            </div>
                           </td>
                           <td>{data.drop_location} </td>
                           {/* <td>{data.alighting_time} </td> */}

@@ -24,6 +24,8 @@ const DriverData = () => {
         carNumber: data.PrivetDriverlist[i].CarNumber,
         driverImage: data.PrivetDriverlist[i].DriverImage,
         vehicleType: data.PrivetDriverlist[i].VehicleType,
+        carModel: data.PrivetDriverlist[i].CarModel,
+        carColor: data.PrivetDriverlist[i].Color,
         status:
           data.PrivetDriverlist[i].LiveStatus == "1"
             ? "on trip"
