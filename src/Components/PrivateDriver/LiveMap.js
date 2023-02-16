@@ -32,6 +32,10 @@ var i = 0;
 var deltaLat;
 var deltaLng;
 
+let drawLineFlag = false;
+let prevLat = "";
+let prevLng = "";
+
 
 const LiveMap = (props) => {
   const [bookedDriver, setBookedDriver] = useState(false);
@@ -83,14 +87,15 @@ const LiveMap = (props) => {
   } else myFlag = 1;
 
   const authenticateUser = (data) => {
-    console.log(data, driverFlag);
+    // console.log(data, driverFlag);
     // debugger;
     if (data.Livetripdetails) {
       if (!driverFlag) {
-        flightPlanCoordinates.push({
-          lat: data.Livetripdetails[0].Latitude,
-          lng: data.Livetripdetails[0].Longitude,
-        });
+        if (flightPlanCoordinates[flightPlanCoordinates.length - 1].lat !== data.Livetripdetails[0].Latitude && flightPlanCoordinates[flightPlanCoordinates.length - 1].lng !== data.Livetripdetails[0].Longitude)
+          flightPlanCoordinates.push({
+            lat: data.Livetripdetails[0].Latitude,
+            lng: data.Livetripdetails[0].Longitude,
+          });
       } else {
         flightPlanCoordinates = [];
         for (let i = 0; i < data.Livetripdetails.length; i++) {
@@ -99,6 +104,7 @@ const LiveMap = (props) => {
             lng: data.Livetripdetails[i].Longitude,
           });
         }
+        drawLineFlag = true;
         driverFlag = false;
       }
       // debugger;
@@ -114,7 +120,8 @@ const LiveMap = (props) => {
 
   useEffect(() => {
     if (onTripDriverEmail) intervalApiCall();
-  }, [onTripDriverEmail, sendRequest]);
+  }, [onTripDriverEmail]);
+  // }, [onTripDriverEmail, sendRequest]);
 
   function intervalApiCall() {
     flightPlanCoordinates = [];
@@ -196,34 +203,57 @@ const LiveMap = (props) => {
     });
 
     pathInterval = setInterval(() => {
+      flightPath1 = new window.google.maps.Polyline({
+        path: flightPlanCoordinates,
+        // geodesic: true,
+        strokeColor: "black",
+        strokeOpacity: 10.0,
+        strokeWeight: 5,
+      });
+
+      flightPath2 = new window.google.maps.Polyline({
+        path: flightPlanCoordinates,
+        // geodesic: true,
+        strokeColor: "#00b0ff",
+        strokeOpacity: 10.0,
+        strokeWeight: 4,
+      });
+      // if (drawLineFlag) {
+      // flightPath1?.setMap(null);
       if (document.getElementsByClassName("gm-fullscreen-control")[0])
         document.getElementsByClassName(
           "gm-fullscreen-control"
         )[0].style.marginTop = "45px";
 
-      flightPath1 = new window.google.maps.Polyline({
-        path: flightPlanCoordinates,
-        geodesic: true,
-        strokeColor: "black",
-        strokeOpacity: 1.0,
-        strokeWeight: 6,
-      });
+      // flightPath1 = new window.google.maps.Polyline({
+      //   path: flightPlanCoordinates,
+      //   // geodesic: true,
+      //   strokeColor: "black",
+      //   strokeOpacity: 10.0,
+      //   strokeWeight: 5,
+      // });
 
-      flightPath2 = new window.google.maps.Polyline({
-        path: flightPlanCoordinates,
-        geodesic: true,
-        strokeColor: "#00b0ff",
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
-      });
+      // flightPath2 = new window.google.maps.Polyline({
+      //   path: flightPlanCoordinates,
+      //   // geodesic: true,
+      //   strokeColor: "#00b0ff",
+      //   strokeOpacity: 10.0,
+      //   strokeWeight: 4,
+      // });
 
       if (flightPlanCoordinates.length > 1) {
         setTimeout(() => {
+          console.log(flightPath1, flightPath2);
+          flightPath1?.setMap(null);
+          flightPath2?.setMap(null);
           flightPath1.setMap(map);
           flightPath2.setMap(map);
+          marker.setPosition(flightPlanCoordinates[flightPlanCoordinates.length - 1])
         }, 3000);
-        transition();
+        // transition();
       } else if (flightPlanCoordinates.length > 0) {
+        flightPath1?.setMap(null);
+        flightPath2?.setMap(null);
         flightPath1.setMap(map);
         flightPath2.setMap(map);
         marker.setPosition(
@@ -248,6 +278,8 @@ const LiveMap = (props) => {
         map.setZoom(11);
         // map.setCenter({ lat: 23.0358311, lng: 72.5579656 });
       }
+      drawLineFlag = false;
+      // }
     }, 2000);
   }
 

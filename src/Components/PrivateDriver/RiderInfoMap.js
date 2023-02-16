@@ -23,6 +23,12 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
             fullscreenControl: true,
             zoomControl: true
         });
+        var bounds = new window.google.maps.LatLngBounds();
+        for(let i = 0; i < driverPath.length; i = i+10) {
+            bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
+            bounds.extend(new window.google.maps.LatLng(driverPath[driverPath.length - 1].lat, driverPath[driverPath.length - 1].lng));
+        }
+        map.fitBounds(bounds);
 
         // const tourStops = [
         //     { lat: RIDER_DATA[0].lat, lng: RIDER_DATA[0].lng }
@@ -88,7 +94,7 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
                     myTitle = `<div><h3>${RIDER_DATA[0].drop_location.split(",")[0]}</h3></div></h3></div>`;
                 } else {
                     icon = studentDummyImage;
-                    myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${RIDER_DATA[i-1]?.rider_name}</h3></div>`;
+                    myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${RIDER_DATA[i - 1]?.rider_name}</h3></div>`;
                 }
             }
 
