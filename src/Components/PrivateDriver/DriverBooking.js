@@ -19,6 +19,11 @@ let requestTripId = "";
 let myHeaders = "";
 let riderInfo = {};
 let authToken = "";
+let error = {
+  riderName: "",
+  pickupStop: "",
+  dropStop: ""
+}
 
 const DriverBooking = (props) => {
   const [isDriverBookingClicked, setIsDriverBookingClicked] = useState(false);
@@ -27,7 +32,10 @@ const DriverBooking = (props) => {
   const [isRequestSentToDriver, setIsRequestSentToDriver] = useState(false);
   const [tripRequestStatus, setTripRequestStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFieldError, setIsFieldError] = useState(false);
   const riderInputSearchRef = useRef();
+  const pickupInputRef = useRef();
+  const dropInputRef = useRef();
   // console.log(props);
 
   // if (tripRequestStatus) {
@@ -185,12 +193,23 @@ const DriverBooking = (props) => {
   window.initMap = initMap;
 
   const tripBookClicked = () => {
-    setIsLoading(true);
-    setIsDriverBookingClicked(true);
-    // console.log(autocomplete[0].getPlace().geometry.location.lat());
+    if (riderInputSearchRef.current.value && pickupInputRef.current.value && dropInputRef.current.value) {
+      error.riderName = "";
+      error.pickupStop = "";
+      error.dropStop = "";
+      setIsFieldError(false);
+      setIsLoading(true);
+      setIsDriverBookingClicked(true);
+    } else {
+      setIsFieldError(true);
+      !riderInputSearchRef.current.value && (error.riderName = "Please add one rider");
+      !pickupInputRef.current.value && (error.pickupStop = "Please add pickup stop");
+      !dropInputRef.current.value && (error.dropStop = "Please add drop stop");
+    }
   };
   const riderSearchHandler = () => {
-    if (riderInputSearchRef.current.value)
+    if (riderInputSearchRef.current.value) {
+      error.riderName = "";
       setIsSearchedRidersData(
         props.riderData.filter(
           (data) =>
@@ -202,7 +221,11 @@ const DriverBooking = (props) => {
             )
         )
       );
-    else setIsSearchedRidersData(false);
+    }
+    else {
+      error.riderName = "Please add one rider";
+      setIsSearchedRidersData(false);
+    }
   };
 
   const riderSelectedHandler = (riderName, riderNumber) => {
@@ -217,6 +240,26 @@ const DriverBooking = (props) => {
     setTimeout(() => {
       setIsRequestSentToDriver(false);
     }, 5000);
+  }
+
+  const pickupStopChangeHandler = () => {
+    if(pickupInputRef.current.value) {
+      error.pickupStop = "";
+      setIsFieldError(false);
+    } else {
+      error.pickupStop = "Please add pickup stop";
+      setIsFieldError(true);
+    }
+  }
+
+  const dropStopChangeHandler = () => {
+    if(dropInputRef.current.value) {
+      error.dropStop = "";
+      setIsFieldError(false);
+    } else {
+      error.dropStop = "Please add drop stop"
+      setIsFieldError(true);
+    }
   }
 
   function move(j = 0, time = 20) {
@@ -285,7 +328,7 @@ const DriverBooking = (props) => {
                   <div class="progressbar">
                     {/* <div class="stylization"></div> */}
                   </div>
-                  <span id="progressBarText" style={{display: "inline-block", zIndex: "999", width: "100%", textAlign: "center" }} >Connecting to driver ...</span>
+                  <span id="progressBarText" style={{ display: "inline-block", zIndex: "999", width: "100%", textAlign: "center" }} >Connecting to driver ...</span>
                   <br />
                 </div>
               </React.Fragment>
@@ -334,6 +377,7 @@ const DriverBooking = (props) => {
                   ref={riderInputSearchRef}
                   onChange={riderSearchHandler}
                 ></input>
+                {isFieldError && error.riderName && <p className="error">{error.riderName}</p>}
                 {searchedRidersData && (
                   <div className="searchedRiders">
                     {searchedRidersData.map((data) => (
@@ -363,13 +407,19 @@ const DriverBooking = (props) => {
                   id="pac-input1"
                   placeholder="Pickup Address"
                   className="tags"
+                  ref={pickupInputRef}
+                  onChange={pickupStopChangeHandler}
                 />
+                {isFieldError && error.pickupStop && <p className="error">{error.pickupStop}</p>}
                 <input
                   type="text"
                   id="pac-input2"
                   placeholder="Dropoff Address"
                   className="tags"
+                  ref={dropInputRef}
+                  onChange={dropStopChangeHandler}
                 />
+                {isFieldError && error.dropStop && <p className="error">{error.dropStop}</p>}
               </div>
             </div>
           </main>

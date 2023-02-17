@@ -9,6 +9,7 @@ import useHttp from "../../Hooks/use-http";
 import Loading from "../../Loading/Loading";
 import little from "../../Assets/little.gif";
 import LiveTrip from "./LiveTrip";
+import DriverData from "../PrivateDriver/DriverData";
 // import studentDummyImage from "../../Assets/new_student_marker.png";
 
 const DUMMY_DATA = [
@@ -52,7 +53,13 @@ const Main = () => {
   const [isRender, setIsRender] = useState();
   const [listData, setListData] = useState({});
   const [isApiError, setIsApiError] = useState();
+  const [isSwitchedToPrivateDriver, setIsSwitchedToPrivateDriver] = useState(false);
   const history = useHistory();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("privateDriverFlag") == "true" && !isSwitchedToPrivateDriver) document.getElementById("checkbox")?.click();
+    sessionStorage.setItem("privateDriverFlag", "false");
+  }, []);
 
   setTimeout(() => {
     document.getElementById("splash").style.display = "none";
@@ -119,91 +126,104 @@ const Main = () => {
               You can check all data of your Organization in Dashboard!
             </p>
           </div>
-          {sessionStorage.getItem("userType") === "AccountManager" && (
+          {sessionStorage.getItem("userType") === "AccountManager" ? (
             <button
               onClick={() => history.push("/new-registration")}
               className={classes.newCorpButton}
             >
               Add New Corporate
             </button>
+          ) : (
+            <div style={{ display: "flex", gap: "5px", alignSelf: "center" }}>
+              <p style={{ cursor: "pointer", letterSpacing: "1px" }} className={isSwitchedToPrivateDriver ? `${classes.privateDriverActiveText}` : `${classes.privateDriverInactiveText}`} onClick={() => document.getElementById("checkbox").click()} >Private Driver</p>
+              <label class={classes.switch} for="checkbox">
+                <input type="checkbox" id="checkbox" className={classes.first} onChange={(e) => {
+                  sessionStorage.setItem("privateDriverFlag", e.target.checked);
+                  e.target.checked ? setIsSwitchedToPrivateDriver(true) : setIsSwitchedToPrivateDriver(false);
+                }} />
+                <div class={`${classes.slider} ${classes.round}`}></div>
+              </label>
+            </div>
           )}
         </header>
-        <div className={classes.cards}>
-          <div
-            className={classes.text}
-            title="Click to see Monthly Trip details"
-            onClick={() => history.push("/trips")}
-          >
-            <p>Trips</p>
-            {isApiError && (
-              <span style={{ fontWeight: "normal", fontSize: "14px" }}>
-                {isApiError}
-              </span>
-            )}
-            {!isApiError && (
-              <span>
-                {isLoading ? <Loading /> : <span>{listData.trips}</span>}
-              </span>
-            )}
+        {isSwitchedToPrivateDriver && <DriverData toggle="true" />}
+        {!isSwitchedToPrivateDriver &&
+          <div className={classes.cards}>
+            <div
+              className={classes.text}
+              title="Click to see Monthly Trip details"
+              onClick={() => history.push("/trips")}
+            >
+              <p>Trips</p>
+              {isApiError && (
+                <span style={{ fontWeight: "normal", fontSize: "14px" }}>
+                  {isApiError}
+                </span>
+              )}
+              {!isApiError && (
+                <span>
+                  {isLoading ? <Loading /> : <span>{listData.trips}</span>}
+                </span>
+              )}
+            </div>
+            <div
+              className={classes.text}
+              title="Click to see Monthly Usage details"
+              onClick={() => history.push("/staff")}
+            >
+              <p>Riders</p>
+              {isApiError && (
+                <span style={{ fontWeight: "normal", fontSize: "14px" }}>
+                  {isApiError}
+                </span>
+              )}
+              {!isApiError && (
+                <span>
+                  {isLoading ? <Loading /> : <span>{listData.riders}</span>}
+                </span>
+              )}
+            </div>
+            <div
+              className={classes.text}
+              title="Click to see Routes details"
+              onClick={() => history.push("/routes")}
+            >
+              <p>Routes</p>
+              {isApiError && (
+                <span style={{ fontWeight: "normal", fontSize: "14px" }}>
+                  {isApiError}
+                </span>
+              )}
+              {!isApiError && (
+                <span>
+                  {isLoading ? <Loading /> : <span>{listData.routes}</span>}
+                </span>
+              )}
+            </div>
+            <div
+              className={classes.text}
+              title="Click to see Active Trips details"
+            >
+              <p>Active Trips</p>
+              {isApiError && (
+                <span style={{ fontWeight: "normal", fontSize: "14px" }}>
+                  {isApiError}
+                </span>
+              )}
+              {!isApiError && (
+                <span>
+                  {isLoading ? <Loading /> : <span>{listData.activeTrips}</span>}
+                </span>
+              )}
+            </div>
           </div>
-          <div
-            className={classes.text}
-            title="Click to see Monthly Usage details"
-            onClick={() => history.push("/staff")}
-          >
-            <p>Riders</p>
-            {isApiError && (
-              <span style={{ fontWeight: "normal", fontSize: "14px" }}>
-                {isApiError}
-              </span>
-            )}
-            {!isApiError && (
-              <span>
-                {isLoading ? <Loading /> : <span>{listData.riders}</span>}
-              </span>
-            )}
-          </div>
-          <div
-            className={classes.text}
-            title="Click to see Routes details"
-            onClick={() => history.push("/routes")}
-          >
-            <p>Routes</p>
-            {isApiError && (
-              <span style={{ fontWeight: "normal", fontSize: "14px" }}>
-                {isApiError}
-              </span>
-            )}
-            {!isApiError && (
-              <span>
-                {isLoading ? <Loading /> : <span>{listData.routes}</span>}
-              </span>
-            )}
-          </div>
-          <div
-            className={classes.text}
-            title="Click to see Active Trips details"
-          >
-            <p>Active Trips</p>
-            {isApiError && (
-              <span style={{ fontWeight: "normal", fontSize: "14px" }}>
-                {isApiError}
-              </span>
-            )}
-            {!isApiError && (
-              <span>
-                {isLoading ? <Loading /> : <span>{listData.activeTrips}</span>}
-              </span>
-            )}
-          </div>
-        </div>
-        {/* <div className={classes.tripChart}>
-        <Chart options={options.options} series={options.series} type="line" height={270} className={classes.chart} />
-      </div> */}
-        <LiveTrip
-          driverList={isLoading ? [] : driverList}
-          isLoading={isLoading}
-        />
+        }
+        {!isSwitchedToPrivateDriver &&
+          <LiveTrip
+            driverList={isLoading ? [] : driverList}
+            isLoading={isLoading}
+          />
+        }
       </div>
       {!sessionStorage.getItem("splashFlag") && (
         <div

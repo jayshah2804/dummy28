@@ -4,6 +4,7 @@ import studentDropImage from "../../Assets/student_dummy_photo.png";
 import studentDummyImage from "../../Assets/new_student_marker.png";
 import startPoint from "../../Assets/Pin_icon_green50.png";
 import endPoint from "../../Assets/Pin_icon50.png";
+// import dummy from "../../Assets/greenNew.png";
 
 let routeType = "";
 const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
@@ -44,12 +45,12 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
         // }
         console.log(RIDER_DATA, "rider");
         const tourStops = [{ lat: driverPath[0].lat, lng: driverPath[0].lng }];
-        for (let i = 0; i < RIDER_DATA.length; i++) {
-            tourStops.push({
-                lat: +RIDER_DATA[i].actual_drop_latLng.split(",")[0],
-                lng: +RIDER_DATA[i].actual_drop_latLng.split(",")[1]
-            })
-        }
+        // for (let i = 0; i < RIDER_DATA.length; i++) {
+        //     tourStops.push({
+        //         lat: +RIDER_DATA[i].actual_drop_latLng.split(",")[0],
+        //         lng: +RIDER_DATA[i].actual_drop_latLng.split(",")[1]
+        //     })
+        // }
         tourStops.push({ lat: +RIDER_DATA[0]?.alighting_lat_lng?.split(",")[0], lng: +RIDER_DATA[0]?.alighting_lat_lng?.split(",")[1] });
 
         // const flightPlanCoordinates = driverPath ? driverPath : tourStops;
@@ -105,6 +106,7 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
                 icon,
                 optimized: false,
             });
+            // marker.scaledSize = new window.google.maps.Size(3, 3);
 
             marker.addListener("mouseover", () => {
                 console.log(marker);

@@ -19,7 +19,7 @@
 .main-container {
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 95%;
   padding: 15px;
   justify-content: space-between;
   transition-property: width;
@@ -178,6 +178,7 @@
 .mapText {
   position: absolute;
   top: 0px;
+  /* height: 40px; */
   height: 40px;
   background-color: white;
   width: 100%;
@@ -186,7 +187,35 @@
   border-bottom-right-radius: 0;
   padding: 10px 20px;
   font-weight: bold;
-  opacity: 0.8;
+  opacity: 1.8;
+}
+
+/* .adminName {
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.adminText {
+  font-size: 14px;
+  color: gray;
+} */
+
+.newCorpButton {
+  /* background-color: rgba(34, 137, 203, 255); */
+  background-color: white;
+  color: rgba(34, 137, 203, 255);
+  border: 1px solid rgba(34, 137, 203, 255);
+  border-radius: 5px;
+  padding: 0px 25px;
+  cursor: pointer;
+  height: 30px;
+  align-self: center;
+}
+
+.newCorpButton:hover {
+  background-color: rgba(34, 137, 203, 255);
+  color: white
 }
 
 @media only screen and (max-width: 768px) {

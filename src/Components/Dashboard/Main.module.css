@@ -250,6 +250,63 @@
   opacity: 0.8;
 }
 
+
+.switch {
+  display: inline-block;
+  height: 20px;
+  position: relative;
+  width: 30px;
+  margin-left: 10px;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: -10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  background-color: #fff;
+  bottom: 2px;
+  content: "";
+  height: 16px;
+  left: 3px;
+  position: absolute;
+  transition: .4s;
+  width: 16px;
+}
+
+.first:checked+.slider {
+  background-color: rgba(34, 137, 203, 255);
+}
+
+.first:checked+.slider:before {
+  transform: translateX(18px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.privateDriverInactiveText {
+  color: gray;
+}
+
+.privateDriverActiveText {
+  color: rgba(34, 137, 203, 255);
+  font-weight: bold;
+}
+
+
 @media only screen and (max-width: 768px) {
   .container {
     width: auto;

@@ -5,7 +5,7 @@ import LiveMap from "./LiveMap";
 let driver_data = [];
 let rider_data = [];
 
-const DriverData = () => {
+const DriverData = (props) => {
   const [driverData, setDriverData] = useState([]);
 
   if (sessionStorage.getItem("interval")) {
@@ -65,6 +65,7 @@ const DriverData = () => {
       setDriverData={setDriverData}
       isLoading={isLoading}
       riderData={rider_data}
+      toggle={props.toggle}
     />
   );
 };
