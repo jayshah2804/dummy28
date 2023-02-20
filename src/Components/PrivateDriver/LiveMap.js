@@ -245,14 +245,13 @@ const LiveMap = (props) => {
       // });
 
       if (flightPlanCoordinates.length > 1) {
-        setTimeout(() => {
-          console.log(flightPath1, flightPath2);
+        // setTimeout(() => {
           flightPath1?.setMap(null);
           flightPath2?.setMap(null);
           flightPath1.setMap(map);
           flightPath2.setMap(map);
           marker.setPosition(flightPlanCoordinates[flightPlanCoordinates.length - 1])
-        }, 3000);
+        // }, 3000);
         // transition();
       } else if (flightPlanCoordinates.length > 0) {
         flightPath1?.setMap(null);
