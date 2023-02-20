@@ -377,7 +377,7 @@ const DriverBooking = (props) => {
                   ref={riderInputSearchRef}
                   onChange={riderSearchHandler}
                 ></input>
-                {isFieldError && error.riderName && <p className="error">{error.riderName}</p>}
+                {isFieldError && error.riderName && <p className="errorField">{error.riderName}</p>}
                 {searchedRidersData && (
                   <div className="searchedRiders">
                     {searchedRidersData.map((data) => (
@@ -410,7 +410,7 @@ const DriverBooking = (props) => {
                   ref={pickupInputRef}
                   onChange={pickupStopChangeHandler}
                 />
-                {isFieldError && error.pickupStop && <p className="error">{error.pickupStop}</p>}
+                {isFieldError && error.pickupStop && <p className="errorField">{error.pickupStop}</p>}
                 <input
                   type="text"
                   id="pac-input2"
@@ -419,7 +419,7 @@ const DriverBooking = (props) => {
                   ref={dropInputRef}
                   onChange={dropStopChangeHandler}
                 />
-                {isFieldError && error.dropStop && <p className="error">{error.dropStop}</p>}
+                {isFieldError && error.dropStop && <p className="errorField">{error.dropStop}</p>}
               </div>
             </div>
           </main>
