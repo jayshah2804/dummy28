@@ -70,7 +70,7 @@
   margin-bottom: 20px;
 }
 
-.driverBooking-container .error {
+.driverBooking-container .errorField {
   color: red;
   font-size: 12px;
 }
