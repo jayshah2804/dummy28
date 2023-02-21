@@ -114,7 +114,8 @@ const NewRegistration = () => {
                     corporateLatlong: latLngInputRef.current.value,
                     creditPeriod: CreditPeriodInputRef.current.value,
                     contractstartdate: contractStartDateInputRef.current.value,
-                    contractEnddate: contractEndDateInputRef.current.value
+                    contractEnddate: contractEndDateInputRef.current.value,
+                    password: ""
                 }
             }, authenticateUser);
         apiFlag++;

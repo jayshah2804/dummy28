@@ -58,13 +58,13 @@ const Notification = (props) => {
             // let digits = createdon.split(" ")[0];
             let H = createdon.split(":")[0]
             let M = createdon.split(":")[1]
-            if (+M + 30 >= 60) {
-                H = +H + 1;
-                M = +M + 30 - 60;
-            } else M = +M + 30
-            if (+H + 5 > 24) H = +H + 5 - 24
-            else H = +H + 5
-            if (M.toString().length === 1) M = "0" + M.toString();
+            // if (+M + 30 >= 60) {
+            //     H = +H + 1;
+            //     M = +M + 30 - 60;
+            // } else M = +M + 30
+            // if (+H + 5 > 24) H = +H + 5 - 24
+            // else H = +H + 5
+            // if (M.toString().length === 1) M = "0" + M.toString();
 
             let newDate = data.NotificationList[i].CreatedDate.replaceAll("-", "/");
             let myDate = formatToMMDDYYYYfromYYYYMMDD(newDate);
