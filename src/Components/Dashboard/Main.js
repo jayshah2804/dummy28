@@ -53,11 +53,16 @@ const Main = () => {
   const [isRender, setIsRender] = useState();
   const [listData, setListData] = useState({});
   const [isApiError, setIsApiError] = useState();
-  const [isSwitchedToPrivateDriver, setIsSwitchedToPrivateDriver] = useState(false);
+  const [isSwitchedToPrivateDriver, setIsSwitchedToPrivateDriver] =
+    useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    if (sessionStorage.getItem("privateDriverFlag") == "true" && !isSwitchedToPrivateDriver) document.getElementById("checkbox")?.click();
+    if (
+      sessionStorage.getItem("privateDriverFlag") == "true" &&
+      !isSwitchedToPrivateDriver
+    )
+      document.getElementById("checkbox")?.click();
     sessionStorage.setItem("privateDriverFlag", "false");
   }, []);
 
@@ -93,7 +98,7 @@ const Main = () => {
       clearInterval(sessionStorage.getItem("interval"));
       sessionStorage.removeItem("interval");
     }
-  }, []);
+  });
 
   useEffect(() => {
     // alert("jay");
@@ -135,19 +140,39 @@ const Main = () => {
             </button>
           ) : (
             <div style={{ display: "flex", gap: "5px", alignSelf: "center" }}>
-              <p style={{ cursor: "pointer", letterSpacing: "1px" }} className={isSwitchedToPrivateDriver ? `${classes.privateDriverActiveText}` : `${classes.privateDriverInactiveText}`} onClick={() => document.getElementById("checkbox").click()} >Private Driver</p>
+              <p
+                style={{ cursor: "pointer", letterSpacing: "1px" }}
+                className={
+                  isSwitchedToPrivateDriver
+                    ? `${classes.privateDriverActiveText}`
+                    : `${classes.privateDriverInactiveText}`
+                }
+                onClick={() => document.getElementById("checkbox").click()}
+              >
+                Private Driver
+              </p>
               <label class={classes.switch} for="checkbox">
-                <input type="checkbox" id="checkbox" className={classes.first} onChange={(e) => {
-                  sessionStorage.setItem("privateDriverFlag", e.target.checked);
-                  e.target.checked ? setIsSwitchedToPrivateDriver(true) : setIsSwitchedToPrivateDriver(false);
-                }} />
+                <input
+                  type="checkbox"
+                  id="checkbox"
+                  className={classes.first}
+                  onChange={(e) => {
+                    sessionStorage.setItem(
+                      "privateDriverFlag",
+                      e.target.checked
+                    );
+                    e.target.checked
+                      ? setIsSwitchedToPrivateDriver(true)
+                      : setIsSwitchedToPrivateDriver(false);
+                  }}
+                />
                 <div class={`${classes.slider} ${classes.round}`}></div>
               </label>
             </div>
           )}
         </header>
         {isSwitchedToPrivateDriver && <DriverData toggle="true" />}
-        {!isSwitchedToPrivateDriver &&
+        {!isSwitchedToPrivateDriver && (
           <div className={classes.cards}>
             <div
               className={classes.text}
@@ -212,18 +237,22 @@ const Main = () => {
               )}
               {!isApiError && (
                 <span>
-                  {isLoading ? <Loading /> : <span>{listData.activeTrips}</span>}
+                  {isLoading ? (
+                    <Loading />
+                  ) : (
+                    <span>{listData.activeTrips}</span>
+                  )}
                 </span>
               )}
             </div>
           </div>
-        }
-        {!isSwitchedToPrivateDriver &&
+        )}
+        {!isSwitchedToPrivateDriver && (
           <LiveTrip
             driverList={isLoading ? [] : driverList}
             isLoading={isLoading}
           />
-        }
+        )}
       </div>
       {!sessionStorage.getItem("splashFlag") && (
         <div

@@ -1,0 +1,17 @@
+.chatbot-container img {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.chatbot-container .main-body {
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  height: 400px;
+  width: 350px;
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+}

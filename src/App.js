@@ -19,6 +19,7 @@ import DriverList from "./Components/Drivers/DriverList";
 import PrivateTrips from "./Components/PrivateDriver/PrivateTrips";
 import LiveMap from "./Components/PrivateDriver/LiveMap";
 import DriverData from "./Components/PrivateDriver/DriverData";
+import ChatBot from "./Components/ChatBot/ChatBot";
 
 let flag = true;
 let prevURL = "";
@@ -221,25 +222,9 @@ function App() {
               </Route>
             </div>
           </div>
+          <ChatBot />
         </React.Fragment>
       )}
-      {/* <Route path="/dashboard">
-        {isLoggedIn ? (
-          <React.Fragment>
-            <Header sideMenuOpen={sideMenuHoverHandler} />
-            <div className="myContainer"> */}
-      {/* {isSideMenuOpen && <SideMenu sideMenuClose={sideMenuLeaveHandler} />} */}
-      {/* <SideMenu
-                sideMenuClose={sideMenuLeaveHandler}
-                property={isSideMenuOpen}
-              />
-              <Dashboard />
-            </div>
-          </React.Fragment>
-        ) : (
-          <Redirect to="/login" />
-        )}
-      </Route> */}
     </div>
   );
 }
