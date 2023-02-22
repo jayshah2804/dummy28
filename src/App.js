@@ -222,7 +222,7 @@ function App() {
               </Route>
             </div>
           </div>
-          {/* <ChatBot /> */}
+          <ChatBot />
         </React.Fragment>
       )}
     </div>
