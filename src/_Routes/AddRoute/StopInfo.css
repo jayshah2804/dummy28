@@ -22,6 +22,7 @@
 
   .stop-main-container {
     display: flex;
+    width: 1180px;
   }
 
 .stopInfo-container {

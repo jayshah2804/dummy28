@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import useHttp from "../../Hooks/use-http";
 import notification_live_trip from "../../Assets/notification_live_trip.png";
 import notification_live_trip_end from "../../Assets/notification_live_trip_end.png";
+import shift_start_icon from "../../Assets/shift_start_icon.png";
+import shift_end_icon from "../../Assets/shif_end_icon.png";
 import notification_department_add from "../../Assets/notification_department_add.png";
 import notification_rider from "../../Assets/notification_rider.png";
 
@@ -161,11 +163,12 @@ const Notification = (props) => {
                           src={
                             ele.title.toLowerCase().includes("department")
                               ? notification_department_add
-                              : ele.title.toLowerCase().includes("rider")
-                              ? notification_rider
-                              : ele.title.toLowerCase().includes("start")
-                              ? notification_live_trip
-                              : notification_live_trip_end
+                              : (ele.title.toLowerCase().includes("rider")
+                                ? notification_rider
+                                : (ele.title.toLowerCase().includes("trip")
+                                  ? (ele.title.toLowerCase().includes("start") ? notification_live_trip : notification_live_trip_end) : (
+                                    ele.title.toLowerCase().includes("start") ? shift_start_icon : shift_end_icon
+                                  )))
                           }
                         ></img>
                         <div style={{ width: "-webkit-fill-available" }}>

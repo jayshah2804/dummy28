@@ -22,6 +22,7 @@
 
 .stop-main-container {
     display: flex;
+    width: 1180px;
 }
 
 .stopInfo-container {
@@ -29,7 +30,8 @@
     margin-bottom: 20px;
     /* width: 70%; */
     width: 1000px;
-    height: 470px;
+    /* height: 470px; */
+    height: 450px;
 }
 
 .stopInfo-container .sub-header {
@@ -138,7 +140,7 @@
 .stop-container {
     margin-top: 55px;
     /* margin-left: 2%; */
-    width: 21%;
+    width: 25%;
     /* height: 400px; */
     /* background-color: whitesmoke; */
     /* height: calc(100vh-100px); */
