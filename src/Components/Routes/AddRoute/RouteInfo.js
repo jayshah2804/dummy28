@@ -217,13 +217,8 @@ function RouteInfo(props) {
                   <option disabled selected>
                     Route Type
                   </option>
-                  {sessionStorage.getItem("type") === "Corporate" ?
-                    <option>IntraCity</option> :
-                    <React.Fragment>
-                      <option>Picking</option>
-                      <option>dropping</option>
-                    </React.Fragment>
-                  }
+                  <option>Picking</option>
+                  <option>dropping</option>
                 </select>
                 {isError.routeType && (
                   <p className="error">{isError.routeType}</p>
