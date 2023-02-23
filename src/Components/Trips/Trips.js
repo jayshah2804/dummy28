@@ -103,8 +103,8 @@ function App(props) {
 
   function formatDate(date = new Date(), format = "mm/dd/yy") {
     const map = {
-      mm: date.getMonth() + 1,
-      dd: date.getDate(),
+      mm: date.getMonth().toString().length === 1 ? ("0" + (date.getMonth() + 1)) : date.getMonth() + 1,
+      dd: date.getDate().toString().length === 1 ? "0" + date.getDate() : date.getDate(),
       yy: date.getFullYear().toString(),
       yyyy: date.getFullYear(),
     };

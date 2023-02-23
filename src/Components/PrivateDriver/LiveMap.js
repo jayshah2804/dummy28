@@ -32,8 +32,8 @@ var deltaLat;
 var deltaLng;
 
 let drawLineFlag = false;
-let prevLat = "";
-let prevLng = "";
+let journeyStart = 0;
+let onTripDriverName = "";
 
 
 const LiveMap = (props) => {
@@ -41,6 +41,7 @@ const LiveMap = (props) => {
   const [onTripDriverEmail, setOnTripDriverEmail] = useState();
   const [tripRequestStatus, setTripRequestStatus] = useState(false);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
+  const [isTripEnded, setIsTripEnded] = useState(false);
   const searchInputRef = useRef();
   const history = useHistory()
 
@@ -112,7 +113,11 @@ const LiveMap = (props) => {
       // console.log(icon);
       icon.rotation = data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
       marker.setIcon(icon);
+      journeyStart = 1;
+      setIsTripEnded(false);
     } else {
+      if (journeyStart) setIsTripEnded(true);
+      journeyStart = 0;
       flightPlanCoordinates = [];
     }
     setIsLoadingRoute(false);
@@ -127,7 +132,7 @@ const LiveMap = (props) => {
 
   function intervalApiCall() {
     flightPlanCoordinates = [];
-    console.log("prev_driverEmail", prev_driverEmail, onTripDriverEmail);
+    // console.log("prev_driverEmail", prev_driverEmail, onTripDriverEmail);
     prev_driverEmail && prev_driverEmail === onTripDriverEmail
       ? (driverFlag = false)
       : (driverFlag = true);
@@ -335,13 +340,14 @@ const LiveMap = (props) => {
       );
   };
 
-  const onTripDriverClickHandler = (driverEmail, status) => {
+  const onTripDriverClickHandler = (driverEmail, status, driverName) => {
     if (status === "on trip") {
       document
         .getElementById(prev_driverId)
         ?.classList.remove("currentDriver");
       document.getElementById(driverEmail).classList.add("currentDriver");
       prev_driverId = driverEmail;
+      onTripDriverName = driverName;
       setOnTripDriverEmail(driverEmail);
       setIsLoadingRoute(true);
     }
@@ -416,7 +422,7 @@ const LiveMap = (props) => {
                   id={ele.driverEmail}
                   className={ele.status === "on trip" ? "driverContainer" : ""}
                   onClick={() =>
-                    onTripDriverClickHandler(ele.driverEmail, ele.status)
+                    onTripDriverClickHandler(ele.driverEmail, ele.status, ele.driverName)
                   }
                 >
                   <div
@@ -504,8 +510,8 @@ const LiveMap = (props) => {
           }}
         />
       )}
-      {tripRequestStatus &&
-        < Message type={/accepted|arrived|started/.test(tripRequestStatus) ? "success" : "fail"} message="Driver has accepted your request" driveErrorMessage="Driver has not accepted your request" />
+      {isTripEnded &&
+        < Message type="success" message={ onTripDriverName + "'s Trip has been ended"} />
       }
     </React.Fragment>
   );

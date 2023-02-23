@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ChatBotImage from "../../Assets/chatBot.jpg";
+import ChatBotImage from "../../Assets/chatBot.png";
+import customerSupportImage from "../../Assets/customer_support.jpg";
 import "./ChatBot.css";
 import { AiOutlineSend } from "react-icons/ai";
 
@@ -8,6 +9,7 @@ let answers = {
   greet: "Hey",
   route:
     "https://www.youtube.com/watch?v=eM8Mjuq4MwQ&list=RDeM8Mjuq4MwQ&start_radio=1",
+  default: " I am really sorry. I don't know how to do this",
 };
 
 const ChatBot = () => {
@@ -32,10 +34,17 @@ const ChatBot = () => {
 
     let keys = Object.keys(answers);
     for (let i = 0; i < keys.length; i++) {
-      if (enteredValue.includes(keys[i])) {
+      if (enteredValue.toLowerCase().includes(keys[i])) {
         a.push(answers[keys[i]]);
+        break;
+      }
+      if (i === keys.length - 1) {
+        a.push(answers.default);
       }
     }
+    setTimeout(() => {
+      document.getElementById("chat").scrollTo(0, document.getElementById("chat").scrollHeight);
+    })
     setChatBotText(a);
   };
 
@@ -43,11 +52,22 @@ const ChatBot = () => {
     <div className="chatbot-container">
       {isChatbotOpen && (
         <div className="main-body">
-          <div className="chat">
-            {chatBotText.length > 0 && chatBotText.map((ele) => <li>{ele}</li>)}
+          <div className="chat-header">
+            <div>
+              <img src={customerSupportImage} />
+            </div>
+            <div style={{display: "flex", flexDirection: "column"}}>
+              <p>LittleBot</p>
+              <p style={{fontSize: "11px", color: "#ffffffd9", marginTop: "-3px"}}>Online</p>
+            </div>
+          </div>
+          <div className="chat" id="chat">
+            {chatBotText.length > 0 &&
+              chatBotText.map((ele, i) => ele.includes("https") ? <p className={i % 2 === 0 ? "leftChat" : "rightChat"}><a href={ele} target="_blank">click here to check</a></p> : <p className={i % 2 === 0 ? "leftChat" : "rightChat"} >{ele}</p>)
+            }
           </div>
           <div className="chat-footer">
-            <input type="text" id="chatInput" />
+            <input type="text" id="chatInput" placeholder="Type your message" onKeyDown={(e) => e.key === "Enter" ? chatInputEnteredClick() : ""} />
             <AiOutlineSend
               className="sendIcon"
               onClick={chatInputEnteredClick}
