@@ -6,7 +6,7 @@ import { AiOutlineSend } from "react-icons/ai";
 
 let answers = {
   start: "Hey, What can I do for you?",
-  greet: "Hey",
+  greet: "Hey, " + sessionStorage.getItem("adminName"),
   route:
     "https://www.youtube.com/watch?v=eM8Mjuq4MwQ&list=RDeM8Mjuq4MwQ&start_radio=1",
   default: " I am really sorry. I don't know how to do this",
@@ -15,6 +15,7 @@ let answers = {
 const ChatBot = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [chatBotText, setChatBotText] = useState([]);
+  const [isPopupTextCanceled, setIsPopupTextCanceled] = useState(true);
 
   useEffect(() => {
     if (isChatbotOpen && chatBotText.length < 1) {
@@ -37,14 +38,19 @@ const ChatBot = () => {
       if (enteredValue.toLowerCase().includes(keys[i])) {
         a.push(answers[keys[i]]);
         break;
+      } else if (/hi|hello|hey/.test(enteredValue.toLowerCase())) {
+        a.push(answers.greet);
+        break;
       }
       if (i === keys.length - 1) {
         a.push(answers.default);
       }
     }
     setTimeout(() => {
-      document.getElementById("chat").scrollTo(0, document.getElementById("chat").scrollHeight);
-    })
+      document
+        .getElementById("chat")
+        .scrollTo(0, document.getElementById("chat").scrollHeight);
+    });
     setChatBotText(a);
   };
 
@@ -56,18 +62,44 @@ const ChatBot = () => {
             <div>
               <img src={customerSupportImage} />
             </div>
-            <div style={{display: "flex", flexDirection: "column"}}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               <p>LittleBot</p>
-              <p style={{fontSize: "11px", color: "#ffffffd9", marginTop: "-3px"}}>Online</p>
+              <p
+                style={{
+                  fontSize: "11px",
+                  color: "#ffffffd9",
+                  marginTop: "-3px",
+                }}
+              >
+                Online
+              </p>
             </div>
           </div>
           <div className="chat" id="chat">
             {chatBotText.length > 0 &&
-              chatBotText.map((ele, i) => ele.includes("https") ? <p className={i % 2 === 0 ? "leftChat" : "rightChat"}><a href={ele} target="_blank">click here to check</a></p> : <p className={i % 2 === 0 ? "leftChat" : "rightChat"} >{ele}</p>)
-            }
+              chatBotText.map((ele, i) =>
+                ele.includes("https") ? (
+                  <p className={i % 2 === 0 ? "leftChat" : "rightChat"}>
+                    <a href={ele} target="_blank">
+                      Click here to learn
+                    </a>
+                  </p>
+                ) : (
+                  <p className={i % 2 === 0 ? "leftChat" : "rightChat"}>
+                    {ele}
+                  </p>
+                )
+              )}
           </div>
           <div className="chat-footer">
-            <input type="text" id="chatInput" placeholder="Type your message" onKeyDown={(e) => e.key === "Enter" ? chatInputEnteredClick() : ""} />
+            <input
+              type="text"
+              id="chatInput"
+              placeholder="Type your message"
+              onKeyDown={(e) =>
+                e.key === "Enter" ? chatInputEnteredClick() : ""
+              }
+            />
             <AiOutlineSend
               className="sendIcon"
               onClick={chatInputEnteredClick}
@@ -75,6 +107,20 @@ const ChatBot = () => {
           </div>
         </div>
       )}
+      {/* {isPopupTextCanceled && (
+        <p className="popup-text">
+          <span>
+            Hey {sessionStorage.getItem("adminName")}, click here if you have
+            questions{" "}
+          </span>
+          <span
+            style={{ marginLeft: "20px", cursor: "pointer" }}
+            onClick={() => setIsPopupTextCanceled(false)}
+          >
+            X
+          </span>
+        </p>
+      )} */}
       <img
         src={ChatBotImage}
         onClick={() => setIsChatbotOpen((prev) => !prev)}
