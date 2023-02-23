@@ -179,7 +179,7 @@ const LiveMap = (props) => {
   function clearIntervalFligthPath() {
     marker?.setMap(null);
     clearInterval(pathInterval);
-    flightPath1?.setMap(null);
+    // flightPath1?.setMap(null);
     flightPath2?.setMap(null);
   }
 
@@ -211,20 +211,20 @@ const LiveMap = (props) => {
         map,
         icon: startPoint
       });
-      flightPath1 = new window.google.maps.Polyline({
-        path: flightPlanCoordinates,
-        // geodesic: true,
-        strokeColor: "black",
-        strokeOpacity: 10.0,
-        strokeWeight: 5,
-      });
+      // flightPath1 = new window.google.maps.Polyline({
+      //   path: flightPlanCoordinates,
+      //   // geodesic: true,
+      //   strokeColor: "black",
+      //   strokeOpacity: 10.0,
+      //   strokeWeight: 5,
+      // });
 
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
         // geodesic: true,
         strokeColor: "#00b0ff",
         strokeOpacity: 10.0,
-        strokeWeight: 4,
+        strokeWeight: 3,
       });
       // if (drawLineFlag) {
       // flightPath1?.setMap(null);
@@ -251,17 +251,17 @@ const LiveMap = (props) => {
 
       if (flightPlanCoordinates.length > 1) {
         // setTimeout(() => {
-        flightPath1?.setMap(null);
+        // flightPath1?.setMap(null);
         flightPath2?.setMap(null);
-        flightPath1.setMap(map);
+        // flightPath1.setMap(map);
         flightPath2.setMap(map);
         marker.setPosition(flightPlanCoordinates[flightPlanCoordinates.length - 1])
         // }, 3000);
         // transition();
       } else if (flightPlanCoordinates.length > 0) {
-        flightPath1?.setMap(null);
+        // flightPath1?.setMap(null);
         flightPath2?.setMap(null);
-        flightPath1.setMap(map);
+        // flightPath1.setMap(map);
         flightPath2.setMap(map);
         marker.setPosition(
           flightPlanCoordinates[flightPlanCoordinates.length - 1]
