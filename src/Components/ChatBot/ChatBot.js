@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import ChatBotImage from "../../Assets/chatBot.png";
+import ChatBotImage from "../../Assets/chatBotNew.png";
 import customerSupportImage from "../../Assets/customer_support.jpg";
+import cancelImage from "../../Assets/crossIcon.png";
 import "./ChatBot.css";
 import { AiOutlineSend } from "react-icons/ai";
 
 let answers = {
   start: "Hey, What can I do for you?",
-  greet: "Hey, " + sessionStorage.getItem("adminName"),
+  greet: "Hey",
   route:
     "https://www.youtube.com/watch?v=eM8Mjuq4MwQ&list=RDeM8Mjuq4MwQ&start_radio=1",
   default: " I am really sorry. I don't know how to do this",
@@ -28,6 +29,7 @@ const ChatBot = () => {
   }, [isChatbotOpen]);
 
   const chatInputEnteredClick = () => {
+    answers.greet = ", " + sessionStorage.getItem("adminName");
     let a = structuredClone(chatBotText);
     let enteredValue = document.getElementById("chatInput").value;
     a.push(enteredValue);
@@ -63,10 +65,10 @@ const ChatBot = () => {
               <img src={customerSupportImage} />
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <p>LittleBot</p>
+              <p style={{ fontSize: "14px" }}>LittleBot</p>
               <p
                 style={{
-                  fontSize: "11px",
+                  fontSize: "10px",
                   color: "#ffffffd9",
                   marginTop: "-3px",
                 }}
@@ -122,7 +124,7 @@ const ChatBot = () => {
         </p>
       )} */}
       <img
-        src={ChatBotImage}
+        src={ !isChatbotOpen ? ChatBotImage : cancelImage}
         onClick={() => setIsChatbotOpen((prev) => !prev)}
       />
     </div>
