@@ -87,6 +87,12 @@ const StopInfo = (props) => {
       // flightPlanCoordinates = [];
       // STOP_DETAILS = [];
       let details = JSON.parse(sessionStorage.getItem("routeDetails"));
+      let i =
+        sessionStorage.getItem("routeType").toLowerCase() === "picking" ? 0 : 1;
+      let detailsLength =
+        sessionStorage.getItem("routeType").toLowerCase() === "picking"
+          ? details.length - 1
+          : details.length;
       editedStopDetails = [];
       editaedFlightPanCoordinates = [];
       editedFilteredData = [];
@@ -94,7 +100,7 @@ const StopInfo = (props) => {
       myStopNumberInfo = {};
       stop_number = 0;
 
-      for (let i = 1; i < details?.length; i++) {
+      for (i; i < detailsLength; i++) {
         // for (let i = 0; i < details?.length - 1; i++) {
         editedStopDetails.push({
           stop: details[i].StopName,
@@ -277,10 +283,20 @@ const StopInfo = (props) => {
       }
       let shuttleRoute = [];
       let staffList = [];
-      for (let i = sessionStorage.getItem("routeType").toLowerCase() === "picking" ? 1 : 0; i < STOP_DETAILS.length; i++) {
+      for (
+        let i =
+          sessionStorage.getItem("routeType").toLowerCase() === "picking"
+            ? 1
+            : 0;
+        i < STOP_DETAILS.length;
+        i++
+      ) {
         shuttleRoute.push({
           StopName: STOP_DETAILS[i].stop,
-          StopNumber: sessionStorage.getItem("routeType").toLowerCase() === "picking" ? i : i + 1,
+          StopNumber:
+            sessionStorage.getItem("routeType").toLowerCase() === "picking"
+              ? i
+              : i + 1,
           StopLatitude: STOP_DETAILS[i].lat,
           StopLongitude: STOP_DETAILS[i].lng,
         });
@@ -566,15 +582,18 @@ const StopInfo = (props) => {
         icon = studentDummyImage;
         if (position.status)
           // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><p id="infowindow-success">Assigned</div>`;
-          myTitle = `<div id="infowindow-container" ><h3>${myStopNumberInfo[position.mNumber[0]]
-            ? myStopNumberInfo[position.mNumber[0]] + ". "
-            : ""
-            }${position.stop.split(",")[0]
-            }</h3><p id="infowindow-success">Assigned</div>`;
+          myTitle = `<div id="infowindow-container" ><h3>${
+            myStopNumberInfo[position.mNumber[0]]
+              ? myStopNumberInfo[position.mNumber[0]] + ". "
+              : ""
+          }${
+            position.stop.split(",")[0]
+          }</h3><p id="infowindow-success">Assigned</div>`;
         // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><div id=${i}><span id='infowindow-assign'>Assign rider</span></div></div>`;
         else
-          myTitle = `<div><div id="infowindow-container" ><h3>${position.stop.split(",")[0]
-            }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
+          myTitle = `<div><div id="infowindow-container" ><h3>${
+            position.stop.split(",")[0]
+          }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
       }
 
       const marker = new window.google.maps.Marker({
@@ -873,18 +892,18 @@ const StopInfo = (props) => {
       if (i !== 0) {
         document
           .getElementsByClassName("stopNames-container")
-        [i].addEventListener("mouseover", () => {
-          document
-            .getElementsByClassName("cross")
-          [i].classList.add("myClassName");
-        });
+          [i].addEventListener("mouseover", () => {
+            document
+              .getElementsByClassName("cross")
+              [i].classList.add("myClassName");
+          });
         document
           .getElementsByClassName("stopNames-container")
-        [i].addEventListener("mouseleave", () => {
-          document
-            .getElementsByClassName("cross")
-          [i].classList.remove("myClassName");
-        });
+          [i].addEventListener("mouseleave", () => {
+            document
+              .getElementsByClassName("cross")
+              [i].classList.remove("myClassName");
+          });
       }
     }
     for (
@@ -894,18 +913,18 @@ const StopInfo = (props) => {
     ) {
       document
         .getElementsByClassName("tempMyStudents")
-      [i].addEventListener("mouseover", () => {
-        document
-          .getElementsByClassName("studentCross")
-        [i].classList.add("myStudentClass");
-      });
+        [i].addEventListener("mouseover", () => {
+          document
+            .getElementsByClassName("studentCross")
+            [i].classList.add("myStudentClass");
+        });
       document
         .getElementsByClassName("tempMyStudents")
-      [i].addEventListener("mouseleave", () => {
-        document
-          .getElementsByClassName("studentCross")
-        [i].classList.remove("myStudentClass");
-      });
+        [i].addEventListener("mouseleave", () => {
+          document
+            .getElementsByClassName("studentCross")
+            [i].classList.remove("myStudentClass");
+        });
     }
     setTimeout(() => {
       document.getElementById("asdf").click();
