@@ -5,6 +5,7 @@ import studentDummyImage from "../../Assets/new_student_marker.png";
 import useHttp from "../../Hooks/use-http";
 import { useHistory } from "react-router-dom";
 import Loading from "../../Loading/Loading";
+import startPoint from "../../Assets/Pin_icon_green50.png"
 
 let valLat = 23.0350155;
 let valLng = 72.5672725;
@@ -101,10 +102,11 @@ const LiveTrip = (props) => {
     // debugger;
     if (data.Livetripdetails) {
       if (!driverFlag) {
-        flightPlanCoordinates.push({
-          lat: data.Livetripdetails[0].Latitude,
-          lng: data.Livetripdetails[0].Longitude,
-        });
+        if (flightPlanCoordinates[flightPlanCoordinates.length - 1].lat !== data.Livetripdetails[0].Latitude && flightPlanCoordinates[flightPlanCoordinates.length - 1].lng !== data.Livetripdetails[0].Longitude)
+          flightPlanCoordinates.push({
+            lat: data.Livetripdetails[0].Latitude,
+            lng: data.Livetripdetails[0].Longitude,
+          });
       } else {
         flightPlanCoordinates = [];
         for (let i = 0; i < data.Livetripdetails.length; i++) {
@@ -115,8 +117,12 @@ const LiveTrip = (props) => {
         }
         driverFlag = false;
       }
-      marker.icon.rotation =
-        data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
+      // marker.icon.rotation =
+      //   data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
+      let icon = marker.getIcon();
+      // console.log(icon);
+      icon.rotation = data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
+      marker.setIcon(icon);
     } else flightPlanCoordinates = [];
     setIsLoadingRoute(false);
     // setIsRender((prev) => !prev);
@@ -237,24 +243,29 @@ const LiveTrip = (props) => {
     });
 
     pathInterval = setInterval(() => {
+      let startPointMarker = new window.google.maps.Marker({
+        position: flightPlanCoordinates[0],
+        map,
+        icon: startPoint
+      });
       if (document.getElementsByClassName("gm-fullscreen-control")[0])
         document.getElementsByClassName(
           "gm-fullscreen-control"
         )[0].style.marginTop = "45px";
 
-      flightPath1 = new window.google.maps.Polyline({
-        path: flightPlanCoordinates,
-        geodesic: true,
-        strokeColor: "black",
-        strokeOpacity: 1.0,
-        strokeWeight: 6,
-      });
+      // flightPath1 = new window.google.maps.Polyline({
+      //   path: flightPlanCoordinates,
+      //   geodesic: true,
+      //   strokeColor: "black",
+      //   strokeOpacity: 1.0,
+      //   strokeWeight: 6,
+      // });
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
         geodesic: true,
         strokeColor: "#00b0ff",
         strokeOpacity: 1.0,
-        strokeWeight: 5,
+        strokeWeight: 3,
       });
       // debugger;
       // if (prev_driverEmail && prev_driverEmail !== props.driverEmail)
@@ -263,13 +274,14 @@ const LiveTrip = (props) => {
       //     flightPath.setPath([]);
       // flightPath1.setMap(map);
       if (flightPlanCoordinates.length > 1) {
-        setTimeout(() => {
-          flightPath1.setMap(map);
-          flightPath2.setMap(map);
-        }, 3000);
-        transition();
+        // setTimeout(() => {
+        // flightPath1.setMap(map);
+        flightPath2.setMap(map);
+        marker.setPosition(flightPlanCoordinates[flightPlanCoordinates.length - 1])
+        // }, 3000);
+        // transition();
       } else if (flightPlanCoordinates.length > 0) {
-        flightPath1.setMap(map);
+        // flightPath1.setMap(map);
         flightPath2.setMap(map);
         marker.setPosition(
           flightPlanCoordinates[flightPlanCoordinates.length - 1]
@@ -295,7 +307,7 @@ const LiveTrip = (props) => {
         !flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
       ) {
         map.setZoom(11);
-        map.setCenter({ lat: 23.0358311, lng: 72.5579656 });
+        // map.setCenter({ lat: 23.0358311, lng: 72.5579656 });
       }
     }, 2000);
   }
