@@ -4,12 +4,15 @@ import Loading from "../../Loading/Loading";
 // import Accordian from "./_Accordian";
 import "./Records.css";
 import editIcon from "../../Assets/editIcon.png";
+import viewIcon from "../../Assets/Disable.png";
 import AddRoute from "./AddRoute/RouteInfo";
 import Message from "../../Modal/Message";
+import ViewRoute from "./ViewRoute/ViewRoute";
 
 let routeId = "";
 const Records = ({ isLoading, data, headers }) => {
   const [isEditRouteClicked, setIsEditRouteClicked] = useState(false);
+  const [isViewRouteClicked, setIsViewRouteClicked] = useState(false);
   const [isRouteCreated, setIsRouteCreated] = useState();
 
   const routeCreationStatus = (data) => {
@@ -25,6 +28,11 @@ const Records = ({ isLoading, data, headers }) => {
     routeId = e.target.parentElement.parentElement.children[0].innerText;
     setIsEditRouteClicked(true);
   };
+  const viewRouteClickHandler = (e) => {
+    routeId = e.target.parentElement.parentElement.children[0].innerText;
+    setIsViewRouteClicked(true);
+  }
+
   return (
     <React.Fragment>
       {data[0] ? (
@@ -53,11 +61,16 @@ const Records = ({ isLoading, data, headers }) => {
                     : "Drop"}
                 </td>
                 {sessionStorage.getItem("userType") !== "AccountManager" && (
-                  <td>
+                  <td style={{ display: "flex", justifyContent: "center", gap: "20px", alignItems: "center", height: "50px" }}>
                     <img
                       onClick={editRouteClickHandler}
                       className="edit-route"
                       src={editIcon}
+                    />
+                    <img
+                      onClick={viewRouteClickHandler}
+                      className="edit-route"
+                      src={viewIcon}
                     />
                   </td>
                 )}
@@ -93,6 +106,7 @@ const Records = ({ isLoading, data, headers }) => {
           setIsAddRouteClicked={setIsEditRouteClicked}
         />
       )}
+      {/* {isViewRouteClicked && <ViewRoute routeId={routeId} setIsViewRouteClicked={setIsViewRouteClicked} />} */}
       {isRouteCreated && (
         <Message
           type={isRouteCreated}

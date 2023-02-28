@@ -89,7 +89,6 @@ const LiveTrip = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("script");
     const script = document.createElement("script");
     script.src =
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyAq88vEj-mQ9idalgeP1IuvulowkkFA-Nk&callback=myInitMap&libraries=places&v=weekly";

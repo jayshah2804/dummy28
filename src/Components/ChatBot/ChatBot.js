@@ -29,7 +29,7 @@ const ChatBot = () => {
   }, [isChatbotOpen]);
 
   const chatInputEnteredClick = () => {
-    answers.greet = ", " + sessionStorage.getItem("adminName");
+    answers.greet += ", " + sessionStorage.getItem("adminName");
     let a = structuredClone(chatBotText);
     let enteredValue = document.getElementById("chatInput").value;
     a.push(enteredValue);

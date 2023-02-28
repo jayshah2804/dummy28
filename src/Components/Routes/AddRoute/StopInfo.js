@@ -471,47 +471,12 @@ const StopInfo = (props) => {
         directionsRenderer2.setDirections(response); // Add route to the map
         directionsRenderer1.setDirections(response); // Add route to the map
         // console.log(response.routes[0].start_location);
-
-        // var leg = response.routes[0];
-
-        //   let marker = new window.google.maps.Marker({
-        //     position: { lat: waypts[0].location.lat(), lng: waypts[0].location.lng() },
-        //     map: map,
-        //     icon: studentDummyImage,
-        //     myTitle: "Jay"
-        //   })
-        //   marker.addListener("mouseover", () => {
-        //     console.log(marker);
-        //     infoWindow.close();
-        //     infoWindow.setContent(marker.myTitle);
-        //     infoWindow.open(marker.getMap(), marker);
-        //   });
       }
     });
 
     const infoWindow = new window.google.maps.InfoWindow();
     let icon;
     let myTitle;
-
-    // const flightPath1 = new window.google.maps.Polyline({
-    //   path: flightPlanCoordinates,
-    //   geodesic: true,
-    //   strokeColor: "black",
-    //   strokeOpacity: 1.0,
-    //   strokeWeight: 7,
-    // });
-
-    // const flightPath = new window.google.maps.Polyline({
-    //   path: flightPlanCoordinates,
-    //   geodesic: true,
-    //   strokeColor: "rgba(34, 137, 203, 255)",
-    //   strokeOpacity: 1.0,
-    //   strokeWeight: 5,
-    // });
-
-    // flightPath1.setMap(map);
-    // flightPath.setMap(map);
-    // console.log(flightPlanCoordinates);
 
     const assignButtonClickHandler = (e) => {
       if (previewRouteFlag) {
