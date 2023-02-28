@@ -88,9 +88,9 @@ const StopInfo = (props) => {
       // STOP_DETAILS = [];
       let details = JSON.parse(sessionStorage.getItem("routeDetails"));
       let i =
-        sessionStorage.getItem("routeType").toLowerCase() === "picking" ? 0 : 1;
+        sessionStorage.getItem("routeType").toLowerCase() === "pickup" ? 0 : 1;
       let detailsLength =
-        sessionStorage.getItem("routeType").toLowerCase() === "picking"
+        sessionStorage.getItem("routeType").toLowerCase() === "pickup"
           ? details.length - 1
           : details.length;
       editedStopDetails = [];
@@ -171,18 +171,18 @@ const StopInfo = (props) => {
         for (let i = 0; i < data.StaffList.length; i++) {
           studentData.push({
             stop:
-              sessionStorage.getItem("routeType").toLowerCase() === "picking"
+              sessionStorage.getItem("routeType").toLowerCase() === "pickup"
                 ? data.StaffList[i].PickupPoint
                 : data.StaffList[i].DropPoint,
             name: [data.StaffList[i].StaffName],
             mNumber: [data.StaffList[i].MobileNumber],
             location: {
               lat:
-                sessionStorage.getItem("routeType").toLowerCase() === "picking"
+                sessionStorage.getItem("routeType").toLowerCase() === "pickup"
                   ? +data.StaffList[i].PickupLL.split(",")[0]
                   : +data.StaffList[i].DropLL.split(",")[0],
               lng:
-                sessionStorage.getItem("routeType").toLowerCase() === "picking"
+                sessionStorage.getItem("routeType").toLowerCase() === "pickup"
                   ? +data.StaffList[i].PickupLL.split(",")[1]
                   : +data.StaffList[i].DropLL.split(",")[1],
             },
@@ -249,7 +249,10 @@ const StopInfo = (props) => {
           body: {
             emailID: sessionStorage.getItem("user"),
             corporateID: sessionStorage.getItem("corpId"),
-            routeType: sessionStorage.getItem("routeType"),
+            routeType:
+              sessionStorage.getItem("routeType").toLowerCase() === "pickup"
+                ? "Picking"
+                : "dropping",
           },
         },
         authenticateUser
@@ -285,7 +288,7 @@ const StopInfo = (props) => {
       let staffList = [];
       for (
         let i =
-          sessionStorage.getItem("routeType").toLowerCase() === "picking"
+          sessionStorage.getItem("routeType").toLowerCase() === "pickup"
             ? 1
             : 0;
         i < STOP_DETAILS.length;
@@ -294,7 +297,7 @@ const StopInfo = (props) => {
         shuttleRoute.push({
           StopName: STOP_DETAILS[i].stop,
           StopNumber:
-            sessionStorage.getItem("routeType").toLowerCase() === "picking"
+            sessionStorage.getItem("routeType").toLowerCase() === "pickup"
               ? i
               : i + 1,
           StopLatitude: STOP_DETAILS[i].lat,
@@ -306,7 +309,7 @@ const StopInfo = (props) => {
           });
         }
       }
-      if (sessionStorage.getItem("routeType").toLowerCase() === "picking")
+      if (sessionStorage.getItem("routeType").toLowerCase() === "pickup")
         shuttleRoute.push({
           StopName: STOP_DETAILS[0].stop,
           StopNumber: shuttleRoute.length + 1,
@@ -325,7 +328,10 @@ const StopInfo = (props) => {
       obj.CorporateID = sessionStorage.getItem("corpId");
       obj.RouteID = props.routeId ? props.routeId : "";
       obj.RouteName = sessionStorage.getItem("routeName");
-      obj.RouteType = sessionStorage.getItem("routeType");
+      obj.RouteType =
+        sessionStorage.getItem("routeType").toLowerCase() === "pickup"
+          ? "Picking"
+          : "dropping";
       obj.ShuttleTypeID = sessionStorage.getItem("shuttleType");
       obj.ShuttleTiming = JSON.stringify(shuttleTiming);
       obj.ShuttleRoute = JSON.stringify(shuttleRoute);

@@ -22,8 +22,8 @@ let authToken = "";
 let error = {
   riderName: "",
   pickupStop: "",
-  dropStop: ""
-}
+  dropStop: "",
+};
 
 const DriverBooking = (props) => {
   const [isDriverBookingClicked, setIsDriverBookingClicked] = useState(false);
@@ -168,10 +168,21 @@ const DriverBooking = (props) => {
         fetch("https://corp.little.global/server" + url, requestOptions)
           .then((response) => response.text())
           .then((result) => {
-            setTripRequestStatus(/accepted|arrived|started/.test(JSON.parse(result).tripStatus.toLowerCase()) ? "success" : "fail");
+            setTripRequestStatus(
+              /accepted|arrived|started/.test(
+                JSON.parse(result).tripStatus?.toLowerCase()
+              )
+                ? "success"
+                : "fail"
+            );
             // props.setBookedDriver(false);
           })
-          .catch((error) => console.log("error", error));
+          .catch((error) =>
+            console.log(
+              "error",
+              !JSON.parse(error).tripStatus ? setTripRequestStatus("fail") : ""
+            )
+          );
       }, 30000);
     }
   }, [isDriverBookingClicked, isToken]);
@@ -193,7 +204,11 @@ const DriverBooking = (props) => {
   window.initMap = initMap;
 
   const tripBookClicked = () => {
-    if (riderInputSearchRef.current.value && pickupInputRef.current.value && dropInputRef.current.value) {
+    if (
+      riderInputSearchRef.current.value &&
+      pickupInputRef.current.value &&
+      dropInputRef.current.value
+    ) {
       error.riderName = "";
       error.pickupStop = "";
       error.dropStop = "";
@@ -202,8 +217,10 @@ const DriverBooking = (props) => {
       setIsDriverBookingClicked(true);
     } else {
       setIsFieldError(true);
-      !riderInputSearchRef.current.value && (error.riderName = "Please add one rider");
-      !pickupInputRef.current.value && (error.pickupStop = "Please add pickup stop");
+      !riderInputSearchRef.current.value &&
+        (error.riderName = "Please add one rider");
+      !pickupInputRef.current.value &&
+        (error.pickupStop = "Please add pickup stop");
       !dropInputRef.current.value && (error.dropStop = "Please add drop stop");
     }
   };
@@ -221,8 +238,7 @@ const DriverBooking = (props) => {
             )
         )
       );
-    }
-    else {
+    } else {
       error.riderName = "Please add one rider";
       setIsSearchedRidersData(false);
     }
@@ -243,24 +259,24 @@ const DriverBooking = (props) => {
   }
 
   const pickupStopChangeHandler = () => {
-    if(pickupInputRef.current.value) {
+    if (pickupInputRef.current.value) {
       error.pickupStop = "";
       setIsFieldError(false);
     } else {
       error.pickupStop = "Please add pickup stop";
       setIsFieldError(true);
     }
-  }
+  };
 
   const dropStopChangeHandler = () => {
-    if(dropInputRef.current.value) {
+    if (dropInputRef.current.value) {
       error.dropStop = "";
       setIsFieldError(false);
     } else {
-      error.dropStop = "Please add drop stop"
+      error.dropStop = "Please add drop stop";
       setIsFieldError(true);
     }
-  }
+  };
 
   function move(j = 0, time = 20) {
     // debugger;
@@ -291,7 +307,9 @@ const DriverBooking = (props) => {
           <img src={props.bookedDriver[0].driverImage}></img>
           <div className="driverDetailsInfo">
             <div>{props.bookedDriver[0].driverName}</div>
-            <div style={{ fontSize: "12px" }}>{props.bookedDriver[0].carNumber}</div>
+            <div style={{ fontSize: "12px" }}>
+              {props.bookedDriver[0].carNumber}
+            </div>
           </div>
         </div>
         <div className="carInfo">
@@ -301,11 +319,17 @@ const DriverBooking = (props) => {
           <div style={{fontSize: "12px"}}>{props.bookedDriver[0].carColor.toLowerCase()}</div> */}
         </div>
       </header>
-      {tripRequestStatus &&
-        <div className="success-sub-container" style={{ top: "65%" }} >
+      {tripRequestStatus && (
+        <div className="success-sub-container" style={{ top: "65%" }}>
           <div className="success-msg">
-            <img src={tripRequestStatus === "success" ? TickmarkImage : ErrorImage} />
-            <p className="data-save">{"Driver has" + (tripRequestStatus === "success" ? " " : " not ") + "accepted your request"}</p>
+            <img
+              src={tripRequestStatus === "success" ? TickmarkImage : ErrorImage}
+            />
+            <p className="data-save">
+              {"Driver has" +
+                (tripRequestStatus === "success" ? " " : " not ") +
+                "accepted your request"}
+            </p>
           </div>
           <div
             style={{
@@ -315,11 +339,16 @@ const DriverBooking = (props) => {
               marginTop: "10px",
             }}
           >
-            <button className={tripRequestStatus === "success" ? "" : "error"} onClick={() => window.location.reload()}>OK</button>
+            <button
+              className={tripRequestStatus === "success" ? "" : "error"}
+              onClick={() => window.location.reload()}
+            >
+              OK
+            </button>
           </div>
         </div>
-      }
-      {!tripRequestStatus &&
+      )}
+      {!tripRequestStatus && (
         <React.Fragment>
           <main>
             {isLoading && (
@@ -328,7 +357,17 @@ const DriverBooking = (props) => {
                   <div class="progressbar">
                     {/* <div class="stylization"></div> */}
                   </div>
-                  <span id="progressBarText" style={{ display: "inline-block", zIndex: "999", width: "100%", textAlign: "center" }} >Connecting to driver ...</span>
+                  <span
+                    id="progressBarText"
+                    style={{
+                      display: "inline-block",
+                      zIndex: "999",
+                      width: "100%",
+                      textAlign: "center",
+                    }}
+                  >
+                    Connecting to driver ...
+                  </span>
                   <br />
                 </div>
               </React.Fragment>
@@ -360,12 +399,7 @@ const DriverBooking = (props) => {
             )}
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <img src={building} style={{ width: "20px", height: "20px" }} />
-              <input
-                type="text"
-                disabled
-                value="Ahmedabad"
-                className="tags"
-              />
+              <input type="text" disabled value="Ahmedabad" className="tags" />
             </div>
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <img src={user} style={{ width: "20px", height: "20px" }} />
@@ -377,13 +411,18 @@ const DriverBooking = (props) => {
                   ref={riderInputSearchRef}
                   onChange={riderSearchHandler}
                 ></input>
-                {isFieldError && error.riderName && <p className="errorField">{error.riderName}</p>}
+                {isFieldError && error.riderName && (
+                  <p className="errorField">{error.riderName}</p>
+                )}
                 {searchedRidersData && (
                   <div className="searchedRiders">
                     {searchedRidersData.map((data) => (
                       <p
                         onClick={(e) =>
-                          riderSelectedHandler(data.OfficialName, data.MobileNumber)
+                          riderSelectedHandler(
+                            data.OfficialName,
+                            data.MobileNumber
+                          )
                         }
                       >
                         {data.OfficialName + "  ( " + data.MobileNumber + " )"}
@@ -393,14 +432,38 @@ const DriverBooking = (props) => {
                 )}
               </div>
             </div>
-            <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center" }}>
-                <img src={pickupicon} style={{ width: "20px", height: "20px" }} />
-                <img src={threedots} style={{ width: "20px", height: "20px" }} />
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src={pickupicon}
+                  style={{ width: "20px", height: "20px" }}
+                />
+                <img
+                  src={threedots}
+                  style={{ width: "20px", height: "20px" }}
+                />
                 <img src={dropicon} style={{ width: "20px", height: "20px" }} />
               </div>
               <div
-                style={{ display: "flex", flexDirection: "column", width: "100%" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
               >
                 <input
                   type="text"
@@ -410,7 +473,9 @@ const DriverBooking = (props) => {
                   ref={pickupInputRef}
                   onChange={pickupStopChangeHandler}
                 />
-                {isFieldError && error.pickupStop && <p className="errorField">{error.pickupStop}</p>}
+                {isFieldError && error.pickupStop && (
+                  <p className="errorField">{error.pickupStop}</p>
+                )}
                 <input
                   type="text"
                   id="pac-input2"
@@ -419,7 +484,9 @@ const DriverBooking = (props) => {
                   ref={dropInputRef}
                   onChange={dropStopChangeHandler}
                 />
-                {isFieldError && error.dropStop && <p className="errorField">{error.dropStop}</p>}
+                {isFieldError && error.dropStop && (
+                  <p className="errorField">{error.dropStop}</p>
+                )}
               </div>
             </div>
           </main>
@@ -428,7 +495,7 @@ const DriverBooking = (props) => {
             <button onClick={tripBookClicked}>Book Now</button>
           </footer>
         </React.Fragment>
-      }
+      )}
     </div>
   );
 };

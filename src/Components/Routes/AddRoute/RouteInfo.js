@@ -27,7 +27,8 @@ function RouteInfo(props) {
     sessionStorage.setItem("routeDetails", JSON.stringify(data.RouteDetails));
     defaultShuttleTimings = data.ShuttleTiming;
     let routeName = data.Route[0].RouteName;
-    let routeType = data.Route[0].RouteType;
+    let routeType =
+      data.Route[0].RouteType.toLowerCase() === "picking" ? "Pickup" : "Drop";
     let shuttleType = data.Route[0].ShuttleTypeName;
     // alert(shuttleType);
     setTimeout(() => {
@@ -217,8 +218,8 @@ function RouteInfo(props) {
                   <option disabled selected>
                     Route Type
                   </option>
-                  <option>Picking</option>
-                  <option>dropping</option>
+                  <option>Pickup</option>
+                  <option>Drop</option>
                 </select>
                 {isError.routeType && (
                   <p className="error">{isError.routeType}</p>
