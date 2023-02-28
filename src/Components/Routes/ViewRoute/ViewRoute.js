@@ -1,187 +1,177 @@
-// import React from 'react'
-// import { useState } from 'react';
-// import { useEffect } from 'react';
-// import useHttp from '../../../Hooks/use-http';
-// import "./ViewRoute.css";
+import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import useHttp from "../../../Hooks/use-http";
+import "./ViewRoute.css";
 
-// let waypts = [];
-// const ViewRoute = (props) => {
-//     const [routeDetails, setRouteDetails] = useState(false);
-//     const authenticateUser = (data) => {
-//         console.log(data);
-//         setRouteDetails(data.RouteDetails);
-//     };
+import startPoint from "../../../Assets/Pin_icon_green50.png";
+import studentDummyImage from "../../../Assets/new_student_marker.png";
 
-//     const { isLoading, sendRequest } = useHttp();
+let flag = 0;
+let waypts = [];
+let routeInfo = "";
+const polyline1 = {
+  strokeColor: "#00b0ff",
+  strokeOpacity: 10.0,
+  strokeWeight: 4,
+};
+const ViewRoute = (props) => {
+  const [routeDetails, setRouteDetails] = useState(false);
+  const authenticateUser = (data) => {
+    // console.log(data);
+    routeInfo = data.Route[0];
+    setRouteDetails(data.RouteDetails);
+  };
 
-//     useEffect(() => {
-//         const script = document.createElement("script");
-//         script.src =
-//             "https://maps.googleapis.com/maps/api/js?key=AIzaSyAq88vEj-mQ9idalgeP1IuvulowkkFA-Nk&callback=myInitMap&libraries=places&v=weekly";
-//         script.async = true;
-//         document.body.appendChild(script);
-//     }, []);
+  const { isLoading, sendRequest } = useHttp();
 
-//     useEffect(() => {
-//         sendRequest({
-//             url: "/api/v1/Route/GetRouteDetails",
-//             method: "POST",
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: {
-//                 emailID: sessionStorage.getItem("user"),
-//                 routeID: props.routeId,
-//             }
-//         }, authenticateUser);
-//     }, [sendRequest]);
+  //   useEffect(() => {
+  const script = document.createElement("script");
+  script.src =
+    "https://maps.googleapis.com/maps/api/js?key=AIzaSyAq88vEj-mQ9idalgeP1IuvulowkkFA-Nk&callback=myInitMap&libraries=places&v=weekly";
+  script.async = true;
+  document.body.appendChild(script);
+  //   }, []);
 
-//     function myInitMap() {
-//         let map = new window.google.maps.Map(document.getElementById("map-viewModal"), {
-//             zoom: 11,
-//             center: { lat: 23.0358311, lng: 72.5579656 },
-//             mapTypeId: window.google.maps.MapTypeId.ROADMAP,
-//             disableDefaultUI: true,
-//             fullscreenControl: true,
-//             zoomControl: true,
-//         });
-//         let directionsService = new window.google.maps.DirectionsService();
+  useEffect(() => {
+    if (flag > 0)
+      sendRequest(
+        {
+          url: "/api/v1/Route/GetRouteDetails",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            emailID: sessionStorage.getItem("user"),
+            routeID: props.routeId,
+          },
+        },
+        authenticateUser
+      );
+    flag++;
+  }, [sendRequest]);
 
-//         let directionsRenderer1 = new window.google.maps.DirectionsRenderer({
-//             polylineOptions: polyline1,
-//             suppressMarkers: true,
-//         });
+  function myInitMap() {
+    let map = new window.google.maps.Map(
+      document.getElementById("map-viewModal"),
+      {
+        zoom: 11,
+        center: { lat: 23.0358311, lng: 72.5579656 },
+        mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        fullscreenControl: true,
+        zoomControl: true,
+      }
+    );
+    let directionsService = new window.google.maps.DirectionsService();
 
-//         directionsRenderer1.setMap(map);
-//         let directionsRenderer2 = new window.google.maps.DirectionsRenderer({
-//             polylineOptions: polyline2,
-//             suppressMarkers: true,
-//         });
+    let directionsRenderer1 = new window.google.maps.DirectionsRenderer({
+      polylineOptions: polyline1,
+      suppressMarkers: true,
+    });
 
-//         directionsRenderer2.setMap(map);
+    directionsRenderer1.setMap(map);
+    // let directionsRenderer2 = new window.google.maps.DirectionsRenderer({
+    //   polylineOptions: polyline2,
+    //   suppressMarkers: true,
+    // });
 
-//         const request = {
-//             origin: { lat: routeDetails[0].StopLatitude, lng: routeDetails[0].StopLongitude },
-//             destination: { lat:routeDetails[routeDetails.length - 1].StopLatitude, lng: routeDetails[routeDetails.length - 1].StopLongitude }, //LD
-//             waypoints: waypts,
-//             travelMode: window.google.maps.TravelMode.DRIVING,
-//         };
+    // directionsRenderer2.setMap(map);
 
-//         // const infoWindow = new window.google.maps.InfoWindow();
-//         // console.log(waypts);
-//         // debugger;
-//         directionsService.route(request, function (response, status) {
-//             console.log("after");
-//             if (status == window.google.maps.DirectionsStatus.OK) {
-//                 directionsRenderer2.setDirections(response); // Add route to the map
-//                 directionsRenderer1.setDirections(response); // Add route to the map
-//                 // console.log(response.routes[0].start_location);
-//             }
-//         });
+    const request = {
+      origin: {
+        lat: routeDetails[
+          routeInfo.RouteType.toLowerCase() === "dropping"
+            ? 0
+            : routeDetails.length - 1
+        ].StopLatitude,
+        lng: routeDetails[
+          routeInfo.RouteType.toLowerCase() === "dropping"
+            ? 0
+            : routeDetails.length - 1
+        ].StopLongitude,
+      },
+      destination: {
+        lat: routeDetails[
+          routeInfo.RouteType.toLowerCase() === "dropping"
+            ? routeDetails.length - 1
+            : 0
+        ].StopLatitude,
+        lng: routeDetails[
+          routeInfo.RouteType.toLowerCase() === "dropping"
+            ? routeDetails.length - 1
+            : 0
+        ].StopLongitude,
+      }, //LD
+      waypoints: waypts,
+      travelMode: window.google.maps.TravelMode.DRIVING,
+    };
 
-//         const infoWindow = new window.google.maps.InfoWindow();
-//         let icon;
-//         let myTitle;
+    // const infoWindow = new window.google.maps.InfoWindow();
+    // console.log(waypts);
+    // debugger;
+    directionsService.route(request, function (response, status) {
+      console.log("after");
+      if (status == window.google.maps.DirectionsStatus.OK) {
+        // directionsRenderer2.setDirections(response); // Add route to the map
+        directionsRenderer1.setDirections(response); // Add route to the map
+        // console.log(response.routes[0].start_location);
+      }
+    });
 
-//         const assignButtonClickHandler = (e) => {
-//             if (previewRouteFlag) {
-//                 dst.pop();
-//                 // dst.push(waypts.pop().location);
-//                 waypts.pop();
-//                 previewRouteFlag = false;
-//             }
-//             // else {
-//             // previewRouteFlag = false;
-//             if (dst.length > 0)
-//                 waypts.push({
-//                     location: dst[dst.length - 1], //KP
-//                     stopover: true,
-//                 });
-//             console.log(dst);
-//             dst.push({
-//                 lat: filteredData[e.target.parentElement.id].location.lat,
-//                 lng: filteredData[e.target.parentElement.id].location.lng,
-//             });
-//             filteredData[e.target.parentElement.id].status = true;
-//             // studentCount += filteredData[e.target.parentElement.id].name.length;
-//             // if (studentCount > shuttleSeatingCapacity) {
-//             //   studentCount -= filteredData[e.target.parentElement.id].name.length;
-//             //   alert("Shuttle seating capacity exceeded");
-//             // }
-//             // else {
-//             prev_id = e.target.parentElement.id;
-//             // filteredData[e.target.parentElement.id].status = true;
+    const infoWindow = new window.google.maps.InfoWindow();
+    let icon;
+    let myTitle;
 
-//             myRecord.push(e.target.parentElement.id);
-//             // flightPlanCoordinates.push(
-//             //   {
-//             //     lat: filteredData[e.target.parentElement.id].location.lat,
-//             //     lng: filteredData[e.target.parentElement.id].location.lng
-//             //   });
-//             STOP_DETAILS.push({
-//                 stop: filteredData[e.target.parentElement.id].stop,
-//                 riders: filteredData[e.target.parentElement.id].name,
-//                 lat: filteredData[e.target.parentElement.id].location.lat,
-//                 lng: filteredData[e.target.parentElement.id].location.lng,
-//                 mNumber: filteredData[e.target.parentElement.id].mNumber,
-//             });
-//             myStopNumberInfo[STOP_DETAILS[STOP_DETAILS.length - 1].mNumber[0]] =
-//                 stop_number + 1;
-//             stop_number++;
-            
-//         };
+    // console.log(filteredData);
+    routeDetails.forEach((position, i) => {
+      if (
+        (routeInfo.RouteType.toLowerCase() === "dropping" &&
+          position.StopNumber === 1) ||
+        (routeInfo.RouteType.toLowerCase() === "picking" &&
+          position.StopNumber === routeDetails.length - 1)
+      ) {
+        icon = startPoint;
+        myTitle = `<div><h3>${position.StopName.split(",")[0]}</h3></div>`;
+      } else {
+        icon = studentDummyImage;
+        myTitle = `<div id="infowindow-container" ><h3>${
+          position.StopName.split(",")[0]
+        }`;
+      }
 
-//         // console.log(filteredData);
-//         filteredData.forEach((position, i) => {
-//             // console.log(filteredData[i]);
-//             if (i === 0) {
-//                 icon = startPoint;
-//                 myTitle = `<div><h3>${position.name.toString()}</h3></div>`;
-//             } else {
-//                 // console.log(position.stop.split(",")[0], position.status);
-//                 icon = studentDummyImage;
-//                 if (position.status)
-//                     // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><p id="infowindow-success">Assigned</div>`;
-//                     myTitle = `<div id="infowindow-container" ><h3>${myStopNumberInfo[position.mNumber[0]]
-//                             ? myStopNumberInfo[position.mNumber[0]] + ". "
-//                             : ""
-//                         }${position.stop.split(",")[0]
-//                         }</h3><p id="infowindow-success">Assigned</div>`;
-//                 // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><div id=${i}><span id='infowindow-assign'>Assign rider</span></div></div>`;
-//                 else
-//                     myTitle = `<div><div id="infowindow-container" ><h3>${position.stop.split(",")[0]
-//                         }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
-//             }
+      let marker = new window.google.maps.Marker({
+        position: { lat: position.StopLatitude, lng: position.StopLongitude },
+        map,
+        myTitle,
+        icon,
+        optimized: false,
+      });
 
-//             const marker = new window.google.maps.Marker({
-//                 position: position.location,
-//                 map,
-//                 myTitle,
-//                 icon,
-//                 optimized: false,
-//             });
+      marker.addListener("mouseover", () => {
+        // infoWindow.close();
+        infoWindow.setContent(marker.myTitle);
+        infoWindow.open(marker.getMap(), marker);
+      });
+    });
+  }
+  window.myInitMap = myInitMap;
 
-//             marker.addListener("mouseover", () => {
-//                 // infoWindow.close();
-//                 infoWindow.setContent(marker.myTitle);
-//                 infoWindow.open(marker.getMap(), marker);
-//                 infoWindow.open(
-//                     setTimeout(() => {
-//                         document
-//                             .getElementById("infowindow-assign")
-//                             .addEventListener("click", assignButtonClickHandler);
-//                     })
-//                 );
-//             });
-//         });
-//     }
-//     window.myInitMap = myInitMap;
+  return (
+    <div className="viewRouteContainer">
+      <header>
+        <span>{props.routeName}</span>
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={() => props.setIsViewRouteClicked(false)}
+        >
+          X
+        </span>
+      </header>
+      <div id="map-viewModal"></div>
+    </div>
+  );
+};
 
-//     return (
-//         <div className='viewRouteContainer'>
-//             <div id="map-viewModal"></div>
-//         </div>
-//     )
-// }
-
-// export default ViewRoute
+export default ViewRoute;

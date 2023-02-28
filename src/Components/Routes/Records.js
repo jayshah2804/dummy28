@@ -4,12 +4,13 @@ import Loading from "../../Loading/Loading";
 // import Accordian from "./_Accordian";
 import "./Records.css";
 import editIcon from "../../Assets/editIcon.png";
-import viewIcon from "../../Assets/Disable.png";
+import viewIcon from "../../Assets/eye.png";
 import AddRoute from "./AddRoute/RouteInfo";
 import Message from "../../Modal/Message";
 import ViewRoute from "./ViewRoute/ViewRoute";
 
 let routeId = "";
+let routeName = "";
 const Records = ({ isLoading, data, headers }) => {
   const [isEditRouteClicked, setIsEditRouteClicked] = useState(false);
   const [isViewRouteClicked, setIsViewRouteClicked] = useState(false);
@@ -30,8 +31,9 @@ const Records = ({ isLoading, data, headers }) => {
   };
   const viewRouteClickHandler = (e) => {
     routeId = e.target.parentElement.parentElement.children[0].innerText;
+    routeName = e.target.parentElement.parentElement.children[1].innerText;
     setIsViewRouteClicked(true);
-  }
+  };
 
   return (
     <React.Fragment>
@@ -61,17 +63,25 @@ const Records = ({ isLoading, data, headers }) => {
                     : "Drop"}
                 </td>
                 {sessionStorage.getItem("userType") !== "AccountManager" && (
-                  <td style={{ display: "flex", justifyContent: "center", gap: "20px", alignItems: "center", height: "50px" }}>
+                  <td
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "20px",
+                      alignItems: "center",
+                      height: "50px",
+                    }}
+                  >
                     <img
                       onClick={editRouteClickHandler}
                       className="edit-route"
                       src={editIcon}
                     />
-                    <img
+                    {/* <img
                       onClick={viewRouteClickHandler}
                       className="edit-route"
                       src={viewIcon}
-                    />
+                    /> */}
                   </td>
                 )}
               </tr>
@@ -98,7 +108,9 @@ const Records = ({ isLoading, data, headers }) => {
           )}
         </React.Fragment>
       )}
-      {isEditRouteClicked && <div className="background"></div>}
+      {(isEditRouteClicked || isViewRouteClicked) && (
+        <div className="background"></div>
+      )}
       {isEditRouteClicked && (
         <AddRoute
           routeCreationStatus={routeCreationStatus}
@@ -106,7 +118,13 @@ const Records = ({ isLoading, data, headers }) => {
           setIsAddRouteClicked={setIsEditRouteClicked}
         />
       )}
-      {/* {isViewRouteClicked && <ViewRoute routeId={routeId} setIsViewRouteClicked={setIsViewRouteClicked} />} */}
+      {isViewRouteClicked && (
+        <ViewRoute
+          routeId={routeId}
+          routeName={routeName}
+          setIsViewRouteClicked={setIsViewRouteClicked}
+        />
+      )}
       {isRouteCreated && (
         <Message
           type={isRouteCreated}

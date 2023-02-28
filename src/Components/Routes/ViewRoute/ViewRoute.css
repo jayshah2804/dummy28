@@ -1,16 +1,31 @@
 .viewRouteContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 700px;
-    height: 500px;
-    background-color: white;
-    border: 1px solid gray;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 600px;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 10px;
+  z-index: 100;
+}
+
+.viewRouteContainer header {
+  padding: 10px;
+  background-color: rgba(34, 137, 203, 255);
+  color: white;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #map-viewModal {
-    position: relative;
-    height: 90%;
-    width: 90%;
+  position: relative;
+  height: 93%;
+  width: 100%;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
