@@ -115,6 +115,7 @@ const Accordian = (props) => {
           "," +
           data.TripdetailList[i].DropoffLongitude,
         route_name: data.TripdetailList[i].RouteName,
+        routeType: data.TripdetailList[i].RouteType
       });
     }
     rider_details = trip_rider_list;

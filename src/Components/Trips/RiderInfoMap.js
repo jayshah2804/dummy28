@@ -12,8 +12,8 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     "https://maps.googleapis.com/maps/api/js?key=AIzaSyAq88vEj-mQ9idalgeP1IuvulowkkFA-Nk&callback=myInitMap&libraries=places&v=weekly";
   script.async = true;
   document.body.appendChild(script);
-
-  routeType = RIDER_DATA[0]?.route_name.toLowerCase().includes("drop");
+  // debugger;
+  routeType = RIDER_DATA[0]?.routeType?.toLowerCase() === "dropping";
 
   function myInitMap() {
     const map = new window.google.maps.Map(document.getElementById("map"), {
@@ -26,6 +26,12 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
       fullscreenControl: true,
       zoomControl: true,
     });
+    var bounds = new window.google.maps.LatLngBounds();
+    for (let i = 0; i < driverPath.length; i = i + 10) {
+      bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
+      bounds.extend(new window.google.maps.LatLng(driverPath[driverPath.length - 1].lat, driverPath[driverPath.length - 1].lng));
+    }
+    map.fitBounds(bounds);
 
     const tourStops = [
       {
@@ -86,9 +92,8 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
         //     icon = endPoint;
         // } else {
         icon = studentDummyImage;
-        myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${
-          RIDER_DATA[i - 1]?.rider_name
-        }</h3></div>`;
+        myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${RIDER_DATA[i - 1]?.rider_name
+          }</h3></div>`;
         // }
       }
 
