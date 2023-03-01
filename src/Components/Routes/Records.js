@@ -77,11 +77,11 @@ const Records = ({ isLoading, data, headers }) => {
                       className="edit-route"
                       src={editIcon}
                     />
-                    {/* <img
+                    <img
                       onClick={viewRouteClickHandler}
                       className="edit-route"
                       src={viewIcon}
-                    /> */}
+                    />
                   </td>
                 )}
               </tr>
