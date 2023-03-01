@@ -33,7 +33,7 @@ const ViewRoute = (props) => {
     }, [routeDetails]);
 
     useEffect(() => {
-        if (flag > 0)
+        // if (flag > 0)
             sendRequest(
                 {
                     url: "/api/v1/Route/GetRouteDetails",
@@ -48,7 +48,7 @@ const ViewRoute = (props) => {
                 },
                 authenticateUser
             );
-        flag++;
+        // flag++;
     }, [sendRequest]);
 
     function myInitMap() {
