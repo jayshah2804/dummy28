@@ -90,8 +90,8 @@ const Notification = (props) => {
       if (+data.NotificationList[i].CreatedDate.split("-")[2] === current)
         time = "Today";
       else if (
-        +data.NotificationList[i].CreatedDate.split("-")[2] ===
-        current - 1
+        (+data.NotificationList[i].CreatedDate.split("-")[2] ===
+          current - 1) || (+data.NotificationList[i].CreatedDate.split("-")[2] >= 28)
       )
         time = "Yesterday";
       else time = "2 days ago";
