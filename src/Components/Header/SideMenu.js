@@ -7,6 +7,9 @@ import useHttp from "../../Hooks/use-http";
 let sideMenuFlag = 0;
 let flag = false;
 let prev_corp = "";
+let obj = {
+  dashboard: "<AiOutlineBarChart />"
+}
 const SideMenu = (props) => {
   const [sideMenuData, setSideMenuData] = useState([]);
   const { sendRequest } = useHttp();

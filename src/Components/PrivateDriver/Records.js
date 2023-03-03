@@ -1,13 +1,16 @@
 import React from "react";
 import Loading from "../../Loading/Loading";
 import Accordian from "./Accordian";
+import { useReactToPrint } from "react-to-print";
 
 const Records = ({ isLoading, data, headers }) => {
+
   const func = (val) => {
     if (val) {
       document.getElementById(val).click();
     }
   }
+
   return (
     <React.Fragment>
       {data[0] ?

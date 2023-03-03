@@ -4,6 +4,8 @@ import {
   MdKeyboardArrowUp,
   MdOutlineDashboard,
 } from "react-icons/md";
+import { AiOutlineBarChart } from "react-icons/ai";
+import { BiBriefcase } from "react-icons/bi";
 import { useHistory } from "react-router-dom";
 
 import classes from "./SideMenuData.module.css";
@@ -83,6 +85,8 @@ const SideMenuData = ({ main, corpId, sub, deptId, myActiveMenu, sideMenuClose }
     <React.Fragment>
       <div className={classes.menu}>
         <MdOutlineDashboard className={classes.frontIcons} />
+        {/* {main.toLowerCase() === "dashboard" && <AiOutlineBarChart className={classes.frontIcons} />}
+        {main.toLowerCase().includes("corporate") && <BiBriefcase className={classes.frontIcons} />} */}
         {/* <NavLink to="#"
           className={classes.mainMenu}
           onClick={() => setSubMenuIsActive((prev) => !prev)}

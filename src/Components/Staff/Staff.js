@@ -5,7 +5,9 @@ import ReactPaginate from "react-paginate";
 import { CSVLink } from "react-csv";
 import { Route, useLocation } from "react-router-dom";
 import useHttp from "../../Hooks/use-http";
+// import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
 // import AddRoute from "./AddRoute/RouteInfo";
+import { useReactToPrint } from "react-to-print";
 
 const STAFF_DATA = [
     {
@@ -178,17 +180,17 @@ function Routes() {
 
     useEffect(() => {
         // if (staffListFlag > 0)
-            sendRequest({
-                url: "/api/v1/Staff/GetStaffList",
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: {
-                    emailID: sessionStorage.getItem("user"),
-                    corporateID: id ? id : "",
-                }
-            }, authenticateUser);
+        sendRequest({
+            url: "/api/v1/Staff/GetStaffList",
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: {
+                emailID: sessionStorage.getItem("user"),
+                corporateID: id ? id : "",
+            }
+        }, authenticateUser);
         staffListFlag++;
     }, [sendRequest, id]);
 
@@ -230,6 +232,19 @@ function Routes() {
         // else setFilteredData(TRIP_DATA);
     };
 
+    // const MyDocument = (
+    //     <Document>
+    //         <Page size="A4">
+    //             <View>
+    //                 <Text>Hello World!</Text>
+    //             </View>
+    //             <View>
+    //                 <Text>We're inside a PDF!</Text>
+    //             </View>
+    //         </Page>
+    //     </Document>
+    // );
+
     return (
         <div className="trips-details" id="trip-table">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -248,6 +263,7 @@ function Routes() {
                                 ref={searchInputRef}
                             />
                         </div>
+                        {/* <PDFViewer>{MyDocument}</PDFViewer> */}
                         <CSVLink data={staff_details} className="export_csv" filename={"data.csv"} >
                             Export
                         </CSVLink>

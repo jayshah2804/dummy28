@@ -6,6 +6,8 @@ import { CSVLink } from "react-csv";
 import { useLocation, useParams } from "react-router-dom";
 import useHttp from "../../Hooks/use-http";
 import { useEffect } from "react";
+import generatePDF from "../../GeneratePDF/generatePdf";
+import Modal from "../../GeneratePDF/Modal";
 
 const TRIP_DATA = [
   {
@@ -34,6 +36,18 @@ const TRIP_TITLE = [
   "Total Trip KM",
 ];
 
+const REPORT_TITLE = [
+  "Sr.",
+  "Driver Name",
+  "Trip Date",
+  "Start Time",
+  "End Time",
+  "Riders",
+  "Pickup",
+  "Drop",
+  "Trip km",
+]
+
 let myClick = false;
 let prev_id = "1";
 
@@ -48,6 +62,7 @@ function PrivateTrips(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(7);
   const [filteredData, setFilteredData] = useState([]);
+  const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
   const startDateRef = useRef();
   const endDateRef = useRef();
 
@@ -250,9 +265,11 @@ function PrivateTrips(props) {
                 onBlur={inputToDateBlurHandler}
               />
             </div>
-            <CSVLink data={filteredData} className="export_csv">
+            {/* <button onClick={() => generatePDF(filteredData)}>Click</button> */}
+            <span className="export_csv" style={{ cursor: "pointer" }} onClick={() => setIsExportButtonClicked(true)} >Export</span>
+            {/* <CSVLink data={filteredData} className="export_csv">
               Export
-            </CSVLink>
+            </CSVLink> */}
           </div>
         </div>
         <Records data={currentRecords} headers={TRIP_TITLE} isLoading={isLoading} />
@@ -282,6 +299,8 @@ function PrivateTrips(props) {
                     /> */}
         </div>
       </div>
+      {isExportButtonClicked && <Modal setIsExportButtonClicked={setIsExportButtonClicked} data={filteredData} heading={REPORT_TITLE} />}
+      {isExportButtonClicked && <div className="add-route-fullcontainer"></div>}
     </div>
   );
 }
