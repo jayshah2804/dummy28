@@ -6,6 +6,7 @@ import useHttp from "../../Hooks/use-http";
 import { useHistory } from "react-router-dom";
 import Loading from "../../Loading/Loading";
 import startPoint from "../../Assets/Pin_icon_green50.png"
+import Message from "../../Modal/Message";
 
 let valLat = 23.0350155;
 let valLng = 72.5672725;
@@ -40,10 +41,14 @@ var i = 0;
 var deltaLat;
 var deltaLng;
 
+let journeyStart = 0;
+let onTripDriverName = "";
+
 const LiveTrip = (props) => {
   const [isRender, setIsRender] = useState("first");
   const [isDriverEmail, setIsDriverEmail] = useState();
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
+  const [isTripEnded, setIsTripEnded] = useState(false);
   const history = useHistory();
 
   // if(props.isLoading){
@@ -97,7 +102,7 @@ const LiveTrip = (props) => {
   }, [isDriverEmail]);
 
   const authenticateUser = (data) => {
-    console.log(data, driverFlag);
+    // console.log(data, driverFlag);
     // debugger;
     if (data.Livetripdetails) {
       if (!driverFlag) {
@@ -122,7 +127,13 @@ const LiveTrip = (props) => {
       // console.log(icon);
       icon.rotation = data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
       marker.setIcon(icon);
-    } else flightPlanCoordinates = [];
+      journeyStart = 1;
+      setIsTripEnded(false);
+    } else {
+      if (journeyStart) setIsTripEnded(true);
+      journeyStart = 0;
+      flightPlanCoordinates = [];
+    }
     setIsLoadingRoute(false);
     // setIsRender((prev) => !prev);
   };
@@ -347,12 +358,13 @@ const LiveTrip = (props) => {
 
   window.myInitMap = myInitMap;
 
-  const activeDriverClickHandler = (driverId, live) => {
+  const activeDriverClickHandler = (driverId, live, driverName) => {
     console.log(driverId);
     if (live == "1") {
       document.getElementById(prev_driverId)?.classList.remove("currentDriver");
       document.getElementById(driverId).classList.add("currentDriver");
       prev_driverId = driverId;
+      onTripDriverName = driverName;
       setIsDriverEmail(driverId);
       setIsLoadingRoute(true);
     }
@@ -390,7 +402,7 @@ const LiveTrip = (props) => {
               key={index}
               id={ele.DriverEmailID}
               onClick={() =>
-                activeDriverClickHandler(ele.DriverEmailID, ele.LiveStatus)
+                activeDriverClickHandler(ele.DriverEmailID, ele.LiveStatus, ele.DriverName)
               }
               className={ele.LiveStatus == "1" ? classes.driverContainer : ""}
             >
@@ -437,6 +449,9 @@ const LiveTrip = (props) => {
         )}
         {isLoadingRoute && <Loading driver="true" />}
       </div>
+      {isTripEnded &&
+        < Message type="success" message={onTripDriverName + "'s Trip has been ended"} />
+      }
     </div>
   );
 };
