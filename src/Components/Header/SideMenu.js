@@ -109,12 +109,12 @@ const SideMenu = (props) => {
   // }
 
   if (props.property) {
-    if (window.screen.width < 400)
+    if (window.screen.width < 450)
       document.getElementById("mySidemenu").style.width = "100%";
     else document.getElementById("mySidemenu").style.width = "22%";
     window.addEventListener("popstate", function (event) {
       // alert(document.getElementById("mySidemenu").style.width);
-      if (window.screen.width < 400) {
+      if (window.screen.width < 450) {
         if (document.getElementById("mySidemenu").style.width == "100%")
           document.getElementById("mySidemenu").style.minWidth = "100%";
       } else {
