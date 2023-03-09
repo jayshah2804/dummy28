@@ -89,7 +89,7 @@ const NewRegistration = () => {
             contractEnddate: contractEndDateInputRef.current.value,
             password: ""
         });
-        if (apiFlag > 1 && isValid)
+        if (isValid)
             sendRequest({
                 url: "/api/v1/Corporate/CorporateRegistration",
                 method: "POST",
