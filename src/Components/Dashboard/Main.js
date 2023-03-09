@@ -58,12 +58,13 @@ const Main = () => {
   const history = useHistory();
 
   useEffect(() => {
+    alert("hello")
     if (
-      sessionStorage.getItem("privateDriverFlag") == "true" &&
+      localStorage.getItem("privateDriverFlag") == "true" &&
       !isSwitchedToPrivateDriver
     )
       document.getElementById("checkbox")?.click();
-    sessionStorage.setItem("privateDriverFlag", "false");
+    // localStorage.setItem("privateDriverFlag", "false");
   }, []);
 
   setTimeout(() => {
@@ -157,7 +158,8 @@ const Main = () => {
                   id="checkbox"
                   className={classes.first}
                   onChange={(e) => {
-                    sessionStorage.setItem(
+                    debugger;
+                    localStorage.setItem(
                       "privateDriverFlag",
                       e.target.checked
                     );
