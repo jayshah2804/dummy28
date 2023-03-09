@@ -58,7 +58,7 @@ const Main = () => {
   const history = useHistory();
 
   useEffect(() => {
-    alert("hello")
+    // alert("hello")
     if (
       localStorage.getItem("privateDriverFlag") == "true" &&
       !isSwitchedToPrivateDriver
