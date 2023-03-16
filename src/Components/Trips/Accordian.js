@@ -92,7 +92,6 @@ const Accordian = (props) => {
   const [riderData, setRiderData] = useState([]);
 
   const authenticateUser = (data) => {
-    console.log(data.TripdetailList);
     driverPath = data.Triplatlong;
     let trip_rider_list = [];
     for (let i = 0; i < data?.TripdetailList?.length; i++) {

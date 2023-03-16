@@ -23,6 +23,8 @@ const Login = ({ login }) => {
   const [isApiError, setIsApiError] = useState();
 
   const authenticateUser = (data) => {
+    // localStorage.setItem("privateDriverFlag", false);
+    // alert("hrllo");
     // console.log(data);
     if (!data.table1) setIsApiError(data + " Please try again later");
     else {

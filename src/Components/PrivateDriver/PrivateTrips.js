@@ -36,18 +36,6 @@ const TRIP_TITLE = [
   "Total Trip KM",
 ];
 
-const REPORT_TITLE = [
-  "Sr.",
-  "Driver Name",
-  "Trip Date",
-  "Start Time",
-  "End Time",
-  "Riders",
-  "Pickup",
-  "Drop",
-  "Trip km",
-]
-
 let myClick = false;
 let prev_id = "1";
 
@@ -299,7 +287,7 @@ function PrivateTrips(props) {
                     /> */}
         </div>
       </div>
-      {isExportButtonClicked && <Modal setIsExportButtonClicked={setIsExportButtonClicked} data={filteredData} heading={REPORT_TITLE} />}
+      {isExportButtonClicked && <Modal setIsExportButtonClicked={setIsExportButtonClicked} isPrivateDriver="1" />}
       {isExportButtonClicked && <div className="add-route-fullcontainer"></div>}
     </div>
   );

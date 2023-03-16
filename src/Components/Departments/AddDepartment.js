@@ -118,7 +118,7 @@ const AddDepartment = () => {
                     adminName: adminNameInputRef.current.value,
                     buttonMark: id ? "M" : "I",
                     departmentID: id ? id : "",
-                    departmentname: departmentNameInputRef.current.value,
+                    departmentname: departmentNameInputRef.current.value.toLowerCase().includes("department") ? departmentNameInputRef.current.value : (departmentNameInputRef.current.value + "Department"),
                     parentID: sessionStorage.getItem("corpId"),
                     interCountryTrips: allow_inter_country === "Yes" ? "Y" : "N",
                     lockVehicleType: lock_vehicle_type === "Yes" ? "Y" : "N",

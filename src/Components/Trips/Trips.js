@@ -6,6 +6,7 @@ import { CSVLink } from "react-csv";
 import { useLocation, useParams } from "react-router-dom";
 import useHttp from "../../Hooks/use-http";
 import { useEffect } from "react";
+import Modal from "../../GeneratePDF/Modal";
 
 const TRIP_DATA = [
   {
@@ -39,6 +40,7 @@ let tripListFlag = 0;
 let total_trip_data = "";
 
 function App(props) {
+  const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   let staffMoNumber = queryParams.get('staff');
@@ -79,23 +81,23 @@ function App(props) {
     console.log(date.getMonth());
     let today = date.getFullYear().toString().concat("-", +date.getMonth() + 1, "-", date.getDate());
     // if (tripListFlag > 0) {
-      console.log(tripListFlag);
-      sendRequest({
-        url: "/api/v1/ShuttleTrips/GetShuttleTrips",
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          emailID: sessionStorage.getItem("user"),
-          // emailID: "nihal@little.global",
-          corporateID: id ? id : (sessionStorage.getItem("userType") === "AccountManager" ? "" : sessionStorage.getItem("corpId")),
-          departmentID: "",
-          staffMobileNumber: staffMoNumber ? staffMoNumber : "",
-          fromDate: "2018-01-01",
-          toDate: today
-        }
-      }, authenticateUser);
+    console.log(tripListFlag);
+    sendRequest({
+      url: "/api/v1/ShuttleTrips/GetShuttleTrips",
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        emailID: sessionStorage.getItem("user"),
+        // emailID: "nihal@little.global",
+        corporateID: id ? id : (sessionStorage.getItem("userType") === "AccountManager" ? "" : sessionStorage.getItem("corpId")),
+        departmentID: "",
+        staffMobileNumber: staffMoNumber ? staffMoNumber : "",
+        fromDate: "2018-01-01",
+        toDate: today
+      }
+    }, authenticateUser);
     // }
     tripListFlag++;
   }, [sendRequest, id]);
@@ -249,9 +251,10 @@ function App(props) {
                 onBlur={inputToDateBlurHandler}
               />
             </div>
-            <CSVLink data={filteredData} className="export_csv" filename={"data.csv"} >
+            <span className="export_csv" onClick={() => setIsExportButtonClicked(true)} >Export</span>
+            {/* <CSVLink data={filteredData} className="export_csv" filename={"data.csv"} >
               Export
-            </CSVLink>
+            </CSVLink> */}
           </div>
         </div>
         <Records data={currentRecords} headers={TRIP_TITLE} isLoading={isLoading} />
@@ -281,6 +284,8 @@ function App(props) {
                     /> */}
         </div>
       </div>
+      {isExportButtonClicked && <Modal setIsExportButtonClicked={setIsExportButtonClicked} />}
+      {isExportButtonClicked && <div className="add-route-fullcontainer"></div>}
     </div>
   );
 }

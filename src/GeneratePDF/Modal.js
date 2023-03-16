@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import useHttp from '../Hooks/use-http';
 import generatePDF from './generatePdf';
 import "./Modal.css";
+import ReactPDF from '@react-pdf/renderer';
+import { PDFViewer } from '@react-pdf/renderer';
+import PDFMake from 'pdfmake';
+import JsxPdf from 'jsx-pdf';
+// import { OpenSans } from './font-descriptors';
 
 let drivers = [];
 let riders = [];
@@ -19,17 +24,36 @@ const Modal = (props) => {
     const [searchedRiderData, setSearchedRiderData] = useState([]);
     const [searchedDriverData, setSearchedDriverData] = useState([]);
     const [isGeneratePdfClicked, setIsGeneratePdfClicked] = useState(false);
+    const [generatePdfError, setGeneratePdfError] = useState(false);
     const startDateRef = useRef();
     const endDateRef = useRef();
     const riderInputSearchRef = useRef();
     const driverInputSearchRef = useRef();
 
+    useEffect(() => {
+        let date = new Date();
+        startDateRef.current.defaultValue = date.getFullYear() + "-" +
+            ((+date.getMonth() + 1) > 9 ? (+date.getMonth() + 1) : ("0" + (+date.getMonth() + 1))) + "-" + "01";
+        endDateRef.current.defaultValue = date.getFullYear() + "-" +
+            ((+date.getMonth() + 1) > 9 ? (+date.getMonth() + 1) : ("0" + (+date.getMonth() + 1))) + "-" +
+            (date.getDate() > 9 ? date.getDate() : ("0" + date.getDate()));
+    }, []);
+
     const authenticateUser = (data) => {
         if (isGeneratePdfClicked) {
-            // console.log(data.TripdetailList, "trip");
-            if (data.TripdetailList)
-                generatePDF(data.TripdetailList, props.heading, selectedRiderData.name, selectedDriverData.name);
-            else alert("No data available for selected fields");
+            if (data.TripdetailList) {
+                let totalKm = 0;
+                for (let i = 0; i < data.TripdetailList.length; i++) {
+                    totalKm += +data.TripdetailList[i].TripDistance;
+                }
+                generatePDF(startDateRef.current.value, endDateRef.current.value, data.TripdetailList, selectedRiderData.name, selectedDriverData.name, data.TripdetailList.length, totalKm.toFixed(2), JSON.parse(data.CorporateLogo)[0].Image,
+                    document.getElementById("cpAddress").innerText, document.getElementById("cpAddress").clientWidth
+                );
+            }
+            else {
+                setGeneratePdfError(true);
+                setTimeout(() => setGeneratePdfError(false), 4000);
+            }
             setIsGeneratePdfClicked(false);
         }
         else {
@@ -47,7 +71,6 @@ const Modal = (props) => {
                     email: data.PrivetDriverlist[i].DriverEmailID
                 });
             }
-            console.log(drivers, riders);
         }
     };
 
@@ -89,13 +112,13 @@ const Modal = (props) => {
                         "Content-Type": "application/json",
                     },
                     body: {
-                        emailID: "sjay2804@gmail.com",
+                        emailID: "jayshah9791@gmail.com",
                         driverEmailID: selectedDriverData.email,
                         fromDate: startDate ? startDate : "2018/01/01",
-                        toDate: endDate ? endDate : "2023/03/02",
+                        toDate: endDate ? endDate : new Date().getFullYear().toString().concat("-", +new Date().getMonth() + 1, "-", new Date().getDate()),
                         riderMobileNumber: selectedRiderData.number,
                         corporateID: sessionStorage.getItem("corpId"),
-                        isPrivateTrip: true
+                        isPrivateTrip: props.isPrivateDriver ? "1" : "0"
                     },
                 },
                 authenticateUser
@@ -128,7 +151,6 @@ const Modal = (props) => {
 
     const generatePdfClickHandler = () => {
         setIsGeneratePdfClicked(true);
-        // generatePDF(props.data, props.heading);
     }
 
     // const riderSelectedHandler = (e) => {
@@ -143,6 +165,7 @@ const Modal = (props) => {
                 <span>Report</span>
                 <span style={{ cursor: "pointer" }} onClick={() => props.setIsExportButtonClicked(false)}>X</span>
             </header>
+            <div id="cpAddress" style={{ fontSize: "0px" }} >524-525, Craft Silicon, Indraprastha Business Park, near DAV School, PrahladNagar, Maninagar, Ahmedabad-380051</div>
             <div className='generatePdf-subContainer'>
                 <main>
                     {isLoading && isGeneratePdfClicked && (
@@ -166,7 +189,11 @@ const Modal = (props) => {
                             </div>
                         </React.Fragment>
                     )}
-                    {/* <div>Select Date:</div> */}
+                    {generatePdfError &&
+                        <div className="pdfGenerateError">
+                            No Records Available for Selected Fields
+                        </div>
+                    }
                     <label htmlFor='startDate'>Start Date: </label>
                     <input
                         type="date"

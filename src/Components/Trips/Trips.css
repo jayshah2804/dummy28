@@ -117,6 +117,7 @@
   border-radius: 5px;
   font-size: 12.5px;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .export_csv:hover {

@@ -34,20 +34,20 @@ const ViewRoute = (props) => {
 
     useEffect(() => {
         // if (flag > 0)
-            sendRequest(
-                {
-                    url: "/api/v1/Route/GetRouteDetails",
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: {
-                        emailID: sessionStorage.getItem("user"),
-                        routeID: props.routeId,
-                    },
+        sendRequest(
+            {
+                url: "/api/v1/Route/GetRouteDetails",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
                 },
-                authenticateUser
-            );
+                body: {
+                    emailID: sessionStorage.getItem("user"),
+                    routeID: props.routeId,
+                },
+            },
+            authenticateUser
+        );
         // flag++;
     }, [sendRequest]);
 
@@ -139,9 +139,9 @@ const ViewRoute = (props) => {
         routeDetails.forEach((position, i) => {
             if (
                 (routeInfo.RouteType.toLowerCase() === "dropping" &&
-                    position.StopNumber === 1) ||
+                    position.StopNumber === 0) ||
                 (routeInfo.RouteType.toLowerCase() === "picking" &&
-                    position.StopNumber === routeDetails.length)
+                    position.StopNumber === routeDetails.length - 1)
             ) {
                 icon = startPoint;
                 myTitle = `<div><h3>${position.StopName.split(",")[0]}</h3></div>`;

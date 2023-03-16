@@ -149,7 +149,8 @@
 }
 
 .stop-subcontainer {
-    margin-top: 30px;
+    /* margin-top: 30px; */
+    margin-top: 10px;
     margin-left: 15px;
     width: 100%;
     text-overflow: clip;
