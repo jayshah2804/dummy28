@@ -147,7 +147,7 @@ const StopInfo = (props) => {
   const authenticateUser = (data) => {
     // debugger;
     if (type === "submit") {
-      console.log(data);
+      // console.log(data);
       if (data.Message && data.Message.toLowerCase() === "success")
         props.routeCreationStatus("Success");
       else {
@@ -159,6 +159,7 @@ const StopInfo = (props) => {
       // alert("here");
       // console.log(data.CorporateLatlong, "current co");
       let studentData = [];
+      // debugger;
       studentData.push({
         stop: data.CorporateLatlong[0].CorporateName,
         name: data.CorporateLatlong[0].CorporateName,
@@ -216,11 +217,11 @@ const StopInfo = (props) => {
         waypts.pop();
         // dst = [waypts.pop().location];
       }
-      console.log(STOP_DETAILS, waypts);
+      // console.log(STOP_DETAILS, waypts);
       // }
       // console.log(studentData, "studentData");
       setFilteredData(studentData);
-      console.log(studentData, "data");
+      // console.log(studentData, "data");
       ridersData = structuredClone(studentData);
     }
   };
@@ -235,11 +236,11 @@ const StopInfo = (props) => {
     let time = JSON.parse(sessionStorage.timings);
 
     if (flag) {
-      console.log({
-        emailID: sessionStorage.getItem("user"),
-        corporateID: sessionStorage.getItem("corpId"),
-        routeType: sessionStorage.getItem("routeType"),
-      });
+      // console.log({
+      //   emailID: sessionStorage.getItem("user"),
+      //   corporateID: sessionStorage.getItem("corpId"),
+      //   routeType: sessionStorage.getItem("routeType"),
+      // });
       sendRequest(
         {
           url: "/api/v1/Corporate/StaffListByCorporate",
@@ -338,7 +339,7 @@ const StopInfo = (props) => {
       obj.ShuttleRoute = JSON.stringify(shuttleRoute);
       obj.StaffList = JSON.stringify(staffList);
       var dataInfo = obj;
-      console.log(dataInfo);
+      // console.log(dataInfo);
 
       sendRequest(
         {
@@ -356,7 +357,7 @@ const StopInfo = (props) => {
 
   const undoRouteClickHandler = () => {
     // if (previewRouteFlag) previewRouteFlag = !previewRouteFlag;
-    console.log(waypts, dst);
+    // console.log(waypts, dst);
     if (dst.length > 0) {
       stop_number--;
       dst.pop();
@@ -372,7 +373,7 @@ const StopInfo = (props) => {
       // filteredData[myRecord].status = false;
       setIsRender((prev) => !prev);
     }
-    console.log(waypts, dst);
+    // console.log(waypts, dst);
     // if (flightPlanCoordinates.length > 1) {
     //   // studentCount -= filteredData[prev_id].name.length;
     //   flightPlanCoordinates.pop();
@@ -425,7 +426,7 @@ const StopInfo = (props) => {
   };
 
   function myInitMap() {
-    console.log(filteredData);
+    // console.log(filteredData);
     const map = new window.google.maps.Map(
       document.getElementById("stops-map"),
       {
@@ -488,7 +489,7 @@ const StopInfo = (props) => {
         lng: STOP_DETAILS[i].lng
       })
     }
-    debugger;
+    // debugger;
     let service = new window.google.maps.DistanceMatrixService();
     service.getDistanceMatrix({
       origins,
@@ -511,7 +512,7 @@ const StopInfo = (props) => {
       document.getElementById("approxKm").innerText = approximate_distance + " km";
       // console.log(approximate_distance);
     }
-    debugger;
+    // debugger;
     if (previewRouteFlag) {
       let service = new window.google.maps.DistanceMatrixService();
       service.getDistanceMatrix({
@@ -555,7 +556,7 @@ const StopInfo = (props) => {
           location: dst[dst.length - 1], //KP
           stopover: true,
         });
-      console.log(dst);
+      // console.log(dst);
       dst.push({
         lat: filteredData[e.target.parentElement.id].location.lat,
         lng: filteredData[e.target.parentElement.id].location.lng,
@@ -679,6 +680,7 @@ const StopInfo = (props) => {
         filteredData[index].name.push(filteredData[i].name.toString());
         filteredData[index].mNumber.push(filteredData[i].mNumber.toString());
         filteredData.splice(i, 1);
+        i--;
       }
       // console.log(filteredData);
       // console.log(filteredData[i],i);
@@ -728,7 +730,7 @@ const StopInfo = (props) => {
       }
       STOP_DETAILS.length = holdingIndex;
       // debugger;
-      console.log(presentIndex, waypts, dst);
+      // console.log(presentIndex, waypts, dst);
       if (presentIndex > waypts.length) waypts.splice(presentIndex - 2, 1);
       else waypts.splice(presentIndex - 1, 1);
       dst.splice(presentIndex - 1, 1);
@@ -876,7 +878,7 @@ const StopInfo = (props) => {
             let ss = STOP_DETAILS.splice(+indexToBeShift + 1, 1);
             STOP_DETAILS.splice(+indexToBeMove, 0, ss[0]);
             // STOP_DETAILS.splice(+indexToBeMove + 1, 1);
-            console.log(indexToBeMove, indexToBeShift, STOP_DETAILS.length);
+            // console.log(indexToBeMove, indexToBeShift, STOP_DETAILS.length);
             if (
               indexToBeMove !== STOP_DETAILS.length - 1 &&
               indexToBeShift !== STOP_DETAILS.length - 1
@@ -893,7 +895,7 @@ const StopInfo = (props) => {
               // waypts.push({ location: a, stopover: true });
               // dst.splice(+indexToBeShift - 1, 0,)
               dst.push(b[0].location);
-              console.log(indexToBeMove, indexToBeShift, dst, waypts);
+              // console.log(indexToBeMove, indexToBeShift, dst, waypts);
             }
             // flightPlanCoordinates.splice(indexToBeShift, 0, flightPlanCoordinates[indexToBeMove]);
             // flightPlanCoordinates.splice(+indexToBeMove + 1, 1);
