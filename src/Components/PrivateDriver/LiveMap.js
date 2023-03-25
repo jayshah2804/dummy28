@@ -215,12 +215,14 @@ const LiveMap = (props) => {
         // path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
         // url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg),
         // url: "https://d1a3f4spazzrp4.cloudfront.net/car-types/map70px/map-uberx.png",
-        fillColor: "#427af4", //rgba(245, 174, 48, 255)
+        fillColor: "rgba(34, 137, 203, 255)", //rgba(245, 174, 48, 255)
+        // fillColor: "#808080", //rgba(245, 174, 48, 255)
+        strokeColor: "black",
         fillOpacity: 1, //0.9
         strokeWeight: 1, // 0.75
         rotation: 0,
-        scale: 0.5, // 6
-        anchor: new window.google.maps.Point(0, 5), //remove
+        scale: 0.4, // 6
+        // anchor: new window.google.maps.Point(0, 32), //remove
       },
       optimized: false,
     });
@@ -299,7 +301,7 @@ const LiveMap = (props) => {
           lat: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat,
           lng: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lng,
         });
-        map.setZoom(14);
+        map.setZoom(16);
         emailFlag = false;
       } else if (
         !flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
