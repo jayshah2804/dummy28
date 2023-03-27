@@ -64,6 +64,38 @@
   background-color: white;
 }
 
+.driverBooking-container main .dropoffInput {
+  display: inline-block;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid grey;
+  width: 95%;
+  height: 30px;
+  margin-bottom: 10px;
+  background-color: white;
+}
+
+.addStopSubDiv {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addStopDiv {
+  width: 20px;
+}
+
+.addStopIconSubDiv {
+  display: none;
+  flex-direction: column;
+  width: 20px;
+}
+
+.removedropInput {
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .driverBooking-container footer {
   align-self: flex-end;
   margin-right: 40px;
@@ -164,6 +196,19 @@
   color: white;
 }
 
+.add-dropoff {
+  background-color: rgb(226, 225, 225);
+  border: 1px solid grey;
+  padding: 3px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pickupDropIcons {
+  width: 20px;
+  height: 20px;
+}
+
 
 
 
@@ -184,6 +229,7 @@
   height: 50px;
   /* background: ; */
 }
+
 .progressbar {
   display: block;
   position: absolute;
@@ -196,6 +242,7 @@
   width: 100%;
   height: 4px;
 }
+
 .progressbar::before {
   content: '';
   display: block;
@@ -211,15 +258,18 @@
   background-repeat: repeat-x;
   animation: movebar 5s linear infinite;
 }
+
 .progressbar::before {
   /* box-shadow: 0 6px 10px 0 rgba(0,0,0,0.1); */
 }
+
 .progressbar::after {
   z-index: 9;
   top: 6px;
   filter: blur(16px);
   opacity: 0.7;
 }
+
 .stylization {
   position: absolute;
   z-index: 999;
@@ -229,6 +279,7 @@
   top: 6px;
   opacity: 0.3;
 }
+
 .stylization::before,
 .stylization::after {
   content: '';
@@ -238,44 +289,54 @@
   top: 0;
   border-radius: 2px;
 }
+
 .stylization::before {
   background: #fff;
   left: 0;
   right: 10px;
 }
+
 .stylization::after {
   width: 6px;
   background: #fff;
   right: 0;
 }
+
 @-moz-keyframes movebar {
   from {
     background-position: 0 0;
   }
+
   to {
     background-position: 400px 0;
   }
 }
+
 @-webkit-keyframes movebar {
   from {
     background-position: 0 0;
   }
+
   to {
     background-position: 400px 0;
   }
 }
+
 @-o-keyframes movebar {
   from {
     background-position: 0 0;
   }
+
   to {
     background-position: 400px 0;
   }
 }
+
 @keyframes movebar {
   from {
     background-position: 0 0;
   }
+
   to {
     background-position: 400px 0;
   }

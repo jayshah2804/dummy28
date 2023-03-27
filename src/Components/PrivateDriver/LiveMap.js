@@ -10,7 +10,7 @@ import Loading from "../../Loading/Loading";
 import Message from "../../Modal/Message";
 import connectionPoint from "../../Assets/start_location_green.png";
 import { useHistory } from "react-router-dom";
-import startPoint from "../../Assets/Pin_icon_green50.png"
+import startPoint from "../../Assets/Pin_icon_green50.png";
 
 let prev_driverEmail = "";
 let flightPlanCoordinates = [];
@@ -35,7 +35,6 @@ let drawLineFlag = false;
 let journeyStart = 0;
 let onTripDriverName = "";
 
-
 const LiveMap = (props) => {
   const [bookedDriver, setBookedDriver] = useState(false);
   const [onTripDriverEmail, setOnTripDriverEmail] = useState();
@@ -43,19 +42,28 @@ const LiveMap = (props) => {
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [isTripEnded, setIsTripEnded] = useState(false);
   const searchInputRef = useRef();
-  const history = useHistory()
+  const history = useHistory();
 
   function transition() {
     i = 0;
-    deltaLat = (flightPlanCoordinates[flightPlanCoordinates.length - 1].lat - flightPlanCoordinates[flightPlanCoordinates.length - 2].lat) / numDeltas;
-    deltaLng = (flightPlanCoordinates[flightPlanCoordinates.length - 1].lng - flightPlanCoordinates[flightPlanCoordinates.length - 2].lng) / numDeltas;
+    deltaLat =
+      (flightPlanCoordinates[flightPlanCoordinates.length - 1].lat -
+        flightPlanCoordinates[flightPlanCoordinates.length - 2].lat) /
+      numDeltas;
+    deltaLng =
+      (flightPlanCoordinates[flightPlanCoordinates.length - 1].lng -
+        flightPlanCoordinates[flightPlanCoordinates.length - 2].lng) /
+      numDeltas;
     moveMarker();
   }
 
   function moveMarker() {
     flightPlanCoordinates[flightPlanCoordinates.length - 2].lat += deltaLat;
     flightPlanCoordinates[flightPlanCoordinates.length - 2].lng += deltaLng;
-    var latlng = new window.google.maps.LatLng(flightPlanCoordinates[flightPlanCoordinates.length - 2].lat, flightPlanCoordinates[flightPlanCoordinates.length - 2].lng);
+    var latlng = new window.google.maps.LatLng(
+      flightPlanCoordinates[flightPlanCoordinates.length - 2].lat,
+      flightPlanCoordinates[flightPlanCoordinates.length - 2].lng
+    );
     // marker.setTitle("Latitude:" + position[0] + " | Longitude:" + position[1]);
     marker.setPosition(latlng);
     if (i != numDeltas) {
@@ -92,7 +100,12 @@ const LiveMap = (props) => {
     // debugger;
     if (data.Livetripdetails) {
       if (!driverFlag) {
-        if (flightPlanCoordinates[flightPlanCoordinates.length - 1].lat !== data.Livetripdetails[0].Latitude && flightPlanCoordinates[flightPlanCoordinates.length - 1].lng !== data.Livetripdetails[0].Longitude)
+        if (
+          flightPlanCoordinates[flightPlanCoordinates.length - 1].lat !==
+          data.Livetripdetails[0].Latitude &&
+          flightPlanCoordinates[flightPlanCoordinates.length - 1].lng !==
+          data.Livetripdetails[0].Longitude
+        )
           flightPlanCoordinates.push({
             lat: data.Livetripdetails[0].Latitude,
             lng: data.Livetripdetails[0].Longitude,
@@ -111,7 +124,8 @@ const LiveMap = (props) => {
       // debugger;
       let icon = marker.getIcon();
       // console.log(icon);
-      icon.rotation = data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
+      icon.rotation =
+        data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
       marker.setIcon(icon);
       journeyStart = 1;
       setIsTripEnded(false);
@@ -197,15 +211,19 @@ const LiveMap = (props) => {
       position: flightPlanCoordinates[flightPlanCoordinates.length - 1],
       map,
       icon: {
-        path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+        path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
+        // path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
         // url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg),
         // url: "https://d1a3f4spazzrp4.cloudfront.net/car-types/map70px/map-uberx.png",
-        fillColor: "rgba(245, 174, 48, 255)",
-        fillOpacity: 0.9,
-        strokeWeight: 0.75,
+        // fillColor: "rgba(34, 137, 203, 255)", //rgba(245, 174, 48, 255)
+        fillColor: "rgba(245, 174, 48, 255)", //rgba(245, 174, 48, 255)
+        // fillColor: "#808080", //rgba(245, 174, 48, 255)
+        strokeColor: "black",
+        fillOpacity: 1, //0.9
+        strokeWeight: 0.5, // 0.75
         rotation: 0,
-        scale: 6,
-        // anchor: new window.google.maps.Point(0, 0),
+        scale: 0.6, // 6
+        anchor: new window.google.maps.Point(25, 0), //remove
       },
       optimized: false,
     });
@@ -214,7 +232,7 @@ const LiveMap = (props) => {
       let startPointMarker = new window.google.maps.Marker({
         position: flightPlanCoordinates[0],
         map,
-        icon: startPoint
+        icon: startPoint,
       });
       // flightPath1 = new window.google.maps.Polyline({
       //   path: flightPlanCoordinates,
@@ -255,14 +273,16 @@ const LiveMap = (props) => {
       // });
 
       if (flightPlanCoordinates.length > 1) {
-        // setTimeout(() => {
-        // flightPath1?.setMap(null);
-        flightPath2?.setMap(null);
-        // flightPath1.setMap(map);
-        flightPath2.setMap(map);
-        marker.setPosition(flightPlanCoordinates[flightPlanCoordinates.length - 1])
-        // }, 3000);
-        // transition();
+        setTimeout(() => {
+          // flightPath1?.setMap(null);
+          flightPath2?.setMap(null);
+          // flightPath1.setMap(map);
+          flightPath2.setMap(map);
+          marker.setPosition(
+            flightPlanCoordinates[flightPlanCoordinates.length - 1]
+          );
+        }, 3000);
+        transition();
       } else if (flightPlanCoordinates.length > 0) {
         // flightPath1?.setMap(null);
         flightPath2?.setMap(null);
@@ -282,7 +302,7 @@ const LiveMap = (props) => {
           lat: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat,
           lng: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lng,
         });
-        map.setZoom(14);
+        map.setZoom(16);
         emailFlag = false;
       } else if (
         !flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
@@ -342,9 +362,7 @@ const LiveMap = (props) => {
 
   const onTripDriverClickHandler = (driverEmail, status, driverName) => {
     if (status === "on trip") {
-      document
-        .getElementById(prev_driverId)
-        ?.classList.remove("currentDriver");
+      document.getElementById(prev_driverId)?.classList.remove("currentDriver");
       document.getElementById(driverEmail).classList.add("currentDriver");
       prev_driverId = driverEmail;
       onTripDriverName = driverName;
@@ -372,7 +390,7 @@ const LiveMap = (props) => {
         carType,
         driverEmail,
         carModel,
-        carColor
+        carColor,
       },
     ]);
   };
@@ -391,7 +409,11 @@ const LiveMap = (props) => {
         </div>
         <button onClick={() => history.push("/privatedrive/trips")} className="newCorpButton">View Trips</button>
       </header> */}
-      <div className="main-container" id="privatedriver" style={props.toggle ? { padding: "15px 0px" } : {}} >
+      <div
+        className="main-container"
+        id="privatedriver"
+        style={props.toggle ? { padding: "15px 0px" } : {}}
+      >
         <div className="driverlist">
           <h4>Driver List</h4>
           <div className="filter-buttons" onClick={filterButtonClickHandler}>
@@ -422,7 +444,11 @@ const LiveMap = (props) => {
                   id={ele.driverEmail}
                   className={ele.status === "on trip" ? "driverContainer" : ""}
                   onClick={() =>
-                    onTripDriverClickHandler(ele.driverEmail, ele.status, ele.driverName)
+                    onTripDriverClickHandler(
+                      ele.driverEmail,
+                      ele.status,
+                      ele.driverName
+                    )
                   }
                 >
                   <div
@@ -479,9 +505,17 @@ const LiveMap = (props) => {
         </div>
         <div className="privateDriverMap-container">
           <div className="livetrip" id="live-map"></div>
-          <div className="mapText" style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            className="mapText"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
             <span>Live Trip Tracker</span>
-            <button onClick={() => history.push("/privatedrive/trips")} className="newCorpButton">View Trips</button>
+            <button
+              onClick={() => history.push("/privatedrive/trips")}
+              className="newCorpButton"
+            >
+              View Trips
+            </button>
           </div>
           {isLoadingRoute && (
             <div
@@ -510,9 +544,12 @@ const LiveMap = (props) => {
           }}
         />
       )}
-      {isTripEnded &&
-        < Message type="success" message={ onTripDriverName + "'s Trip has been ended"} />
-      }
+      {isTripEnded && (
+        <Message
+          type="success"
+          message={onTripDriverName + "'s Trip has been ended"}
+        />
+      )}
     </React.Fragment>
   );
 };

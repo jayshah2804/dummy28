@@ -16,7 +16,13 @@ const DriverData = (props) => {
   const authenticateUser = (data) => {
     console.log(data);
     let collectedDriverData = [];
-    if(data.RidersList?.length > 0) rider_data = data.RidersList; 
+    if (data.RidersList?.length > 0) {
+      rider_data = data.RidersList;
+      rider_data.push({
+        mobileNumber: "",
+        OfficialName: "Guest"
+      })
+    }
     for (let i = 0; i < data.PrivetDriverlist?.length; i++) {
       collectedDriverData.push({
         driverName: data.PrivetDriverlist[i].DriverName,
@@ -30,8 +36,8 @@ const DriverData = (props) => {
           data.PrivetDriverlist[i].LiveStatus == "1"
             ? "on trip"
             : data.PrivetDriverlist[i].IsOnline === true
-            ? "online"
-            : "",
+              ? "online"
+              : "",
       });
     }
     driver_data = structuredClone(collectedDriverData);
@@ -50,7 +56,7 @@ const DriverData = (props) => {
         },
         body: {
           // emailID: "nihal@little.global",
-            emailID: sessionStorage.getItem("user"),
+          emailID: sessionStorage.getItem("user"),
           userType: "corporate",
         },
       },

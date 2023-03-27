@@ -35,8 +35,8 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
 
     const tourStops = [
       {
-        lat: RIDER_DATA[0].startingLocationLat,
-        lng: RIDER_DATA[0].startingLocationLong,
+        lat: routeType ? RIDER_DATA[0].startingLocationLat : +RIDER_DATA[0].alighting_lat_lng.split(",")[0],
+        lng: routeType ? RIDER_DATA[0].startingLocationLong : +RIDER_DATA[0].alighting_lat_lng.split(",")[1],
       },
     ];
     for (let i = 0; i < RIDER_DATA.length; i++) {
@@ -78,7 +78,7 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     flightPath.setMap(map);
     flightPathBorder.setMap(map);
 
-    const infoWindow = new window.google.maps.InfoWindow();
+    const infoWindow = new window.google.maps.InfoWindow({ minWidth: 150 });
     let icon;
     let myTitle;
     tourStops.forEach((position, i) => {
@@ -106,7 +106,6 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
       });
 
       marker.addListener("mouseover", () => {
-        console.log(marker);
         infoWindow.close();
         infoWindow.setContent(marker.myTitle);
         infoWindow.open(marker.getMap(), marker);
