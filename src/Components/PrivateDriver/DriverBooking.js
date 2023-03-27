@@ -146,7 +146,7 @@ const DriverBooking = (props) => {
     if (isDriverBookingClicked) {
       move();
       paraMeters();
-      fetch(url, requestOptions)
+      fetch("https://corp.little.global/server" + url, requestOptions)
         .then((response) => response.text())
         .then((result) => {
           setIsToken(JSON.parse(result).token);
@@ -156,7 +156,7 @@ const DriverBooking = (props) => {
         .catch((error) => console.log("error", error));
     } else if (isToken) {
       paraMeters();
-      fetch(url, requestOptions)
+      fetch("https://corp.little.global/server" + url, requestOptions)
         .then((response) => response.text())
         .then((result) => {
           JSON.parse(result).tripId
@@ -175,10 +175,11 @@ const DriverBooking = (props) => {
         document.getElementById("progressBarText").innerText =
           "Sending Trip Request ...";
       });
+      //test
       move(0, 50);
       setTimeout(() => {
         paraMeters();
-        fetch(url, requestOptions)
+        fetch("https://corp.little.global/server" + url, requestOptions)
           .then((response) => response.text())
           .then((result) => {
             pickupDrop = [];
