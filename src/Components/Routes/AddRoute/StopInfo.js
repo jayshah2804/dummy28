@@ -406,6 +406,7 @@ const StopInfo = (props) => {
   };
 
   const previewClickHandler = () => {
+    // debugger;
     if (waypts.length > 0) {
       previewRouteFlag = true;
       waypts.push({
@@ -417,6 +418,16 @@ const StopInfo = (props) => {
         lng: STOP_DETAILS[0].lng + 0.00001,
       });
       // flightPlanCoordinates.push(flightPlanCoordinates[0]);
+    } else if (dst.length > 0) {
+      previewRouteFlag = true;
+      waypts.push({
+        location: dst[dst.length - 1],
+        stopover: true,
+      });
+      dst.push({
+        lat: STOP_DETAILS[0].lat,
+        lng: STOP_DETAILS[0].lng + 0.00001,
+      });
     }
     // if (flightPlanCoordinates.length > 1) {
     //   previewRouteFlag = true;
@@ -527,7 +538,7 @@ const StopInfo = (props) => {
     }
     function previewCallback(response, status) {
       approximate_distance += +(+(response.rows[0].elements[0].distance.text.split(" ")[0]) * 1.60934).toFixed(2);
-      document.getElementById("approxKm").innerText = approximate_distance + " km";
+      document.getElementById("approxKm").innerText = approximate_distance.toFixed(2) + " km";
     }
 
     directionsService.route(request, function (response, status) {
