@@ -220,6 +220,7 @@ const StopInfo = (props) => {
       // console.log(STOP_DETAILS, waypts);
       // }
       // console.log(studentData, "studentData");
+      // debugger;
       setFilteredData(studentData);
       // console.log(studentData, "data");
       ridersData = structuredClone(studentData);
@@ -684,7 +685,6 @@ const StopInfo = (props) => {
 
   if (myFlag && filteredData.length > 0) {
     let arr = [];
-    // debugger;
     for (let i = 0; i < filteredData.length; i++) {
       if (arr.includes(filteredData[i].stop)) {
         let index = arr.indexOf(filteredData[i].stop);
@@ -695,7 +695,8 @@ const StopInfo = (props) => {
       }
       // console.log(filteredData);
       // console.log(filteredData[i],i);
-      arr.push(filteredData[i].stop);
+      else
+        arr.push(filteredData[i].stop);
     }
     // STOP_DETAILS = [];
     arr = [];
@@ -706,8 +707,10 @@ const StopInfo = (props) => {
         STOP_DETAILS[index].mNumber.push(STOP_DETAILS[i].mNumber.toString());
         STOP_DETAILS.splice(i, 1);
         flightPlanCoordinates.splice(i, 1);
+        i--;
       }
-      arr.push(STOP_DETAILS[i].stop);
+      else
+        arr.push(STOP_DETAILS[i].stop);
     }
 
     setFilteredData(filteredData);

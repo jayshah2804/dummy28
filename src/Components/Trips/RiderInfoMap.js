@@ -33,6 +33,24 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     }
     map.fitBounds(bounds);
 
+    let arr = [];
+
+    for (let i = 0; i < RIDER_DATA.length; i++) {
+      if (arr.includes(routeType ? RIDER_DATA[i].drop_location : RIDER_DATA[i].pickup_location)) {
+        let index = arr.indexOf(routeType ? RIDER_DATA[i].drop_location : RIDER_DATA[i].pickup_location);
+        RIDER_DATA[index].rider_name.push(RIDER_DATA[i].rider_name.toString());
+        // RIDER_DATA[index].mNumber.push(filteredData[i].mNumber.toString());
+        RIDER_DATA.splice(i, 1);
+        i--;
+      }
+      // console.log(filteredData);
+      // console.log(filteredData[i],i);
+      else {
+        RIDER_DATA[i].rider_name = [RIDER_DATA[i].rider_name];
+        arr.push(routeType ? RIDER_DATA[i].drop_location : RIDER_DATA[i].pickup_location);
+      }
+    }
+
     const tourStops = [
       {
         lat: routeType ? RIDER_DATA[0].startingLocationLat : +RIDER_DATA[0].alighting_lat_lng.split(",")[0],
@@ -56,8 +74,6 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     //     lat: flightPlanCoordinates[flightPlanCoordinates.length - 1].lat,
     //     lng: flightPlanCoordinates[flightPlanCoordinates.length - 1].lng + 0.0001
     // });
-
-    console.log(tourStops);
 
     const flightPathBorder = new window.google.maps.Polyline({
       path: flightPlanCoordinates,

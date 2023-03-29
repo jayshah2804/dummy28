@@ -19,7 +19,22 @@ const ViewRoute = (props) => {
     const [routeDetails, setRouteDetails] = useState(false);
     const authenticateUser = (data) => {
         routeInfo = data.Route[0];
-        setRouteDetails(data.RouteDetails);
+        let routeDetails = data.RouteDetails;
+        let arr = [];
+        for (let i = 0; i < routeDetails.length; i++) {
+            if (arr.includes(routeDetails[i].StopName)) {
+                let index = arr.indexOf(routeDetails[i].StopName);
+                // routeInfo[index].name.push(routeInfo[i].name.toString());
+                // routeInfo[index].mNumber.push(routeInfo[i].mNumber.toString());
+                routeDetails.splice(i, 1);
+                i--;
+            }
+            // console.log(filteredData);
+            // console.log(filteredData[i],i);
+            else
+                arr.push(routeDetails[i].StopName);
+        }
+        setRouteDetails(routeDetails);
     };
 
     const { isLoading, sendRequest } = useHttp();
