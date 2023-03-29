@@ -126,7 +126,7 @@ const Main = () => {
         <header>
           <div>
             <p className={classes.adminName}>
-              {"Welcome " + sessionStorage.getItem("adminName") + ","}
+              {"Welcome " + sessionStorage.getItem("adminName")}
             </p>
             <p className={classes.adminText}>
               You can check all data of your Organization in Dashboard!

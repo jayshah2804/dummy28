@@ -10,7 +10,7 @@ const useHttp = () => {
         setError(null);
         try {
             const response = await fetch(
-                "https://corp.little.global/server" + requestConfig.url, {
+                "https://littleapi.azurewebsites.net" + requestConfig.url, {
                 method: requestConfig.method,
                 headers: requestConfig.headers,
                 body: JSON.stringify(requestConfig.body)
