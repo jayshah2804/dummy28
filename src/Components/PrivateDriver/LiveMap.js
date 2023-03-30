@@ -10,7 +10,8 @@ import Loading from "../../Loading/Loading";
 import Message from "../../Modal/Message";
 import connectionPoint from "../../Assets/start_location_green.png";
 import { useHistory } from "react-router-dom";
-import startPoint from "../../Assets/Pin_icon_green50.png";
+import startPoint from "../../Assets/dropIcon.png";
+import endPoint from "../../Assets/pickIcon.png";
 
 let prev_driverEmail = "";
 let flightPlanCoordinates = [];
@@ -24,7 +25,8 @@ let prev_driverId = "";
 let flightPath1;
 let flightPath2;
 let marker;
-
+let startPointMarker;
+let endPointMarker;
 var numDeltas = 100;
 var delay = 20; //milliseconds
 var i = 0;
@@ -34,6 +36,10 @@ var deltaLng;
 let drawLineFlag = false;
 let journeyStart = 0;
 let onTripDriverName = "";
+// let dropLocationDetails = {
+//   name: "",
+//   latLng: ""
+// }
 
 const LiveMap = (props) => {
   const [bookedDriver, setBookedDriver] = useState(false);
@@ -130,9 +136,52 @@ const LiveMap = (props) => {
       journeyStart = 1;
       setIsTripEnded(false);
     } else {
-      if (journeyStart) setIsTripEnded(true);
-      journeyStart = 0;
-      flightPlanCoordinates = [];
+      if (data?.LivetripStatus?.toLowerCase() === "ended") {
+        setIsTripEnded(true);
+        flightPlanCoordinates = [];
+      } else setIsTripEnded(false);
+      // if (journeyStart) setIsTripEnded(true);
+      // journeyStart = 0;
+      // flightPlanCoordinates = [];
+    }
+
+    // if (data.Livetrip) {
+    //   dropLocationDetails.name = data.Livetrip[0].DropoffAddress;
+    //   dropLocationDetails.latLng = { lat: data.Livetrip[0].DropoffLatitude, lng: data.Livetrip[0].DropoffLongitude };
+    // } else {
+    //   dropLocationDetails.name = null;
+    //   dropLocationDetails.latLng = null;
+    // }
+    if (!(data?.LivetripStatus?.toLowerCase() === "ended")) {
+      if (startPointMarker) startPointMarker.setMap(null);
+      if (endPointMarker) endPointMarker.setMap(null);
+      startPointMarker = new window.google.maps.Marker({
+        position: { lat: data?.Livetrip[0]?.PickupLatitude, lng: data?.Livetrip[0]?.PickupLongitude },
+        map,
+        icon: startPoint,
+        myTitle: `<h3>${data?.Livetrip[0]?.PickupAddress?.split(",")[0]}</h3>`
+      });
+      endPointMarker = new window.google.maps.Marker({
+        position: { lat: data?.Livetrip[0]?.DropoffLatitude, lng: data?.Livetrip[0]?.DropoffLongitude },
+        map,
+        icon: endPoint,
+        myTitle: `<h3>${data?.Livetrip[0]?.DropoffAddress?.split(",")[0]}</h3>`,
+      });
+      // endPointMarker.setAnimation(window.google.maps.Animation.BOUNCE)
+      var bounds = new window.google.maps.LatLngBounds();
+      bounds.extend(new window.google.maps.LatLng(data.Livetrip[0]?.PickupLatitude, data.Livetrip[0]?.PickupLongitude));
+      bounds.extend(new window.google.maps.LatLng(data.Livetrip[0]?.DropoffLatitude, data.Livetrip[0]?.DropoffLongitude));
+      const infoWindow = new window.google.maps.InfoWindow();
+      startPointMarker.addListener("mouseover", () => {
+        infoWindow.close();
+        infoWindow.setContent(startPointMarker.myTitle);
+        infoWindow.open(startPointMarker.getMap(), startPointMarker);
+      });
+      endPointMarker.addListener("mouseover", () => {
+        infoWindow.close();
+        infoWindow.setContent(endPointMarker.myTitle);
+        infoWindow.open(endPointMarker.getMap(), endPointMarker);
+      });
     }
     setIsLoadingRoute(false);
   };
@@ -228,12 +277,13 @@ const LiveMap = (props) => {
       optimized: false,
     });
 
+    // marker2.addListener("mouseover", () => {
+    //   infoWindow.close();
+    //   infoWindow.setContent(marker2.myTitle);
+    //   infoWindow.open(marker2.getMap(), marker);
+    // });
+
     pathInterval = setInterval(() => {
-      let startPointMarker = new window.google.maps.Marker({
-        position: flightPlanCoordinates[0],
-        map,
-        icon: startPoint,
-      });
       // flightPath1 = new window.google.maps.Polyline({
       //   path: flightPlanCoordinates,
       //   // geodesic: true,
@@ -302,7 +352,7 @@ const LiveMap = (props) => {
           lat: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat,
           lng: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lng,
         });
-        map.setZoom(16);
+        map.setZoom(14);
         emailFlag = false;
       } else if (
         !flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat

@@ -91,7 +91,7 @@ const Login = ({ login }) => {
     setIsApiError("");
     if (
       // eslint-disable-next-line
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+      /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(
         emailInputRef?.current?.value
       )
     ) {
