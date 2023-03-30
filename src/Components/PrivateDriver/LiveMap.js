@@ -128,12 +128,24 @@ const LiveMap = (props) => {
         driverFlag = false;
       }
       // debugger;
-      let icon = marker.getIcon();
-      // console.log(icon);
-      icon.rotation =
-        data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
-      marker.setIcon(icon);
+      // let icon = marker.getIcon();
+      // // console.log(icon);
+      // icon.rotation =
+      //   data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
+      // marker.setIcon(icon);
       journeyStart = 1;
+
+      // setTimeout(() => {
+      const markerUrl =
+        "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9";
+      // console.log(document.querySelector(`[src = "${markerUrl}"]`));
+      let markerSrc = document.querySelector(`[src = "${markerUrl}"]`);
+      if (marker)
+        markerSrc.style.transform = `rotate(${data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
+          }deg)`;
+      // });
+
+
       setIsTripEnded(false);
     } else {
       if (data?.LivetripStatus?.toLowerCase() === "ended") {
@@ -260,19 +272,21 @@ const LiveMap = (props) => {
       position: flightPlanCoordinates[flightPlanCoordinates.length - 1],
       map,
       icon: {
-        path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
+        url: "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9",
+        // path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
         // path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
         // url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg),
         // url: "https://d1a3f4spazzrp4.cloudfront.net/car-types/map70px/map-uberx.png",
         // fillColor: "rgba(34, 137, 203, 255)", //rgba(245, 174, 48, 255)
-        fillColor: "rgba(245, 174, 48, 255)", //rgba(245, 174, 48, 255)
-        // fillColor: "#808080", //rgba(245, 174, 48, 255)
-        strokeColor: "black",
-        fillOpacity: 1, //0.9
-        strokeWeight: 0.5, // 0.75
-        rotation: 0,
-        scale: 0.6, // 6
-        anchor: new window.google.maps.Point(25, 0), //remove
+        // fillColor: "rgba(245, 174, 48, 255)", //rgba(245, 174, 48, 255)
+        // strokeColor: "black",
+        scaledSize: new window.google.maps.Size(35, 35),
+        anchor: new window.google.maps.Point(15, 10)
+        // fillOpacity: 1, //0.9
+        // strokeWeight: 0.5, // 0.75
+        // rotation: 0,
+        // scale: 0.6, // 6
+        // anchor: new window.google.maps.Point(25, 0), //remove
       },
       optimized: false,
     });
