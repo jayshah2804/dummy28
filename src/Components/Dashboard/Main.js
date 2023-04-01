@@ -47,6 +47,7 @@ const DUMMY_DATA = [
 
 let divFlag = 0;
 let driverList = [];
+let initial;
 
 const Main = () => {
   // const [options, setOptions] = useState(initial);
@@ -66,6 +67,32 @@ const Main = () => {
       document.getElementById("checkbox")?.click();
     // localStorage.setItem("privateDriverFlag", "false");
   }, []);
+
+  useEffect(() => {
+    startSessionTime();
+    window.addEventListener("mousemove", clearSessionTimeout);
+  }, []);
+
+  function startSessionTime() {
+    initial = Math.round(new Date().getTime() / 1000);
+    let interval = setInterval(() => {
+      let current = Math.round(new Date().getTime() / 1000);
+      // console.log(current - initial);
+      if (current - initial > 1800) {
+        clearInterval(interval);
+        window.removeEventListener("mousemove", clearSessionTimeout);
+        sessionStorage.setItem("login", false);
+        history.push("/");
+        setTimeout(() => {
+          alert("Your session has been expired");
+        }, 1000);
+      }
+    }, 60000);
+  }
+
+  function clearSessionTimeout() {
+    initial = Math.round(new Date().getTime() / 1000);
+  }
 
   setTimeout(() => {
     document.getElementById("splash").style.display = "none";
@@ -159,10 +186,7 @@ const Main = () => {
                   className={classes.first}
                   onChange={(e) => {
                     debugger;
-                    localStorage.setItem(
-                      "privateDriverFlag",
-                      e.target.checked
-                    );
+                    localStorage.setItem("privateDriverFlag", e.target.checked);
                     e.target.checked
                       ? setIsSwitchedToPrivateDriver(true)
                       : setIsSwitchedToPrivateDriver(false);

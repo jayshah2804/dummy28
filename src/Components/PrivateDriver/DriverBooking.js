@@ -26,7 +26,7 @@ let error = {
   pickupStop: "",
   dropStop: "",
   guestName: "",
-  guestMoNumber: ""
+  guestMoNumber: "",
 };
 let str = [];
 let pickupDrop = [];
@@ -213,13 +213,13 @@ const DriverBooking = (props) => {
     // }
     let elements = document.getElementsByClassName("removedropInput");
     for (let i = 0; i < elements.length; i++) {
-      elements[i].addEventListener('click', removeDropoffs, false);
+      elements[i].addEventListener("click", removeDropoffs, false);
     }
     return () => {
       for (let i = 0; i < elements.length; i++) {
-        elements[i].removeEventListener('click', removeDropoffs);
+        elements[i].removeEventListener("click", removeDropoffs);
       }
-    }
+    };
   }, [isRender]);
 
   function initMap() {
@@ -227,15 +227,29 @@ const DriverBooking = (props) => {
     // var input2 = document.getElementById("pac-input2");
     // autocomplete[0] = new window.google.maps.places.Autocomplete(input1, {});
     // autocomplete[1] = new window.google.maps.places.Autocomplete(input2);
-    for (let i = 0; i < document.getElementsByClassName("pacInput").length; i++) {
-      autocomplete[i] = new window.google.maps.places.Autocomplete(document.getElementsByClassName("pacInput")[i], {
-        componentRestrictions: { country: ["in"] }
-      });
+    for (
+      let i = 0;
+      i < document.getElementsByClassName("pacInput").length;
+      i++
+    ) {
+      autocomplete[i] = new window.google.maps.places.Autocomplete(
+        document.getElementsByClassName("pacInput")[i],
+        {
+          componentRestrictions: { country: ["in"] },
+        }
+      );
     }
-    for (let i = 0; i < document.getElementsByClassName("dropoffInput").length; i++) {
-      autocomplete[i + 2] = new window.google.maps.places.Autocomplete(document.getElementsByClassName("dropoffInput")[i], {
-        componentRestrictions: { country: ["in"] }
-      });
+    for (
+      let i = 0;
+      i < document.getElementsByClassName("dropoffInput").length;
+      i++
+    ) {
+      autocomplete[i + 2] = new window.google.maps.places.Autocomplete(
+        document.getElementsByClassName("dropoffInput")[i],
+        {
+          componentRestrictions: { country: ["in"] },
+        }
+      );
     }
   }
   window.initMap = initMap;
@@ -244,28 +258,40 @@ const DriverBooking = (props) => {
     if (
       riderInputSearchRef.current.value &&
       pickupInputRef.current.value &&
-      dropInputRef.current.value && (riderInputSearchRef.current.value.toLowerCase() === "guest" ? (guestNameInputRef.current.value && guestMoNumberInputRef.current.value.toString().length === 10) : 1)
+      dropInputRef.current.value &&
+      !error.riderName &&
+      (riderInputSearchRef.current.value.toLowerCase() === "guest"
+        ? guestNameInputRef.current.value &&
+          guestMoNumberInputRef.current.value.toString().length === 10
+        : 1)
     ) {
       if (riderInputSearchRef.current.value.toLowerCase() === "guest") {
         riderInfo.name = guestNameInputRef.current.value;
         riderInfo.mobileNumber = "91" + guestMoNumberInputRef.current.value;
       }
       // debugger;
-      if (!(dropOffs[0]?.order)) {
+      if (!dropOffs[0]?.order) {
         for (let i = 0; i < 2; i++) {
           if (autocomplete[i]?.getPlace()?.geometry?.location?.lat()) {
             pickupDrop[i] = {
               address: document.getElementsByClassName("pacInput")[i].value,
-              latLng: autocomplete[i].getPlace().geometry.location.lat() + "," + autocomplete[i].getPlace().geometry.location.lng()
-            }
+              latLng:
+                autocomplete[i].getPlace().geometry.location.lat() +
+                "," +
+                autocomplete[i].getPlace().geometry.location.lng(),
+            };
           }
         }
         for (let i = 2; i < autocomplete.length; i++) {
           if (autocomplete[i]?.getPlace()?.geometry?.location?.lat()) {
             dropOffs[i - 2] = {
-              address: document.getElementsByClassName("dropoffInput")[i - 2].value,
-              latLng: autocomplete[i].getPlace().geometry.location.lat() + "," + autocomplete[i].getPlace().geometry.location.lng()
-            }
+              address:
+                document.getElementsByClassName("dropoffInput")[i - 2].value,
+              latLng:
+                autocomplete[i].getPlace().geometry.location.lat() +
+                "," +
+                autocomplete[i].getPlace().geometry.location.lng(),
+            };
           }
         }
         let addStops = [];
@@ -276,12 +302,12 @@ const DriverBooking = (props) => {
             contactName: "",
             notes: "",
             latlng: pickupDrop[1].latLng,
-            address: pickupDrop[1].address
-          })
+            address: pickupDrop[1].address,
+          });
           pickupDrop[1] = {
             latLng: dropOffs[dropOffs.length - 1].latLng,
             address: dropOffs[dropOffs.length - 1].address,
-          }
+          };
         }
         for (let i = 0; i < dropOffs.length; i++) {
           addStops.push({
@@ -290,8 +316,8 @@ const DriverBooking = (props) => {
             contactName: "",
             notes: "",
             latlng: dropOffs[i].latLng,
-            address: dropOffs[i].address
-          })
+            address: dropOffs[i].address,
+          });
         }
         dropOffs = addStops;
       }
@@ -305,14 +331,16 @@ const DriverBooking = (props) => {
       error.dropStop = "";
       error.guestName = "";
       error.guestMoNumber = "";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
       setIsLoading(true);
       setIsDriverBookingClicked(true);
     } else {
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
       if (riderInputSearchRef.current.value.toLowerCase() === "guest") {
-        !guestNameInputRef.current.value && (error.guestName = "Please add guest name");
-        !(guestMoNumberInputRef.current.value.toString().length === 10) && (error.guestMoNumber = "Please enter valid mobile number");
+        !guestNameInputRef.current.value &&
+          (error.guestName = "Please add guest name");
+        !(guestMoNumberInputRef.current.value.toString().length === 10) &&
+          (error.guestMoNumber = "Please enter valid mobile number");
       }
       !riderInputSearchRef.current.value &&
         (error.riderName = "Please add one rider");
@@ -339,12 +367,27 @@ const DriverBooking = (props) => {
       error.riderName = "Please add one rider";
       setIsSearchedRidersData(false);
     }
+    for (let i = 0; i < props.riderData.length; i++) {
+      debugger;
+      if (
+        props.riderData[i].OfficialName.toLowerCase().includes(
+          riderInputSearchRef.current.value.toLowerCase()
+        )
+      )
+        break;
+      if (i === props.riderData.length - 1) {
+        error.riderName =
+          riderInputSearchRef.current.value + " is not registred";
+        setIsFieldError((prev) => !prev);
+      }
+    }
   };
 
   const riderSelectedHandler = (riderName, riderNumber) => {
     riderInfo.name = riderName;
     riderInfo.mobileNumber = riderNumber;
-    riderInputSearchRef.current.value = riderName + (riderNumber ? "  ( " + riderNumber + " )" : "");
+    riderInputSearchRef.current.value =
+      riderName + (riderNumber ? "  ( " + riderNumber + " )" : "");
     setIsSearchedRidersData(false);
   };
 
@@ -357,37 +400,37 @@ const DriverBooking = (props) => {
   const pickupStopChangeHandler = () => {
     if (pickupInputRef.current.value) {
       error.pickupStop = "";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
     } else {
       error.pickupStop = "Please add pickup stop";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
     }
   };
 
   const dropStopChangeHandler = () => {
     if (dropInputRef.current.value) {
       error.dropStop = "";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
     } else {
       error.dropStop = "Please add drop stop";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
     }
   };
 
   const guestNameChangeHandler = () => {
     if (guestNameInputRef.current.value) {
       error.guestName = "";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
     } else {
       error.guestName = "Please add guest name";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
     }
   };
 
   const guestMoNumberChangeHandler = () => {
     if (guestMoNumberInputRef.current.value.toString().length === 10) {
       error.guestMoNumber = "";
-      setIsFieldError(prev => !prev);
+      setIsFieldError((prev) => !prev);
     }
     // else {
     //   error.guestMoNumber = "Please enter valid mobile number";
@@ -396,10 +439,20 @@ const DriverBooking = (props) => {
   };
 
   const addStopClickHandler = () => {
-    for (let i = 0; i < document.getElementById("addStopDiv").children.length; i++) {
-      if ((!(document.getElementById("addStopDiv").children[i].style.display)) || (document.getElementById("addStopDiv").children[i].style.display === 'none')) {
-        document.getElementById("addStopDiv").children[i].style.display = 'flex';
-        document.getElementById("addStopIconDiv").children[i].style.display = 'flex';
+    for (
+      let i = 0;
+      i < document.getElementById("addStopDiv").children.length;
+      i++
+    ) {
+      if (
+        !document.getElementById("addStopDiv").children[i].style.display ||
+        document.getElementById("addStopDiv").children[i].style.display ===
+          "none"
+      ) {
+        document.getElementById("addStopDiv").children[i].style.display =
+          "flex";
+        document.getElementById("addStopIconDiv").children[i].style.display =
+          "flex";
         break;
       }
     }
@@ -407,48 +460,84 @@ const DriverBooking = (props) => {
       if (autocomplete[i]?.getPlace()?.geometry?.location?.lat()) {
         pickupDrop[i] = {
           address: document.getElementsByClassName("pacInput")[i].value,
-          latLng: autocomplete[i].getPlace().geometry.location.lat() + "," + autocomplete[i].getPlace().geometry.location.lng()
-        }
+          latLng:
+            autocomplete[i].getPlace().geometry.location.lat() +
+            "," +
+            autocomplete[i].getPlace().geometry.location.lng(),
+        };
       }
     }
     for (let i = 2; i < autocomplete.length; i++) {
       if (autocomplete[i]?.getPlace()?.geometry?.location?.lat()) {
         dropOffs[i - 2] = {
           address: document.getElementsByClassName("dropoffInput")[i - 2].value,
-          latLng: autocomplete[i].getPlace().geometry.location.lat() + "," + autocomplete[i].getPlace().geometry.location.lng()
-        }
+          latLng:
+            autocomplete[i].getPlace().geometry.location.lat() +
+            "," +
+            autocomplete[i].getPlace().geometry.location.lng(),
+        };
       }
     }
     let i = 0;
     while (document.getElementsByClassName("dropoffInput")[i].value) i++;
     dropOffs.length = i;
-  }
+  };
 
   const removeDropoffs = (e) => {
     for (let i = 0; i < 2; i++) {
       if (autocomplete[i]?.getPlace()?.geometry?.location?.lat()) {
         pickupDrop[i] = {
           address: document.getElementsByClassName("pacInput")[i].value,
-          latLng: autocomplete[i].getPlace().geometry.location.lat() + "," + autocomplete[i].getPlace().geometry.location.lng()
-        }
+          latLng:
+            autocomplete[i].getPlace().geometry.location.lat() +
+            "," +
+            autocomplete[i].getPlace().geometry.location.lng(),
+        };
       }
     }
     for (let i = 2; i < autocomplete.length; i++) {
       if (autocomplete[i]?.getPlace()?.geometry?.location?.lat()) {
         dropOffs[i - 2] = {
           address: document.getElementsByClassName("dropoffInput")[i - 2].value,
-          latLng: autocomplete[i].getPlace().geometry.location.lat() + "," + autocomplete[i].getPlace().geometry.location.lng()
-        }
+          latLng:
+            autocomplete[i].getPlace().geometry.location.lat() +
+            "," +
+            autocomplete[i].getPlace().geometry.location.lng(),
+        };
       }
     }
-    for (let i = 0; i < document.getElementsByClassName("dropoffInput").length; i++) {
-      if (e.target.parentElement.children[0].value === document.getElementById("addStopDiv").children[i].children[0].value) {
+    for (
+      let i = 0;
+      i < document.getElementsByClassName("dropoffInput").length;
+      i++
+    ) {
+      if (
+        e.target.parentElement.children[0].value ===
+        document.getElementById("addStopDiv").children[i].children[0].value
+      ) {
         autocomplete.splice(i + 2, 1);
-        document.getElementById("addStopDiv").children[i].style.display = 'none';
-        document.getElementById("addStopIconDiv").children[i].style.display = 'none';
-        document.getElementById("addStopDiv").children[i].children[0].value = "";
-        document.getElementById("addStopDiv").insertBefore(document.getElementById("addStopDiv").children[i], document.getElementById("addStopDiv").children[document.getElementById("addStopDiv").children]);
-        document.getElementById("addStopIconDiv").insertBefore(document.getElementById("addStopIconDiv").children[i], document.getElementById("addStopIconDiv").children[document.getElementById("addStopIconDiv").children]);
+        document.getElementById("addStopDiv").children[i].style.display =
+          "none";
+        document.getElementById("addStopIconDiv").children[i].style.display =
+          "none";
+        document.getElementById("addStopDiv").children[i].children[0].value =
+          "";
+        document
+          .getElementById("addStopDiv")
+          .insertBefore(
+            document.getElementById("addStopDiv").children[i],
+            document.getElementById("addStopDiv").children[
+              document.getElementById("addStopDiv").children
+            ]
+          );
+        document
+          .getElementById("addStopIconDiv")
+          .insertBefore(
+            document.getElementById("addStopIconDiv").children[i],
+            document.getElementById("addStopIconDiv").children[
+              document.getElementById("addStopIconDiv").children
+            ]
+          );
         dropOffs.splice(i, 1);
         break;
       }
@@ -456,8 +545,8 @@ const DriverBooking = (props) => {
     let i = 0;
     while (document.getElementsByClassName("dropoffInput")[i].value) i++;
     dropOffs.length = i;
-    setIsRender(prev => !prev);
-  }
+    setIsRender((prev) => !prev);
+  };
 
   function move(j = 0, time = 20) {
     // debugger;
@@ -497,7 +586,9 @@ const DriverBooking = (props) => {
           {/* <div>Honda Amaze</div> */}
           {/* <div style={{ fontSize: "12px" }}>Platinum White</div> */}
           <div>{props.bookedDriver[0].carModel.toLowerCase()}</div>
-          <div style={{ fontSize: "12px" }}>{props.bookedDriver[0].carColor.toLowerCase()}</div>
+          <div style={{ fontSize: "12px" }}>
+            {props.bookedDriver[0].carColor.toLowerCase()}
+          </div>
         </div>
       </header>
       {tripRequestStatus && (
@@ -586,29 +677,46 @@ const DriverBooking = (props) => {
                           )
                         }
                       >
-                        {data.OfficialName + (data?.MobileNumber ? "  ( " + data.MobileNumber + " )" : "")}
+                        {data.OfficialName +
+                          (data?.MobileNumber
+                            ? "  ( " + data.MobileNumber + " )"
+                            : "")}
                       </p>
                     ))}
                   </div>
                 )}
               </div>
             </div>
-            {riderInputSearchRef?.current?.value.toLowerCase() === "guest" &&
-              <div style={{ display: "flex", justifyContent: "end", gap: "20px" }}>
+            {riderInputSearchRef?.current?.value.toLowerCase() === "guest" && (
+              <div
+                style={{ display: "flex", justifyContent: "end", gap: "20px" }}
+              >
                 <div style={{ width: "45%", display: "inline-block" }}>
-                  <input type="text" ref={guestNameInputRef} onChange={guestNameChangeHandler} placeholder="Name of the Guest" className="tags" />
+                  <input
+                    type="text"
+                    ref={guestNameInputRef}
+                    onChange={guestNameChangeHandler}
+                    placeholder="Name of the Guest"
+                    className="tags"
+                  />
                   {error.guestName && (
                     <p className="errorField">{error.guestName}</p>
                   )}
                 </div>
                 <div style={{ width: "45%", display: "inline-block" }}>
-                  <input type="text" ref={guestMoNumberInputRef} onChange={guestMoNumberChangeHandler} placeholder="Mobile Number of the Guest" className="tags" />
+                  <input
+                    type="text"
+                    ref={guestMoNumberInputRef}
+                    onChange={guestMoNumberChangeHandler}
+                    placeholder="Mobile Number of the Guest"
+                    className="tags"
+                  />
                   {error.guestMoNumber && (
                     <p className="errorField">{error.guestMoNumber}</p>
                   )}
                 </div>
               </div>
-            }
+            )}
             <div
               style={{
                 display: "flex",
@@ -634,14 +742,18 @@ const DriverBooking = (props) => {
                   style={{ width: "20px", height: "20px" }}
                 />
                 <div id="addStopIconDiv">
-                  {
-                    arr.map(() =>
-                      <div className="addStopIconSubDiv">
-                        <img src={startLocation} style={{ width: "20px", height: "20px" }} />
-                        <img src={threedots} style={{ width: "20px", height: "20px" }} />
-                      </div>
-                    )
-                  }
+                  {arr.map(() => (
+                    <div className="addStopIconSubDiv">
+                      <img
+                        src={startLocation}
+                        style={{ width: "20px", height: "20px" }}
+                      />
+                      <img
+                        src={threedots}
+                        style={{ width: "20px", height: "20px" }}
+                      />
+                    </div>
+                  ))}
                 </div>
                 <img src={dropicon} style={{ width: "20px", height: "20px" }} />
               </div>
@@ -675,20 +787,37 @@ const DriverBooking = (props) => {
                   <p className="errorField">{error.dropStop}</p>
                 )}
                 <div id="addStopDiv">
-                  {
-                    arr.map(() =>
-                      <div className="addStopSubDiv">
-                        <input type="text" className="tags dropoffInput" placeholder="Add Stop" /><span className="removedropInput">X</span>
-                      </div>
-                    )
-                  }
+                  {arr.map(() => (
+                    <div className="addStopSubDiv">
+                      <input
+                        type="text"
+                        className="tags dropoffInput"
+                        placeholder="Add Stop"
+                      />
+                      <span className="removedropInput">X</span>
+                    </div>
+                  ))}
                 </div>
                 {/* {addStopCount > 0 && str.map(ele => ele)} */}
               </div>
             </div>
-            <div onClick={addStopClickHandler} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", marginTop: "5px" }}>
-              <img src={addStopIcon} style={{ width: "20px", height: "20px" }} />
-              <p style={{ color: "rgba(34, 137, 203, 255)", fontSize: "14px" }}>Add Stop</p>
+            <div
+              onClick={addStopClickHandler}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                cursor: "pointer",
+                marginTop: "5px",
+              }}
+            >
+              <img
+                src={addStopIcon}
+                style={{ width: "20px", height: "20px" }}
+              />
+              <p style={{ color: "rgba(34, 137, 203, 255)", fontSize: "14px" }}>
+                Add Stop
+              </p>
             </div>
             {/* <button onClick={addStopClickHandler} >Add Stop</button> */}
           </main>
@@ -697,9 +826,8 @@ const DriverBooking = (props) => {
             <button onClick={tripBookClicked}>Book Now</button>
           </footer>
         </React.Fragment>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 };
 
