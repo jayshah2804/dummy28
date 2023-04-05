@@ -136,8 +136,10 @@
   max-height: 100px;
   overflow: auto;
   background-color: white;
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
   /* top: 0; */
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
   margin-top: -10px;
   border-top: none;
   /* border-bottom: none; */
@@ -209,21 +211,6 @@
   height: 20px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .wrapper {
   position: relative;
   height: 50px;
@@ -244,7 +231,7 @@
 }
 
 .progressbar::before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   z-index: 99;
@@ -253,7 +240,17 @@
   width: 100%;
   height: 100%;
   border-radius: 15px;
-  background-image: linear-gradient(90deg, #2289cb 0%, #2289cb 25%, #e22c1d 25%, #e22c1d 50%, #2a9545 50%, #2a9545 75%, #f5ae30 75%, #f5ae30 100%);
+  background-image: linear-gradient(
+    90deg,
+    #2289cb 0%,
+    #2289cb 25%,
+    #e22c1d 25%,
+    #e22c1d 50%,
+    #2a9545 50%,
+    #2a9545 75%,
+    #f5ae30 75%,
+    #f5ae30 100%
+  );
   background-position: 0 0;
   background-repeat: repeat-x;
   animation: movebar 5s linear infinite;
@@ -282,7 +279,7 @@
 
 .stylization::before,
 .stylization::after {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   height: 4px;
