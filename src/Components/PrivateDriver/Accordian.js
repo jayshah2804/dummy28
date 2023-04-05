@@ -92,8 +92,8 @@ const Accordian = (props) => {
             "Content-Type": "application/json",
           },
           body: {
-            // emailID: sessionStorage.getItem("user"),
-            emailID: "nihal@little.global",
+            emailID: sessionStorage.getItem("user"),
+            // emailID: "nihal@little.global",
             journeyID: current_journeyId,
           },
         },
@@ -116,6 +116,9 @@ const Accordian = (props) => {
 
     if (evenFlag % 2 !== 0) {
       current_journeyId = e.target.parentElement.children[1].innerText;
+      let a = current_journeyId.split(",");
+      if (a.length !== 1)
+        current_journeyId = e.target.parentElement.children[1].id;
     }
   };
 
@@ -127,7 +130,7 @@ const Accordian = (props) => {
           <div className={classes.driverInfo}>
             <div className={classes.div}>
               <p>{props.driver_name}</p>
-              <p className={classes.carInfo}>{props.car_info}</p>
+              <p className={classes.carInfo} id={props.journey_id} >{props.car_info}</p>
             </div>
           </div>
         </td>
@@ -172,7 +175,7 @@ const Accordian = (props) => {
                           <td>{data.pickup_location} </td>
                           {/* <td>{data.boarding_time} </td> */}
                           {/* <td>{data.boarding_lat_lng} </td> */}
-                          <td style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
+                          <td style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                             {/* <span className={classes.green}></span>
                             <span className={classes.line}></span>
                             <span className={classes.red}></span> */}
@@ -190,7 +193,7 @@ const Accordian = (props) => {
                               <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
                               <img style={{ width: "20px", height: "20px" }} src={endPoint} />
                             </div>
-                            <div style={{display: "flex", justifyContent: "space-between", color: "grey", fontSize: "10px"}}>
+                            <div style={{ display: "flex", justifyContent: "space-between", color: "grey", fontSize: "10px" }}>
                               <p>{data.startingLocationLat + ", " + data.startingLocationLong}</p>
                               <p>{data.actual_drop_latLng}</p>
                             </div>

@@ -387,6 +387,7 @@ const StopInfo = (props) => {
       "It will reset all the routes created. Want to reset?"
     );
     if (response) {
+      previewRouteFlag = false;
       myStopNumberInfo = {};
       stop_number = 0;
       // studentCount = 0;

@@ -12,7 +12,7 @@ import Loading from "../../Loading/Loading";
 const RIDER_TITLE = [
   "Rider Name",
   "Pickup Location",
-  "Shuttle Arrival Time",
+  // "Shuttle Arrival Time",
   "Boarding Time",
   "Boarding (Lat Lng )",
   "Drop Location",
@@ -222,7 +222,7 @@ const Accordian = (props) => {
                             {data.rider_name}
                           </td>
                           <td>{data.pickup_location} </td>
-                          <td>{data.shuttle_arrival_time} </td>
+                          {/* <td>{data.shuttle_arrival_time} </td> */}
                           <td>{data.boarding_time} </td>
                           <td>{data.boarding_lat_lng} </td>
                           <td>{data.drop_location} </td>
