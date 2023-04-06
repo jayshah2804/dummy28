@@ -41,6 +41,9 @@ let prev_id = "1";
 
 let tripListFlag = 0;
 let total_trip_data = "";
+let today = new Date().getFullYear().toString().concat("-", new Date().getMonth() + 1, "-", new Date().getDate());
+let startDate = today;
+let endDate = today;
 
 function PrivateTrips(props) {
   const location = useLocation();
@@ -50,12 +53,13 @@ function PrivateTrips(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(7);
   const [filteredData, setFilteredData] = useState([]);
+  const [isDataFiltered, setIsDataFiltered] = useState(false);
   const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
   const startDateRef = useRef();
   const endDateRef = useRef();
 
   const authenticateUser = (data) => {
-    console.log(data);
+    // console.log(data);
     let trip_list = [];
     if (data.TripList) {
       for (let i = 0; i < data.TripList.length; i++) {
@@ -75,16 +79,13 @@ function PrivateTrips(props) {
     }
     total_trip_data = trip_list;
     setFilteredData(trip_list);
+    setIsDataFiltered(false);
   };
 
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
-    let date = new Date();
-    // console.log(date.getMonth());
-    let today = date.getFullYear().toString().concat("-", +date.getMonth() + 1, "-", date.getDate());
-    // if (tripListFlag > 0) {
-    // console.log(tripListFlag);
+    setFilteredData([]);
     sendRequest({
       url: "/api/v1/PrivateTrip/GetPrivateTrip",
       method: "POST",
@@ -93,19 +94,17 @@ function PrivateTrips(props) {
       },
       body: {
         emailID: sessionStorage.getItem("user"),
-        // emailID: "nihal@little.global",
         userType: "corporate",
-        fromDate: "2018-01-01",
-        toDate: today
+        fromDate: startDate,
+        toDate: endDate
       }
     }, authenticateUser);
     // }
     tripListFlag++;
-  }, [sendRequest]);
+  }, [sendRequest, isDataFiltered]);
 
 
   function formatDate(date = new Date(), format = "mm/dd/yy") {
-    debugger;
     const map = {
       mm: date.getMonth().toString().length === 1 ? ("0" + (date.getMonth() + 1)) : date.getMonth() + 1,
       dd: date.getDate().toString().length === 1 ? "0" + date.getDate() : date.getDate(),
@@ -158,47 +157,34 @@ function PrivateTrips(props) {
   const filterButtonClickHandler = (e) => {
     startDateRef.current.value = "";
     endDateRef.current.value = "";
-    document.getElementById(e.target.id).classList.add("selected");
-    document.getElementById(prev_id).classList.remove("selected");
+    document.getElementById(e.target.id)?.classList.add("selected");
+    document.getElementById(prev_id)?.classList.remove("selected");
     prev_id = e.target.id;
 
     setCurrentPage(1);
+    setIsDataFiltered(true);
     myClick = true;
 
     if (e.target.innerText === "Today") {
-      let todayDate = formatDate();
-      setFilteredData(total_trip_data.filter((data) => data.trip_date === todayDate));
+      startDate = new Date().getFullYear().toString().concat("-", +new Date().getMonth() + 1, "-", new Date().getDate())
+      endDate = today;
     } else if (e.target.innerText === "This Week") {
-      let todayDate = formatDate();
-      setFilteredData(
-        total_trip_data.filter(
-          (data) => differenceInDays(data.trip_date, todayDate) <= 7
-        )
-      );
+      startDate = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate() - new Date().getDay());
+      endDate = today;
     } else if (e.target.innerText === "This Month") {
-      let todayDate = formatDate();
-      setFilteredData(
-        total_trip_data.filter(
-          (data) => differenceInDays(data.trip_date, todayDate) <= 31
-        )
-      );
+      startDate = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + "1";
+      endDate = today;
     }
   };
 
   const dateChangeHandler = () => {
     if (startDateRef.current.value && endDateRef.current.value) {
-      let startdate = formatToMMDDYYYYfromYYYYMMDD(startDateRef.current.value);
-      let enddate = formatToMMDDYYYYfromYYYYMMDD(endDateRef.current.value);
-      startdate = new Date(startdate);
-      enddate = new Date(enddate);
-      // console.log(startdate, enddate);
-      setFilteredData(
-        total_trip_data.filter(
-          (data) =>
-            new Date(data.trip_date) > startdate &&
-            new Date(data.trip_date) < enddate
-        )
-      );
+      startDate = startDateRef.current.value;
+      endDate = endDateRef.current.value;
+      document.getElementById(prev_id).classList.remove("selected");
+      prev_id = null;
+      setIsDataFiltered(true);
+      setCurrentPage(1);
     }
   };
 
@@ -225,16 +211,16 @@ function PrivateTrips(props) {
       <div className="table-container">
         <div className="header">
           <div onClick={filterButtonClickHandler} className="filter-buttons">
-            <button
+            {/* <button
               onClick={allDataButtonClickHandler}
               id="1"
               className="selected"
             >
               All Data
-            </button>
-            <button id="2">Today</button>
-            <button id="3">This Week</button>
-            <button id="4">This Month</button>
+            </button> */}
+            <button id="1" className="selected">Today</button>
+            <button id="2">This Week</button>
+            <button id="3">This Month</button>
           </div>
           <div>
             <div onChange={dateChangeHandler} className="datepicker">

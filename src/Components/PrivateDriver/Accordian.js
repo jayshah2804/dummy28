@@ -46,24 +46,16 @@ const Accordian = (props) => {
     for (let i = 0; i < data?.TripdetailList?.length; i++) {
       trip_rider_list.push({
         id: i + 1,
-        startingLocationLat: data.TripdetailList[i].startinglat,
-        startingLocationLong: data.TripdetailList[i].startinglong,
+        actual_pickup_name: data.TripdetailList[i].ActualPickupName,
+        actual_dropOff_name: data.TripdetailList[i].ActualDropOffName,
+        actual_pickup_latLng: data.TripdetailList[i].ActualPickupAddress,
+        actual_dropOff_latLng: data.TripdetailList[i].ActualDropoffAddress,
         rider_name: data.TripdetailList[i].RiderName,
-        pickup_location: data.TripdetailList[i].PickupAddress,
-        shuttle_arrival_time: data.TripdetailList[i].ShuttleArriveTime,
-        actual_drop_latLng: data.TripdetailList[i].ActualDropOffLatLong,
-        // boarding_time: data.TripdetailList[i].BoardingTime,
-        boarding_lat_lng:
-          data.TripdetailList[i].PickupLatitude +
-          "," +
-          data.TripdetailList[i].PickupLongitude,
-        drop_location: data.TripdetailList[i].DropOffAddress,
-        // alighting_time: data.TripdetailList[i].AlightingTime,
-        alighting_lat_lng:
-          data.TripdetailList[i].DropoffLatitude +
-          "," +
-          data.TripdetailList[i].DropoffLongitude,
-        // route_name: data.TripdetailList[i].RouteName
+        pickup_name: data.TripdetailList[i].PickupAddress,
+        drop_name: data.TripdetailList[i].DropOffAddress,
+        pickup_latLng: data.TripdetailList[i].PickupLatitude + "," + data.TripdetailList[i].PickupLongitude,
+        dropoff_latLng: data.TripdetailList[i].DropoffLatitude + "," + data.TripdetailList[i].DropoffLongitude,
+        trip_status: data.TripdetailList[i].TripStatus
       });
     }
     rider_details = trip_rider_list;
@@ -80,10 +72,6 @@ const Accordian = (props) => {
       (currentId !== previous_id ||
         (currentId === previous_id && !prev_active_status)) && current_journeyId
     ) {
-      // debugger;
-      // console.log(currentId, previous_id, prev_active_status);
-      // console.log("here2");
-      // console.log(current_journeyId);
       sendRequest(
         {
           url: "/api/v1//PrivateTrip/PrivateTripDetails",
@@ -93,7 +81,6 @@ const Accordian = (props) => {
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            // emailID: "nihal@little.global",
             journeyID: current_journeyId,
           },
         },
@@ -172,7 +159,7 @@ const Accordian = (props) => {
                             {/* <p>{data.rider_name}</p> */}
                           </td>
                           {/* <td>{data.shuttle_arrival_time} </td> */}
-                          <td>{data.pickup_location} </td>
+                          <td>{data.trip_status.toLowerCase() !== "ended" ? data.pickup_name : data.actual_pickup_name} </td>
                           {/* <td>{data.boarding_time} </td> */}
                           {/* <td>{data.boarding_lat_lng} </td> */}
                           <td style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
@@ -194,11 +181,11 @@ const Accordian = (props) => {
                               <img style={{ width: "20px", height: "20px" }} src={endPoint} />
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between", color: "grey", fontSize: "10px" }}>
-                              <p>{data.startingLocationLat + ", " + data.startingLocationLong}</p>
-                              <p>{data.actual_drop_latLng}</p>
+                              <p>{data.actual_pickup_latLng}</p>
+                              <p>{data.actual_dropOff_latLng}</p>
                             </div>
                           </td>
-                          <td>{data.drop_location} </td>
+                          <td>{data.trip_status.toLowerCase() !== "ended" ? data.drop_name : data.actual_dropOff_name} </td>
                           {/* <td>{data.alighting_time} </td> */}
                           {/* <td>{data.alighting_lat_lng} </td> */}
                         </tr>

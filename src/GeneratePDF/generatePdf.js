@@ -26,7 +26,7 @@ const heading = [
 let months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount, kmCount, cpLogo, cpAddress, addressWidth) => {
 
-    const opt = { orientation: "portrait", unit: "px" };
+    const opt = { orientation: "portrait", unit: "px", compressPdf: true };
     const doc = new jsPDF(opt);
     let current_date_time = new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear() + " | " + (new Date().getHours() > 12 ? new Date().getHours() - 12 + ":" + (new Date().getMinutes().toString().length === 1 ? "0" + new Date().getMinutes() : new Date().getMinutes()) + " pm" : new Date().getHours() + ":" + (new Date().getMinutes().toString().length === 1 ? "0" + new Date().getMinutes() : new Date().getMinutes()) + " am");
     pageCount = 0;
@@ -42,6 +42,7 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
 
     // for each ticket pass all its data into an array
     let i = 0;
+    console.log(data);
     data.forEach(ticket => {
         const ticketData = [
             ++i,
@@ -50,8 +51,8 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
             ticket.StartTime,
             ticket.EndTime,
             ticket.RiderName,
-            ticket.PickupAddress,
-            ticket.DropOffAddress,
+            ticket.ActualPickupName ? ticket.ActualPickupName : ticket.PickupAddress,
+            ticket.ActualDropOffName ? ticket.ActualDropOffName : ticket.DropOffAddress,
             ticket.TripDistance,
         ];
         tableRows.push(ticketData);
@@ -61,11 +62,6 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
 
     // doc.setFont('poppins'); // set font
     doc.setFont('openSans'); // set font
-    // doc.addImage(img, 'jpg', 10, 5, 30, 15);
-    // doc.addImage(cpLogo, 'png', 190, 5, 70, 30);
-    // doc.setFontSize(8);
-    // doc.setTextColor(54, 69, 79);
-    // doc.text(cpAddress, (450 - ((doc.getFontSize() * addressWidth) / 12)) / 2, 43);
 
     doc.setDrawColor(255, 255, 255);
     doc.setFillColor(240, 240, 240);

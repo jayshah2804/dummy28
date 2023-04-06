@@ -7,7 +7,7 @@ const Records = ({ isLoading, data, headers }) => {
 
   const func = (val) => {
     if (val) {
-      document.getElementById(val).click();
+      document.getElementById(val)?.click();
     }
   }
 

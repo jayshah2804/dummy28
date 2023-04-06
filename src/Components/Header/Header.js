@@ -73,7 +73,7 @@ const Nav = (props) => {
           <CgMenuMotion className={classes.menuIcon}
             onMouseEnter={sideMenuClickHandler}
           />
-          <img src={littleLogo} alt="" className={classes.littleLogo} />
+          <img src={littleLogo} alt="" className={classes.littleLogo} style={{cursor: "pointer"}} onClick={() => history.push("/dashboard")} />
         </div>
         <div className={classes.orgDetails}>
           {sessionStorage.getItem("userType") !== "AccountManager" &&

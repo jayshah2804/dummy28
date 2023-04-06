@@ -6,7 +6,9 @@ import startPoint from "../../Assets/Pin_icon_green50.png";
 import endPoint from "../../Assets/Pin_icon50.png";
 // import dummy from "../../Assets/greenNew.png";
 
-let routeType = "";
+let minBounds = 1;
+let maxBounds = 50;
+let dividend = 10;
 const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     const script = document.createElement("script");
     script.src =
@@ -14,53 +16,28 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     script.async = true;
     document.body.appendChild(script);
 
-    // routeType = RIDER_DATA[0]?.route_name.toLowerCase().includes("drop");
-
     function myInitMap() {
         const map = new window.google.maps.Map(document.getElementById("map"), {
             zoom: 11,
-            center: { lat: RIDER_DATA[0].startingLocationLat, lng: RIDER_DATA[0].startingLocationLong },
+            center: RIDER_DATA[0]?.trip_status?.toLowerCase() !== "ended" ? { lat: +RIDER_DATA[0].pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].pickup_latLng.split(",")[1] } : { lat: +RIDER_DATA[0].actual_pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].actual_pickup_latLng.split(",")[1] },
             disableDefaultUI: true,
             fullscreenControl: true,
             zoomControl: true
         });
-        var bounds = new window.google.maps.LatLngBounds();
-        for(let i = 0; i < driverPath.length; i = i+10) {
-            bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
-            bounds.extend(new window.google.maps.LatLng(driverPath[driverPath.length - 1].lat, driverPath[driverPath.length - 1].lng));
+        if (driverPath) {
+            let currentBounds = Math.ceil(driverPath.length / dividend);
+            while (!(currentBounds < maxBounds && currentBounds >= minBounds)) {
+                if (currentBounds < minBounds) currentBounds = Math.ceil(driverPath.length / (Math.ceil(dividend) / 2));
+                else if (currentBounds > maxBounds) currentBounds = Math.ceil(driverPath.length / (Math.ceil(dividend) * 2));
+            }
+            var bounds = new window.google.maps.LatLngBounds();
+            for (let i = 0; i < driverPath.length; i = i + currentBounds) {
+                bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
+            }
+            map.fitBounds(bounds);
         }
-        map.fitBounds(bounds);
 
-        // const tourStops = [
-        //     { lat: RIDER_DATA[0].lat, lng: RIDER_DATA[0].lng }
-        // ];
-        // for (let i = 0; i < RIDER_DATA.length; i++) {
-        //     let a = routeType ? RIDER_DATA[i].alighting_lat_lng.split(",") : RIDER_DATA[i].boarding_lat_lng.split(",");
-        //     let lat = +a[0];
-        //     let lng = +a[1];
-        //     tourStops.push({
-        //         lat: lat,
-        //         lng: lng
-        //     })
-        // }
-        console.log(RIDER_DATA, "rider");
-        const tourStops = [{ lat: driverPath[0].lat, lng: driverPath[0].lng }];
-        // for (let i = 0; i < RIDER_DATA.length; i++) {
-        //     tourStops.push({
-        //         lat: +RIDER_DATA[i].actual_drop_latLng.split(",")[0],
-        //         lng: +RIDER_DATA[i].actual_drop_latLng.split(",")[1]
-        //     })
-        // }
-        tourStops.push({ lat: +RIDER_DATA[0]?.alighting_lat_lng?.split(",")[0], lng: +RIDER_DATA[0]?.alighting_lat_lng?.split(",")[1] });
-
-        // const flightPlanCoordinates = driverPath ? driverPath : tourStops;
         const flightPlanCoordinates = driverPath;
-        // flightPlanCoordinates.push({
-        //     lat: flightPlanCoordinates[flightPlanCoordinates.length - 1].lat,
-        //     lng: flightPlanCoordinates[flightPlanCoordinates.length - 1].lng + 0.0001
-        // });
-
-        console.log(tourStops, "tourStops");
 
         const flightPathBorder = new window.google.maps.Polyline({
             path: flightPlanCoordinates,
@@ -82,43 +59,31 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
         flightPathBorder.setMap(map);
 
         const infoWindow = new window.google.maps.InfoWindow();
-        let icon;
-        let myTitle;
-        tourStops.forEach((position, i) => {
-            if (i === 0) {
-                icon = startPoint;
-                myTitle = `<div><h3>${RIDER_DATA[0].pickup_location.split(",")[0]}</h3></div></h3></div>`;
-            }
-            else {
-                if (i === tourStops.length - 1) {
-                    icon = endPoint;
-                    myTitle = `<div><h3>${RIDER_DATA[0].drop_location.split(",")[0]}</h3></div></h3></div>`;
-                } else {
-                    icon = studentDummyImage;
-                    myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${RIDER_DATA[i - 1]?.rider_name}</h3></div>`;
-                }
-            }
 
-            const marker = new window.google.maps.Marker({
-                position,
-                map,
-                myTitle,
-                icon,
-                optimized: false,
-            });
-            // marker.scaledSize = new window.google.maps.Size(3, 3);
+        const marker1 = new window.google.maps.Marker({
+            position: RIDER_DATA[0]?.trip_status?.toLowerCase() !== "ended" ? { lat: +RIDER_DATA[0].pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].pickup_latLng.split(",")[1] } : { lat: +RIDER_DATA[0].actual_pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].actual_pickup_latLng.split(",")[1] },
+            map,
+            myTitle: RIDER_DATA[0]?.trip_status?.toLowerCase() !== "ended" ? RIDER_DATA[0].pickup_name : RIDER_DATA[0].actual_pickup_name,
+            icon: startPoint,
+            optimized: false,
+        });
+        const marker2 = new window.google.maps.Marker({
+            position: RIDER_DATA[0]?.trip_status?.toLowerCase() !== "ended" ? { lat: +RIDER_DATA[0].dropoff_latLng.split(",")[0], lng: +RIDER_DATA[0].dropoff_latLng.split(",")[1] } : { lat: +RIDER_DATA[0].actual_dropOff_latLng.split(",")[0], lng: +RIDER_DATA[0].actual_dropOff_latLng.split(",")[1] },
+            map,
+            myTitle: RIDER_DATA[0]?.trip_status?.toLowerCase() !== "ended" ? RIDER_DATA[0].drop_name : RIDER_DATA[0].actual_dropOff_name,
+            icon: endPoint,
+            optimized: false,
+        });
 
-            marker.addListener("mouseover", () => {
-                console.log(marker);
-                infoWindow.close();
-                infoWindow.setContent(marker.myTitle);
-                infoWindow.open(marker.getMap(), marker);
-            });
-            // document.getElementById("myHandler").addEventListener("click", () => {
-            //   infoWindow.setPosition([{ lat: 23.037569650831212, lng: 72.55877665822754 }]);
-            //   infoWindow.setContent("Jay Shah");
-            //   infoWindow.open(marker.getMap(), marker);
-            // })
+        marker1.addListener("mouseover", () => {
+            infoWindow.close();
+            infoWindow.setContent(marker1.myTitle);
+            infoWindow.open(marker1.getMap(), marker1);
+        });
+        marker2.addListener("mouseover", () => {
+            infoWindow.close();
+            infoWindow.setContent(marker2.myTitle);
+            infoWindow.open(marker2.getMap(), marker2);
         });
     }
 
