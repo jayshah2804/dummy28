@@ -61,9 +61,9 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
         const infoWindow = new window.google.maps.InfoWindow();
 
         const marker1 = new window.google.maps.Marker({
-            position: RIDER_DATA[0]?.trip_status?.toLowerCase() !== "ended" ? { lat: +RIDER_DATA[0].pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].pickup_latLng.split(",")[1] } : { lat: +RIDER_DATA[0].actual_pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].actual_pickup_latLng.split(",")[1] },
+            position: RIDER_DATA[0]?.trip_status?.toLowerCase() === "accepted" ? { lat: +RIDER_DATA[0].pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].pickup_latLng.split(",")[1] } : { lat: +RIDER_DATA[0].actual_pickup_latLng.split(",")[0], lng: +RIDER_DATA[0].actual_pickup_latLng.split(",")[1] },
             map,
-            myTitle: RIDER_DATA[0]?.trip_status?.toLowerCase() !== "ended" ? RIDER_DATA[0].pickup_name : RIDER_DATA[0].actual_pickup_name,
+            myTitle: RIDER_DATA[0]?.trip_status?.toLowerCase() === "accepted" ? RIDER_DATA[0].pickup_name : RIDER_DATA[0].actual_pickup_name,
             icon: startPoint,
             optimized: false,
         });

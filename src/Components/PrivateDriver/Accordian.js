@@ -159,7 +159,7 @@ const Accordian = (props) => {
                             {/* <p>{data.rider_name}</p> */}
                           </td>
                           {/* <td>{data.shuttle_arrival_time} </td> */}
-                          <td>{data.trip_status.toLowerCase() !== "ended" ? data.pickup_name : data.actual_pickup_name} </td>
+                          <td>{data.actual_pickup_name ? data.actual_pickup_name : data.pickup_name} </td>
                           {/* <td>{data.boarding_time} </td> */}
                           {/* <td>{data.boarding_lat_lng} </td> */}
                           <td style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
@@ -185,7 +185,7 @@ const Accordian = (props) => {
                               <p>{data.actual_dropOff_latLng}</p>
                             </div>
                           </td>
-                          <td>{data.trip_status.toLowerCase() !== "ended" ? data.drop_name : data.actual_dropOff_name} </td>
+                          <td>{data.actual_dropOff_name ? data.actual_dropOff_name : data.drop_name} </td>
                           {/* <td>{data.alighting_time} </td> */}
                           {/* <td>{data.alighting_lat_lng} </td> */}
                         </tr>

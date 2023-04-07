@@ -12,6 +12,8 @@ import connectionPoint from "../../Assets/start_location_green.png";
 import { useHistory } from "react-router-dom";
 import startPoint from "../../Assets/dropIcon.png";
 import endPoint from "../../Assets/pickIcon.png";
+import { FaRegUserCircle } from "react-icons/fa";
+import { FiPhoneCall } from "react-icons/fi";
 
 let prev_driverEmail = "";
 let flightPlanCoordinates = [];
@@ -36,6 +38,7 @@ var deltaLng;
 let drawLineFlag = false;
 let journeyStart = 0;
 let onTripDriverName = "";
+let riderDetails = "";
 // let dropLocationDetails = {
 //   name: "",
 //   latLng: ""
@@ -168,16 +171,16 @@ const LiveMap = (props) => {
       if (startPointMarker) startPointMarker.setMap(null);
       if (endPointMarker) endPointMarker.setMap(null);
       startPointMarker = new window.google.maps.Marker({
-        position: { lat: data?.Livetrip[0]?.PickupLatitude, lng: data?.Livetrip[0]?.PickupLongitude },
+        position: data.Livetrip[0].ActualPickupName ? { lat: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[0], lng: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[1] } : { lat: data?.Livetrip[0]?.PickupLatitude, lng: data?.Livetrip[0]?.PickupLongitude },
         map,
         icon: startPoint,
-        myTitle: `<h3>${data?.Livetrip[0]?.PickupAddress?.split(",")[0]}</h3>`
+        myTitle: `${data.Livetrip[0].ActualPickupName ? data.Livetrip[0].ActualPickupName : data?.Livetrip[0]?.PickupAddress?.split(",")[0]}`
       });
       endPointMarker = new window.google.maps.Marker({
         position: { lat: data?.Livetrip[0]?.DropoffLatitude, lng: data?.Livetrip[0]?.DropoffLongitude },
         map,
         icon: endPoint,
-        myTitle: `<h3>${data?.Livetrip[0]?.DropoffAddress?.split(",")[0]}</h3>`,
+        myTitle: `${data?.Livetrip[0]?.DropoffAddress?.split(",")[0]}`,
       });
       // endPointMarker.setAnimation(window.google.maps.Animation.BOUNCE)
       var bounds = new window.google.maps.LatLngBounds();
@@ -194,6 +197,10 @@ const LiveMap = (props) => {
         infoWindow.setContent(endPointMarker.myTitle);
         infoWindow.open(endPointMarker.getMap(), endPointMarker);
       });
+      riderDetails = {
+        name: data.Livetrip[0].riderName,
+        mNumber: data.Livetrip[0].riderMobileNumber
+      }
     }
     setIsLoadingRoute(false);
   };
@@ -252,6 +259,7 @@ const LiveMap = (props) => {
   }
 
   function clearIntervalApiCall() {
+    riderDetails = "";
     clearInterval(trip_interval);
     emailFlag = true;
   }
@@ -430,6 +438,7 @@ const LiveMap = (props) => {
       document.getElementById(driverEmail).classList.add("currentDriver");
       prev_driverId = driverEmail;
       onTripDriverName = driverName;
+      riderDetails = "";
       setOnTripDriverEmail(driverEmail);
       setIsLoadingRoute(true);
     }
@@ -581,6 +590,18 @@ const LiveMap = (props) => {
               View Trips
             </button>
           </div>
+          {riderDetails &&
+            <div className="riderInfoContainer">
+              <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+                <FaRegUserCircle />
+                <span>{riderDetails.name}</span>
+              </div>
+              <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+                <FiPhoneCall />
+                <span>{"+" + riderDetails.mNumber}</span>
+              </div>
+            </div>
+          }
           {isLoadingRoute && (
             <div
               style={{
