@@ -9,11 +9,14 @@ const useHttp = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(requestConfig.url, {
-        method: requestConfig.method,
-        headers: requestConfig.headers,
-        body: JSON.stringify(requestConfig.body),
-      });
+      const response = await fetch(
+        "https://corp.little.global/server" + requestConfig.url,
+        {
+          method: requestConfig.method,
+          headers: requestConfig.headers,
+          body: JSON.stringify(requestConfig.body),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Request failed!");
