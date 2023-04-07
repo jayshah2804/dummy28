@@ -232,9 +232,10 @@
   justify-content: center;
   gap: 5px;
   padding-left: 10px;
-  /* border-radius: 10px; */
+  border-radius: 10px;
   font-size: 14px;
-  box-shadow: 0 5px 30px rgba(33, 33, 33, .3);
+  box-shadow: 0 0px 20px rgba(33, 33, 33, .3);
+  border: 1px solid rgba(34, 137, 203, 255);
 }
 
 @media only screen and (max-width: 768px) {
