@@ -1,39 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import { useCallback } from 'react';
+import React, { useEffect, useState } from "react";
+import { useCallback } from "react";
 
 const useHttp = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const sendRequest = useCallback(async (requestConfig, applyData) => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(
-                "https://corp.little.global/server" + requestConfig.url, {
-                method: requestConfig.method,
-                headers: requestConfig.headers,
-                body: JSON.stringify(requestConfig.body)
-            }
-            );
+  const sendRequest = useCallback(async (requestConfig, applyData) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(requestConfig.url, {
+        method: requestConfig.method,
+        headers: requestConfig.headers,
+        body: JSON.stringify(requestConfig.body),
+      });
 
-            if (!response.ok) {
-                throw new Error('Request failed!');
-            }
+      if (!response.ok) {
+        throw new Error("Request failed!");
+      }
 
-            const data = await response.json();
-            applyData(data);
-
-        } catch (err) {
-            applyData(err.message || 'Something went wrong!');
-        }
-        setIsLoading(false);
-    }, []);
-
-    return {
-        isLoading,
-        sendRequest
+      const data = await response.json();
+      applyData(data);
+    } catch (err) {
+      applyData(err.message || "Something went wrong!");
     }
-}
+    setIsLoading(false);
+  }, []);
+
+  return {
+    isLoading,
+    sendRequest,
+  };
+};
 
 export default useHttp;

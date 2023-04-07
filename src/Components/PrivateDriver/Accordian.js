@@ -53,9 +53,15 @@ const Accordian = (props) => {
         rider_name: data.TripdetailList[i].RiderName,
         pickup_name: data.TripdetailList[i].PickupAddress,
         drop_name: data.TripdetailList[i].DropOffAddress,
-        pickup_latLng: data.TripdetailList[i].PickupLatitude + "," + data.TripdetailList[i].PickupLongitude,
-        dropoff_latLng: data.TripdetailList[i].DropoffLatitude + "," + data.TripdetailList[i].DropoffLongitude,
-        trip_status: data.TripdetailList[i].TripStatus
+        pickup_latLng:
+          data.TripdetailList[i].PickupLatitude +
+          "," +
+          data.TripdetailList[i].PickupLongitude,
+        dropoff_latLng:
+          data.TripdetailList[i].DropoffLatitude +
+          "," +
+          data.TripdetailList[i].DropoffLongitude,
+        trip_status: data.TripdetailList[i].TripStatus,
       });
     }
     rider_details = trip_rider_list;
@@ -70,7 +76,8 @@ const Accordian = (props) => {
     // console.log("here");
     if (
       (currentId !== previous_id ||
-        (currentId === previous_id && !prev_active_status)) && current_journeyId
+        (currentId === previous_id && !prev_active_status)) &&
+      current_journeyId
     ) {
       sendRequest(
         {
@@ -91,33 +98,35 @@ const Accordian = (props) => {
     rider_dataFlag++;
   }, [sendRequest, isActive]);
 
-  const tableRowClickHandler = (e) => {
-    if (parent_prev_id !== e.target.parentElement.id && !prev_active_status)
+  const tableRowClickHandler = (targetId) => {
+    if (parent_prev_id !== targetId && !prev_active_status)
       props.formyRender(parent_prev_id);
     setIsActive((prev) => !prev);
-    parent_prev_id = e.target.parentElement.id;
+    parent_prev_id = targetId;
     previous_id = currentId;
-    currentId = e.target.parentElement.id;
+    currentId = targetId;
     prev_active_status = isActive;
     evenFlag++;
 
-    if (evenFlag % 2 !== 0) {
-      current_journeyId = e.target.parentElement.children[1].innerText;
-      let a = current_journeyId.split(",");
-      if (a.length !== 1)
-        current_journeyId = e.target.parentElement.children[1].id;
-    }
+    if (evenFlag % 2 !== 0)
+      current_journeyId =
+        document.getElementById(targetId)?.children[1].innerText;
   };
 
   return (
     <React.Fragment>
       {/* {console.log(riderData)} */}
-      <tr onClick={tableRowClickHandler} id={props.id + "tr"}>
+      <tr
+        onClick={() => tableRowClickHandler(props.id + "tr")}
+        id={props.id + "tr"}
+      >
         <td>
           <div className={classes.driverInfo}>
             <div className={classes.div}>
               <p>{props.driver_name}</p>
-              <p className={classes.carInfo} id={props.journey_id} >{props.car_info}</p>
+              <p className={classes.carInfo} id={props.journey_id}>
+                {props.car_info}
+              </p>
             </div>
           </div>
         </td>
@@ -154,38 +163,136 @@ const Accordian = (props) => {
                     {riderData.map((data) => {
                       return (
                         <tr id="myHandler">
-                          <td>{data.rider_name}
+                          <td>
+                            {data.rider_name}
                             {/* <img src={photo} alt="" /> */}
                             {/* <p>{data.rider_name}</p> */}
                           </td>
                           {/* <td>{data.shuttle_arrival_time} </td> */}
-                          <td>{data.actual_pickup_name ? data.actual_pickup_name : data.pickup_name} </td>
+                          <td>
+                            {data.actual_pickup_name
+                              ? data.actual_pickup_name
+                              : data.pickup_name}{" "}
+                          </td>
                           {/* <td>{data.boarding_time} </td> */}
                           {/* <td>{data.boarding_lat_lng} </td> */}
-                          <td style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                          <td
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "space-between",
+                            }}
+                          >
                             {/* <span className={classes.green}></span>
                             <span className={classes.line}></span>
                             <span className={classes.red}></span> */}
                             <div>
-                              <img style={{ width: "20px", height: "20px" }} src={connectionPoint} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px", transform: "rotate(90deg)" }} src={threedots} />
-                              <img style={{ width: "20px", height: "20px" }} src={endPoint} />
+                              <img
+                                style={{ width: "20px", height: "20px" }}
+                                src={connectionPoint}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  transform: "rotate(90deg)",
+                                }}
+                                src={threedots}
+                              />
+                              <img
+                                style={{ width: "20px", height: "20px" }}
+                                src={endPoint}
+                              />
                             </div>
-                            <div style={{ display: "flex", justifyContent: "space-between", color: "grey", fontSize: "10px" }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                color: "grey",
+                                fontSize: "10px",
+                              }}
+                            >
                               <p>{data.actual_pickup_latLng}</p>
                               <p>{data.actual_dropOff_latLng}</p>
                             </div>
                           </td>
-                          <td>{data.actual_dropOff_name ? data.actual_dropOff_name : data.drop_name} </td>
+                          <td>
+                            {data.actual_dropOff_name
+                              ? data.actual_dropOff_name
+                              : data.drop_name}{" "}
+                          </td>
                           {/* <td>{data.alighting_time} </td> */}
                           {/* <td>{data.alighting_lat_lng} </td> */}
                         </tr>
