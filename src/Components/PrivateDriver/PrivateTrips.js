@@ -21,7 +21,7 @@ const TRIP_DATA = [
     drop_time: "03:00 PM",
     total_trip_time: "02:00 Hrs",
     total_trip_km: "419 KM",
-  }
+  },
 ];
 
 const TRIP_TITLE = [
@@ -41,19 +41,22 @@ let prev_id = "1";
 
 let tripListFlag = 0;
 let total_trip_data = "";
-let today = new Date().getFullYear().toString().concat("-", new Date().getMonth() + 1, "-", new Date().getDate());
+let today = new Date()
+  .getFullYear()
+  .toString()
+  .concat("-", new Date().getMonth() + 1, "-", new Date().getDate());
 let startDate = today;
 let endDate = today;
 
 function PrivateTrips(props) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  let staffMoNumber = queryParams.get('staff');
+  let staffMoNumber = queryParams.get("staff");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(7);
   const [filteredData, setFilteredData] = useState([]);
-  const [isDataFiltered, setIsDataFiltered] = useState(false);
+  const [isDataFiltered, setIsDataFiltered] = useState(true);
   const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
   const startDateRef = useRef();
   const endDateRef = useRef();
@@ -66,15 +69,18 @@ function PrivateTrips(props) {
         trip_list.push({
           id: i + 1,
           driver_name: data.TripList[i].DriverName,
-          car_info: data.TripList[i].VehicaleModel + "," + data.TripList[i].VehicaleNumber,
+          car_info:
+            data.TripList[i].VehicaleModel +
+            "," +
+            data.TripList[i].VehicaleNumber,
           journey_id: data.TripList[i].DriverTripID,
           trip_date: data.TripList[i].StartedOnDate,
           pickup_time: data.TripList[i].StartedOnTime,
           drop_time: data.TripList[i].EndedOnTime,
           total_trip_time: data.TripList[i].TotalTripTime,
           total_trip_km: data.TripList[i].TripDistance,
-          trip_status: data.TripList[i].TripStatus
-        })
+          trip_status: data.TripList[i].TripStatus,
+        });
       }
     }
     total_trip_data = trip_list;
@@ -85,41 +91,26 @@ function PrivateTrips(props) {
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
-    setFilteredData([]);
-    sendRequest({
-      url: "/api/v1/PrivateTrip/GetPrivateTrip",
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: {
-        emailID: sessionStorage.getItem("user"),
-        userType: "corporate",
-        fromDate: startDate,
-        toDate: endDate
-      }
-    }, authenticateUser);
-    // }
-    tripListFlag++;
+    if (isDataFiltered) {
+      setFilteredData([]);
+      sendRequest(
+        {
+          url: "/api/v1/PrivateTrip/GetPrivateTrip",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            emailID: sessionStorage.getItem("user"),
+            userType: "corporate",
+            fromDate: startDate,
+            toDate: endDate,
+          },
+        },
+        authenticateUser
+      );
+    }
   }, [sendRequest, isDataFiltered]);
-
-
-  function formatDate(date = new Date(), format = "mm/dd/yy") {
-    const map = {
-      mm: date.getMonth().toString().length === 1 ? ("0" + (date.getMonth() + 1)) : date.getMonth() + 1,
-      dd: date.getDate().toString().length === 1 ? "0" + date.getDate() : date.getDate(),
-      yy: date.getFullYear().toString(),
-      yyyy: date.getFullYear(),
-    };
-    return format.replace(/mm|dd|yy|yyy/gi, (matched) => map[matched]);
-  }
-
-  function differenceInDays(date1, date2) {
-    var Difference_In_Time =
-      new Date(date2).getTime() - new Date(date1).getTime();
-    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-    return Difference_In_Days;
-  }
 
   function formatToMMDDYYYYfromYYYYMMDD(inputDate) {
     var date = new Date(inputDate);
@@ -146,8 +137,8 @@ function PrivateTrips(props) {
     (myClick
       ? currentPage * recordsPerPage - (filteredData.length % recordsPerPage)
       : currentPage * recordsPerPage +
-      recordsPerPage -
-      (filteredData.length % recordsPerPage)) > filteredData.length
+        recordsPerPage -
+        (filteredData.length % recordsPerPage)) > filteredData.length
   )
     toRecords = filteredData.length;
   else toRecords = currentPage * recordsPerPage;
@@ -166,13 +157,34 @@ function PrivateTrips(props) {
     myClick = true;
 
     if (e.target.innerText === "Today") {
-      startDate = new Date().getFullYear().toString().concat("-", +new Date().getMonth() + 1, "-", new Date().getDate())
+      startDate = new Date()
+        .getFullYear()
+        .toString()
+        .concat("-", +new Date().getMonth() + 1, "-", new Date().getDate());
       endDate = today;
     } else if (e.target.innerText === "This Week") {
-      startDate = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate() - new Date().getDay());
+      if (new Date().getDay() === 0)
+        startDate =
+          new Date().getFullYear() +
+          "-" +
+          (new Date().getMonth() + 1) +
+          "-" +
+          (new Date().getDate() - 6);
+      else
+        startDate =
+          new Date().getFullYear() +
+          "-" +
+          (new Date().getMonth() + 1) +
+          "-" +
+          (new Date().getDate() - (new Date().getDay() - 1));
       endDate = today;
     } else if (e.target.innerText === "This Month") {
-      startDate = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + "1";
+      startDate =
+        new Date().getFullYear() +
+        "-" +
+        (new Date().getMonth() + 1) +
+        "-" +
+        "1";
       endDate = today;
     }
   };
@@ -188,22 +200,21 @@ function PrivateTrips(props) {
     }
   };
 
-  const allDataButtonClickHandler = () => {
-    myClick = false;
-    setFilteredData(total_trip_data);
-  };
-
   const inputFromDateBlurHandler = (e) => {
     e.target.type = "text";
     if (startDateRef.current.value)
-      startDateRef.current.value = formatToMMDDYYYYfromYYYYMMDD(startDateRef.current.value);
-  }
+      startDateRef.current.value = formatToMMDDYYYYfromYYYYMMDD(
+        startDateRef.current.value
+      );
+  };
 
   const inputToDateBlurHandler = (e) => {
     e.target.type = "text";
     if (endDateRef.current.value)
-      endDateRef.current.value = formatToMMDDYYYYfromYYYYMMDD(endDateRef.current.value);
-  }
+      endDateRef.current.value = formatToMMDDYYYYfromYYYYMMDD(
+        endDateRef.current.value
+      );
+  };
 
   return (
     <div className="trips-details" id="trip-table">
@@ -218,7 +229,9 @@ function PrivateTrips(props) {
             >
               All Data
             </button> */}
-            <button id="1" className="selected">Today</button>
+            <button id="1" className="selected">
+              Today
+            </button>
             <button id="2">This Week</button>
             <button id="3">This Month</button>
           </div>
@@ -240,13 +253,23 @@ function PrivateTrips(props) {
               />
             </div>
             {/* <button onClick={() => generatePDF(filteredData)}>Click</button> */}
-            <span className="export_csv" style={{ cursor: "pointer" }} onClick={() => setIsExportButtonClicked(true)} >Export</span>
+            <span
+              className="export_csv"
+              style={{ cursor: "pointer" }}
+              onClick={() => setIsExportButtonClicked(true)}
+            >
+              Export
+            </span>
             {/* <CSVLink data={filteredData} className="export_csv">
               Export
             </CSVLink> */}
           </div>
         </div>
-        <Records data={currentRecords} headers={TRIP_TITLE} isLoading={isLoading} />
+        <Records
+          data={currentRecords}
+          headers={TRIP_TITLE}
+          isLoading={isLoading}
+        />
         <div className="footer">
           <p>
             Showing {fromRecords} to {toRecords} of {filteredData.length}{" "}
@@ -273,7 +296,12 @@ function PrivateTrips(props) {
                     /> */}
         </div>
       </div>
-      {isExportButtonClicked && <Modal setIsExportButtonClicked={setIsExportButtonClicked} isPrivateDriver="1" />}
+      {isExportButtonClicked && (
+        <Modal
+          setIsExportButtonClicked={setIsExportButtonClicked}
+          isPrivateDriver="1"
+        />
+      )}
       {isExportButtonClicked && <div className="add-route-fullcontainer"></div>}
     </div>
   );

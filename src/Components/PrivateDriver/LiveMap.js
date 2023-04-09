@@ -111,9 +111,9 @@ const LiveMap = (props) => {
       if (!driverFlag) {
         if (
           flightPlanCoordinates[flightPlanCoordinates.length - 1].lat !==
-          data.Livetripdetails[0].Latitude &&
+            data.Livetripdetails[0].Latitude &&
           flightPlanCoordinates[flightPlanCoordinates.length - 1].lng !==
-          data.Livetripdetails[0].Longitude
+            data.Livetripdetails[0].Longitude
         )
           flightPlanCoordinates.push({
             lat: data.Livetripdetails[0].Latitude,
@@ -144,10 +144,10 @@ const LiveMap = (props) => {
       // console.log(document.querySelector(`[src = "${markerUrl}"]`));
       let markerSrc = document.querySelector(`[src = "${markerUrl}"]`);
       if (marker)
-        markerSrc.style.transform = `rotate(${data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
-          }deg)`;
+        markerSrc.style.transform = `rotate(${
+          data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
+        }deg)`;
       // });
-
 
       setIsTripEnded(false);
     } else {
@@ -171,21 +171,46 @@ const LiveMap = (props) => {
       if (startPointMarker) startPointMarker.setMap(null);
       if (endPointMarker) endPointMarker.setMap(null);
       startPointMarker = new window.google.maps.Marker({
-        position: data.Livetrip[0].ActualPickupName ? { lat: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[0], lng: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[1] } : { lat: data?.Livetrip[0]?.PickupLatitude, lng: data?.Livetrip[0]?.PickupLongitude },
+        position: data.Livetrip[0].ActualPickupName
+          ? {
+              lat: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[0],
+              lng: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[1],
+            }
+          : {
+              lat: data?.Livetrip[0]?.PickupLatitude,
+              lng: data?.Livetrip[0]?.PickupLongitude,
+            },
         map,
         icon: startPoint,
-        myTitle: `${data.Livetrip[0].ActualPickupName ? data.Livetrip[0].ActualPickupName : data?.Livetrip[0]?.PickupAddress?.split(",")[0]}`
+        myTitle: `${
+          data.Livetrip[0].ActualPickupName
+            ? data.Livetrip[0].ActualPickupName
+            : data?.Livetrip[0]?.PickupAddress?.split(",")[0]
+        }`,
       });
       endPointMarker = new window.google.maps.Marker({
-        position: { lat: data?.Livetrip[0]?.DropoffLatitude, lng: data?.Livetrip[0]?.DropoffLongitude },
+        position: {
+          lat: data?.Livetrip[0]?.DropoffLatitude,
+          lng: data?.Livetrip[0]?.DropoffLongitude,
+        },
         map,
         icon: endPoint,
         myTitle: `${data?.Livetrip[0]?.DropoffAddress?.split(",")[0]}`,
       });
       // endPointMarker.setAnimation(window.google.maps.Animation.BOUNCE)
       var bounds = new window.google.maps.LatLngBounds();
-      bounds.extend(new window.google.maps.LatLng(data.Livetrip[0]?.PickupLatitude, data.Livetrip[0]?.PickupLongitude));
-      bounds.extend(new window.google.maps.LatLng(data.Livetrip[0]?.DropoffLatitude, data.Livetrip[0]?.DropoffLongitude));
+      bounds.extend(
+        new window.google.maps.LatLng(
+          data.Livetrip[0]?.PickupLatitude,
+          data.Livetrip[0]?.PickupLongitude
+        )
+      );
+      bounds.extend(
+        new window.google.maps.LatLng(
+          data.Livetrip[0]?.DropoffLatitude,
+          data.Livetrip[0]?.DropoffLongitude
+        )
+      );
       const infoWindow = new window.google.maps.InfoWindow();
       startPointMarker.addListener("mouseover", () => {
         infoWindow.close();
@@ -199,8 +224,8 @@ const LiveMap = (props) => {
       });
       riderDetails = {
         name: data.Livetrip[0].riderName,
-        mNumber: data.Livetrip[0].riderMobileNumber
-      }
+        mNumber: data.Livetrip[0].riderMobileNumber,
+      };
     }
     setIsLoadingRoute(false);
   };
@@ -288,8 +313,8 @@ const LiveMap = (props) => {
         // fillColor: "rgba(34, 137, 203, 255)", //rgba(245, 174, 48, 255)
         // fillColor: "rgba(245, 174, 48, 255)", //rgba(245, 174, 48, 255)
         // strokeColor: "black",
-        scaledSize: new window.google.maps.Size(35, 35),
-        anchor: new window.google.maps.Point(15, 10)
+        scaledSize: new window.google.maps.Size(34, 34),
+        anchor: new window.google.maps.Point(17, 17),
         // fillOpacity: 1, //0.9
         // strokeWeight: 0.5, // 0.75
         // rotation: 0,
@@ -538,8 +563,8 @@ const LiveMap = (props) => {
                           ele?.status === "online"
                             ? "online"
                             : ele.status === "on trip"
-                              ? "ontrip"
-                              : ""
+                            ? "ontrip"
+                            : ""
                         }
                       ></p>
                     </div>
@@ -556,15 +581,15 @@ const LiveMap = (props) => {
                       onClick={
                         ele.status === "online"
                           ? () =>
-                            bookButtonClickHandler(
-                              ele.driverImage,
-                              ele.driverName,
-                              ele.carNumber,
-                              ele.vehicleType,
-                              ele.driverEmail,
-                              ele.carModel,
-                              ele.carColor
-                            )
+                              bookButtonClickHandler(
+                                ele.driverImage,
+                                ele.driverName,
+                                ele.carNumber,
+                                ele.vehicleType,
+                                ele.driverEmail,
+                                ele.carModel,
+                                ele.carColor
+                              )
                           : ""
                       }
                     >
@@ -590,18 +615,22 @@ const LiveMap = (props) => {
               View Trips
             </button>
           </div>
-          {riderDetails &&
+          {riderDetails && (
             <div className="riderInfoContainer">
-              <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+              <div
+                style={{ display: "flex", gap: "15px", alignItems: "center" }}
+              >
                 <FaRegUserCircle />
                 <span>{riderDetails.name}</span>
               </div>
-              <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+              <div
+                style={{ display: "flex", gap: "15px", alignItems: "center" }}
+              >
                 <FiPhoneCall />
                 <span>{"+" + riderDetails.mNumber}</span>
               </div>
             </div>
-          }
+          )}
           {isLoadingRoute && (
             <div
               style={{

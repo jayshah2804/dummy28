@@ -146,7 +146,12 @@ const DriverBooking = (props) => {
     if (isDriverBookingClicked) {
       move();
       paraMeters();
-      fetch("https://corp.little.global/server" + url, requestOptions)
+      fetch(
+        (window.location.origin === "https://corp.little.global"
+          ? "https://corp.little.global/server"
+          : "") + url,
+        requestOptions
+      )
         .then((response) => response.text())
         .then((result) => {
           setIsToken(JSON.parse(result).token);
@@ -156,7 +161,12 @@ const DriverBooking = (props) => {
         .catch((error) => console.log("error", error));
     } else if (isToken) {
       paraMeters();
-      fetch("https://corp.little.global/server" + url, requestOptions)
+      fetch(
+        (window.location.origin === "https://corp.little.global"
+          ? "https://corp.little.global/server"
+          : "") + url,
+        requestOptions
+      )
         .then((response) => response.text())
         .then((result) => {
           JSON.parse(result).tripId
@@ -179,7 +189,12 @@ const DriverBooking = (props) => {
       move(0, 50);
       setTimeout(() => {
         paraMeters();
-        fetch("https://corp.little.global/server" + url, requestOptions)
+        fetch(
+          (window.location.origin === "https://corp.little.global"
+            ? "https://corp.little.global/server"
+            : "") + url,
+          requestOptions
+        )
           .then((response) => response.text())
           .then((result) => {
             pickupDrop = [];

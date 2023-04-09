@@ -10,7 +10,9 @@ const useHttp = () => {
     setError(null);
     try {
       const response = await fetch(
-        "https://corp.little.global/server" + requestConfig.url,
+        (window.location.origin === "https://corp.little.global"
+          ? "https://corp.little.global/server"
+          : "") + requestConfig.url,
         {
           method: requestConfig.method,
           headers: requestConfig.headers,
