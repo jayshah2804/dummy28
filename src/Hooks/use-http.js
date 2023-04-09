@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
 
+let baseURL =
+  window.location.origin === "https://corp.little.global"
+    ? "https://corp.little.global/server"
+    : "";
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -9,16 +13,11 @@ const useHttp = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        (window.location.origin === "https://corp.little.global"
-          ? "https://corp.little.global/server"
-          : "") + requestConfig.url,
-        {
-          method: requestConfig.method,
-          headers: requestConfig.headers,
-          body: JSON.stringify(requestConfig.body),
-        }
-      );
+      const response = await fetch(baseURL + requestConfig.url, {
+        method: requestConfig.method,
+        headers: requestConfig.headers,
+        body: JSON.stringify(requestConfig.body),
+      });
 
       if (!response.ok) {
         throw new Error("Request failed!");
