@@ -34,6 +34,7 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
             for (let i = 0; i < driverPath.length; i = i + currentBounds) {
                 bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
             }
+            bounds.extend(new window.google.maps.LatLng(driverPath[driverPath.length - 1].lat, driverPath[driverPath.length - 1].lng));
             map.fitBounds(bounds);
         }
 

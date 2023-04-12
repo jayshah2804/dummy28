@@ -14,6 +14,7 @@ import startPoint from "../../Assets/dropIcon.png";
 import endPoint from "../../Assets/pickIcon.png";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
+import CryptoJS from "crypto-js";
 
 let prev_driverEmail = "";
 let flightPlanCoordinates = [];
@@ -39,6 +40,7 @@ let drawLineFlag = false;
 let journeyStart = 0;
 let onTripDriverName = "";
 let riderDetails = "";
+let onlineDriversMarker = [];
 // let dropLocationDetails = {
 //   name: "",
 //   latLng: ""
@@ -46,10 +48,11 @@ let riderDetails = "";
 
 const LiveMap = (props) => {
   const [bookedDriver, setBookedDriver] = useState(false);
-  const [onTripDriverEmail, setOnTripDriverEmail] = useState();
+  const [onTripDriverEmail, setOnTripDriverEmail] = useState(null);
   const [tripRequestStatus, setTripRequestStatus] = useState(false);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [isTripEnded, setIsTripEnded] = useState(false);
+  const [driverFilterType, setDriversFilterType] = useState("");
   const searchInputRef = useRef();
   const history = useHistory();
 
@@ -83,6 +86,8 @@ const LiveMap = (props) => {
 
   useEffect(() => {
     prev_driverEmail = "";
+    document.getElementsByClassName("filter-buttons")[0].children[0].style.boxShadow = "0 10px 10px rgba(33, 33, 33, .3)"
+    document.getElementsByClassName("filter-buttons")[0].children[0].style.transform = "scale(1.05)"
   }, []);
 
   useEffect(() => {
@@ -91,9 +96,9 @@ const LiveMap = (props) => {
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyAq88vEj-mQ9idalgeP1IuvulowkkFA-Nk&callback=myInitMap&libraries=places&v=weekly";
     script.async = true;
     document.body.appendChild(script);
-  }, [onTripDriverEmail]);
+  }, [onTripDriverEmail, driverFilterType]);
 
-  if (prev_driverEmail && prev_driverEmail !== onTripDriverEmail && myFlag) {
+  if ((prev_driverEmail && prev_driverEmail !== onTripDriverEmail && myFlag) || prev_driverEmail == null) {
     // console.log("here", trip_interval);
     clearIntervalApiCall();
     clearIntervalFligthPath();
@@ -105,127 +110,150 @@ const LiveMap = (props) => {
   } else myFlag = 1;
 
   const authenticateUser = (data) => {
-    // console.log(data, driverFlag);
-    // debugger;
-    if (data.Livetripdetails) {
-      if (!driverFlag) {
-        if (
-          flightPlanCoordinates[flightPlanCoordinates.length - 1].lat !==
-            data.Livetripdetails[0].Latitude &&
-          flightPlanCoordinates[flightPlanCoordinates.length - 1].lng !==
-            data.Livetripdetails[0].Longitude
-        )
-          flightPlanCoordinates.push({
-            lat: data.Livetripdetails[0].Latitude,
-            lng: data.Livetripdetails[0].Longitude,
+    if (onTripDriverEmail == null) {
+      let driverDetails = JSON.parse(data);
+      for (let i = 0; i < onlineDriversMarker.length; i++) {
+        onlineDriversMarker[i]?.setMap(null);
+      }
+      onlineDriversMarker = [];
+      const infoWindow = new window.google.maps.InfoWindow();
+      // debugger;
+      for (let i = 0; i < driverDetails.length; i++) {
+        if (driverDetails[i].Latitude > 0 && (driverFilterType === "online" ? !(driverDetails[i].TripID) : (driverFilterType === "on trip" ? driverDetails[i].TripID : 1))) {
+          onlineDriversMarker[i] = new window.google.maps.Marker({
+            position: { lat: driverDetails[i].Latitude, lng: driverDetails[i].Longitude },
+            map,
+            icon: {
+              url: "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9",
+              scaledSize: new window.google.maps.Size(34, 34),
+              anchor: new window.google.maps.Point(17, 17),
+            },
+            myTitle: `${driverDetails[i].FullName}`,
           });
-      } else {
-        flightPlanCoordinates = [];
-        for (let i = 0; i < data.Livetripdetails.length; i++) {
-          flightPlanCoordinates.push({
-            lat: data.Livetripdetails[i].Latitude,
-            lng: data.Livetripdetails[i].Longitude,
+          onlineDriversMarker[i].addListener("mouseover", () => {
+            infoWindow.close();
+            infoWindow.setContent(onlineDriversMarker[i].myTitle);
+            infoWindow.open(onlineDriversMarker[i].getMap(), onlineDriversMarker[i]);
           });
         }
-        drawLineFlag = true;
-        driverFlag = false;
       }
-      // debugger;
-      // let icon = marker.getIcon();
-      // // console.log(icon);
-      // icon.rotation =
-      //   data.Livetripdetails[data.Livetripdetails.length - 1].Bearing;
-      // marker.setIcon(icon);
-      journeyStart = 1;
-
-      // setTimeout(() => {
       const markerUrl =
         "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9";
-      // console.log(document.querySelector(`[src = "${markerUrl}"]`));
-      let markerSrc = document.querySelector(`[src = "${markerUrl}"]`);
-      if (marker)
-        markerSrc.style.transform = `rotate(${
-          data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
-        }deg)`;
-      // });
-
-      setIsTripEnded(false);
+      setTimeout(() => {
+        for (let i = 0; i < onlineDriversMarker.length; i++) {
+          let markerSrc = document.querySelectorAll(`[src = "${markerUrl}"]`);
+          if (onlineDriversMarker[i] && markerSrc[i])
+            markerSrc[i].style.transform = `rotate(${driverDetails[i].Bearing}deg)`;
+        }
+      }, 2000);
     } else {
-      if (data?.LivetripStatus?.toLowerCase() === "ended") {
-        setIsTripEnded(true);
-        flightPlanCoordinates = [];
-      } else setIsTripEnded(false);
-      // if (journeyStart) setIsTripEnded(true);
-      // journeyStart = 0;
-      // flightPlanCoordinates = [];
-    }
+      if (data.Livetripdetails) {
+        if (!driverFlag) {
+          if (
+            flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat !==
+            data.Livetripdetails[0]?.Latitude &&
+            flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lng !==
+            data.Livetripdetails[0]?.Longitude
+          )
+            flightPlanCoordinates.push({
+              lat: data.Livetripdetails[0].Latitude,
+              lng: data.Livetripdetails[0].Longitude,
+            });
+        } else {
+          flightPlanCoordinates = [];
+          for (let i = 0; i < data.Livetripdetails.length; i++) {
+            flightPlanCoordinates.push({
+              lat: data.Livetripdetails[i].Latitude,
+              lng: data.Livetripdetails[i].Longitude,
+            });
+          }
+          drawLineFlag = true;
+          driverFlag = false;
+        }
+        journeyStart = 1;
 
-    // if (data.Livetrip) {
-    //   dropLocationDetails.name = data.Livetrip[0].DropoffAddress;
-    //   dropLocationDetails.latLng = { lat: data.Livetrip[0].DropoffLatitude, lng: data.Livetrip[0].DropoffLongitude };
-    // } else {
-    //   dropLocationDetails.name = null;
-    //   dropLocationDetails.latLng = null;
-    // }
-    if (!(data?.LivetripStatus?.toLowerCase() === "ended")) {
-      if (startPointMarker) startPointMarker.setMap(null);
-      if (endPointMarker) endPointMarker.setMap(null);
-      startPointMarker = new window.google.maps.Marker({
-        position: data.Livetrip[0].ActualPickupName
-          ? {
+        // setTimeout(() => {
+        const markerUrl =
+          "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9";
+        // console.log(document.querySelector(`[src = "${markerUrl}"]`));
+        // setTimeout(() => {
+        let markerSrc = document.querySelector(`[src = "${markerUrl}"]`);
+        if (marker && markerSrc)
+          markerSrc.style.transform = `rotate(${data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
+            }deg)`;
+        // }, 1000);
+        // });
+
+        setIsTripEnded(false);
+      } else {
+        if (data?.LivetripStatus?.toLowerCase() === "ended") {
+          setIsTripEnded(true);
+          flightPlanCoordinates = [];
+        } else setIsTripEnded(false);
+        // if (journeyStart) setIsTripEnded(true);
+        // journeyStart = 0;
+        // flightPlanCoordinates = [];
+      }
+
+      if (!(data?.LivetripStatus?.toLowerCase() === "ended")) {
+        if (startPointMarker) startPointMarker.setMap(null);
+        if (endPointMarker) endPointMarker.setMap(null);
+        startPointMarker = new window.google.maps.Marker({
+          position: data.Livetrip[0].ActualPickupName
+            ? {
               lat: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[0],
               lng: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[1],
             }
-          : {
+            : {
               lat: data?.Livetrip[0]?.PickupLatitude,
               lng: data?.Livetrip[0]?.PickupLongitude,
             },
-        map,
-        icon: startPoint,
-        myTitle: `${
-          data.Livetrip[0].ActualPickupName
+          map,
+          icon: startPoint,
+          myTitle: `${data.Livetrip[0].ActualPickupName
             ? data.Livetrip[0].ActualPickupName
             : data?.Livetrip[0]?.PickupAddress?.split(",")[0]
-        }`,
-      });
-      endPointMarker = new window.google.maps.Marker({
-        position: {
-          lat: data?.Livetrip[0]?.DropoffLatitude,
-          lng: data?.Livetrip[0]?.DropoffLongitude,
-        },
-        map,
-        icon: endPoint,
-        myTitle: `${data?.Livetrip[0]?.DropoffAddress?.split(",")[0]}`,
-      });
-      // endPointMarker.setAnimation(window.google.maps.Animation.BOUNCE)
-      var bounds = new window.google.maps.LatLngBounds();
-      bounds.extend(
-        new window.google.maps.LatLng(
-          data.Livetrip[0]?.PickupLatitude,
-          data.Livetrip[0]?.PickupLongitude
-        )
-      );
-      bounds.extend(
-        new window.google.maps.LatLng(
-          data.Livetrip[0]?.DropoffLatitude,
-          data.Livetrip[0]?.DropoffLongitude
-        )
-      );
-      const infoWindow = new window.google.maps.InfoWindow();
-      startPointMarker.addListener("mouseover", () => {
-        infoWindow.close();
-        infoWindow.setContent(startPointMarker.myTitle);
-        infoWindow.open(startPointMarker.getMap(), startPointMarker);
-      });
-      endPointMarker.addListener("mouseover", () => {
-        infoWindow.close();
-        infoWindow.setContent(endPointMarker.myTitle);
-        infoWindow.open(endPointMarker.getMap(), endPointMarker);
-      });
-      riderDetails = {
-        name: data.Livetrip[0].riderName,
-        mNumber: data.Livetrip[0].riderMobileNumber,
-      };
+            }`,
+        });
+        endPointMarker = new window.google.maps.Marker({
+          position: {
+            lat: data?.Livetrip[0]?.DropoffLatitude,
+            lng: data?.Livetrip[0]?.DropoffLongitude,
+          },
+          map,
+          icon: endPoint,
+          myTitle: `${data?.Livetrip[0]?.DropoffAddress?.split(",")[0]}`,
+        });
+        // endPointMarker.setAnimation(window.google.maps.Animation.BOUNCE)
+        var bounds = new window.google.maps.LatLngBounds();
+        bounds.extend(
+          new window.google.maps.LatLng(
+            data.Livetrip[0]?.PickupLatitude,
+            data.Livetrip[0]?.PickupLongitude
+          )
+        );
+        bounds.extend(
+          new window.google.maps.LatLng(
+            data.Livetrip[0]?.DropoffLatitude,
+            data.Livetrip[0]?.DropoffLongitude
+          )
+        );
+        const infoWindow = new window.google.maps.InfoWindow();
+        startPointMarker.addListener("mouseover", () => {
+          infoWindow.close();
+          infoWindow.setContent(startPointMarker.myTitle);
+          infoWindow.open(startPointMarker.getMap(), startPointMarker);
+        });
+        endPointMarker.addListener("mouseover", () => {
+          infoWindow.close();
+          infoWindow.setContent(endPointMarker.myTitle);
+          infoWindow.open(endPointMarker.getMap(), endPointMarker);
+        });
+        riderDetails = {
+          name: data.Livetrip[0].riderName,
+          mNumber: data.Livetrip[0].riderMobileNumber,
+        };
+      }
     }
     setIsLoadingRoute(false);
   };
@@ -235,15 +263,52 @@ const LiveMap = (props) => {
   useEffect(() => {
     if (onTripDriverEmail) intervalApiCall();
   }, [onTripDriverEmail]);
-  // }, [onTripDriverEmail, sendRequest]);
+
+  useEffect(() => {
+    if (onTripDriverEmail == null) {
+      setIsLoadingRoute(true);
+      var secretkey = "f080786e3a348458a621e2fa4c267ad8";
+      var key = CryptoJS.enc.Utf8.parse(secretkey);
+      var iv = CryptoJS.enc.Utf8.parse("84jfkfndl3ybdfkf");
+
+      let data = `FORMID|JSONDATA|JSONDATA|{"FORMID":"GETDRIVERLOCATIONS_PD","VehicleTypes":{"CorporateID":"9D9D690143564"},"Country":"INDIA","City":"AHMEDABAD","userId": "${sessionStorage.getItem("user")}"}`;
+      var cipherText = CryptoJS.AES.encrypt(
+        data,
+        key,
+        {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        }
+      ).toString();
+      // console.log(encodeURIComponent(cipherText));
+      sendRequest(
+        {
+          url: "/api/v1/Header/DriveronlineLocations",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            cipherText: encodeURIComponent(cipherText)
+          },
+        },
+        authenticateUser
+      );
+    }
+  }, [onTripDriverEmail, driverFilterType]);
 
   function intervalApiCall() {
     flightPlanCoordinates = [];
     // console.log("prev_driverEmail", prev_driverEmail, onTripDriverEmail);
-    prev_driverEmail && prev_driverEmail === onTripDriverEmail
-      ? (driverFlag = false)
-      : (driverFlag = true);
-    prev_driverEmail = onTripDriverEmail;
+    if (prev_driverEmail == null)
+      driverFlag = true;
+    else {
+      prev_driverEmail && prev_driverEmail === onTripDriverEmail
+        ? (driverFlag = false)
+        : (driverFlag = true);
+      prev_driverEmail = onTripDriverEmail;
+    }
 
     sendRequest(
       {
@@ -255,7 +320,7 @@ const LiveMap = (props) => {
         body: {
           emailID: sessionStorage.getItem("user"),
           driverEmailID: onTripDriverEmail,
-          corporateID: "",
+          corporateID: sessionStorage.getItem("corpId"),
           Isall: 1,
         },
       },
@@ -300,123 +365,102 @@ const LiveMap = (props) => {
     if (!onTripDriverEmail) {
       flightPlanCoordinates = [];
     }
-
-    marker = new window.google.maps.Marker({
-      position: flightPlanCoordinates[flightPlanCoordinates.length - 1],
-      map,
-      icon: {
-        url: "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9",
-        // path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759   c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z    M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713   v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336   h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
-        // path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-        // url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg),
-        // url: "https://d1a3f4spazzrp4.cloudfront.net/car-types/map70px/map-uberx.png",
-        // fillColor: "rgba(34, 137, 203, 255)", //rgba(245, 174, 48, 255)
-        // fillColor: "rgba(245, 174, 48, 255)", //rgba(245, 174, 48, 255)
-        // strokeColor: "black",
-        scaledSize: new window.google.maps.Size(34, 34),
-        anchor: new window.google.maps.Point(17, 17),
-        // fillOpacity: 1, //0.9
-        // strokeWeight: 0.5, // 0.75
-        // rotation: 0,
-        // scale: 0.6, // 6
-        // anchor: new window.google.maps.Point(25, 0), //remove
-      },
-      optimized: false,
-    });
-
-    // marker2.addListener("mouseover", () => {
-    //   infoWindow.close();
-    //   infoWindow.setContent(marker2.myTitle);
-    //   infoWindow.open(marker2.getMap(), marker);
-    // });
-
-    pathInterval = setInterval(() => {
-      // flightPath1 = new window.google.maps.Polyline({
-      //   path: flightPlanCoordinates,
-      //   // geodesic: true,
-      //   strokeColor: "black",
-      //   strokeOpacity: 10.0,
-      //   strokeWeight: 5,
-      // });
-
+    if (onTripDriverEmail == null) {
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
-        // geodesic: true,
-        strokeColor: "#00b0ff",
-        strokeOpacity: 10.0,
-        strokeWeight: 3,
       });
-      // if (drawLineFlag) {
-      // flightPath1?.setMap(null);
-      if (document.getElementsByClassName("gm-fullscreen-control")[0])
-        document.getElementsByClassName(
-          "gm-fullscreen-control"
-        )[0].style.marginTop = "45px";
+    }
+    else {
+      marker = new window.google.maps.Marker({
+        position: flightPlanCoordinates[flightPlanCoordinates.length - 1],
+        map,
+        icon: {
+          url: "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9",
+          scaledSize: new window.google.maps.Size(34, 34),
+          anchor: new window.google.maps.Point(17, 17),
+        },
+        optimized: false,
+      });
 
-      // flightPath1 = new window.google.maps.Polyline({
-      //   path: flightPlanCoordinates,
-      //   // geodesic: true,
-      //   strokeColor: "black",
-      //   strokeOpacity: 10.0,
-      //   strokeWeight: 5,
-      // });
-
-      // flightPath2 = new window.google.maps.Polyline({
-      //   path: flightPlanCoordinates,
-      //   // geodesic: true,
-      //   strokeColor: "#00b0ff",
-      //   strokeOpacity: 10.0,
-      //   strokeWeight: 4,
-      // });
-
-      if (flightPlanCoordinates.length > 1) {
-        // setTimeout(() => {
-        // flightPath1?.setMap(null);
-        flightPath2?.setMap(null);
-        // flightPath1.setMap(map);
-        flightPath2.setMap(map);
-        marker.setPosition(
-          flightPlanCoordinates[flightPlanCoordinates.length - 1]
-        );
-        // }, 3000);
-        // transition();
-      } else if (flightPlanCoordinates.length > 0) {
-        // flightPath1?.setMap(null);
-        flightPath2?.setMap(null);
-        // flightPath1.setMap(map);
-        flightPath2.setMap(map);
-        marker.setPosition(
-          flightPlanCoordinates[flightPlanCoordinates.length - 1]
-        );
-      }
-
-      if (
-        prev_driverEmail &&
-        emailFlag &&
-        flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
-      ) {
-        map.setCenter({
-          lat: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat,
-          lng: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lng,
+      pathInterval = setInterval(() => {
+        flightPath2 = new window.google.maps.Polyline({
+          path: flightPlanCoordinates,
+          // geodesic: true,
+          strokeColor: "#00b0ff",
+          strokeOpacity: 10.0,
+          strokeWeight: 3,
         });
-        map.setZoom(14);
-        emailFlag = false;
-      } else if (
-        !flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
-      ) {
-        map.setZoom(11);
-        // map.setCenter({ lat: 23.0358311, lng: 72.5579656 });
-      }
-      drawLineFlag = false;
-      // }
-    }, 2000);
+        // if (drawLineFlag) {
+        // flightPath1?.setMap(null);
+        if (document.getElementsByClassName("gm-fullscreen-control")[0])
+          document.getElementsByClassName(
+            "gm-fullscreen-control"
+          )[0].style.marginTop = "45px";
+
+        // flightPath1 = new window.google.maps.Polyline({
+        //   path: flightPlanCoordinates,
+        //   // geodesic: true,
+        //   strokeColor: "black",
+        //   strokeOpacity: 10.0,
+        //   strokeWeight: 5,
+        // });
+
+        // flightPath2 = new window.google.maps.Polyline({
+        //   path: flightPlanCoordinates,
+        //   // geodesic: true,
+        //   strokeColor: "#00b0ff",
+        //   strokeOpacity: 10.0,
+        //   strokeWeight: 4,
+        // });
+
+        if (flightPlanCoordinates.length > 1) {
+          // setTimeout(() => {
+          // flightPath1?.setMap(null);
+          flightPath2?.setMap(null);
+          // flightPath1.setMap(map);
+          flightPath2.setMap(map);
+          marker.setPosition(
+            flightPlanCoordinates[flightPlanCoordinates.length - 1]
+          );
+          // }, 3000);
+          // transition();
+        } else if (flightPlanCoordinates.length > 0) {
+          // flightPath1?.setMap(null);
+          flightPath2?.setMap(null);
+          // flightPath1.setMap(map);
+          flightPath2.setMap(map);
+          marker.setPosition(
+            flightPlanCoordinates[flightPlanCoordinates.length - 1]
+          );
+        }
+        if (
+          (prev_driverEmail || prev_driverEmail == null) &&
+          (emailFlag || prev_driverEmail == null) &&
+          flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
+        ) {
+          map.setCenter({
+            lat: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat,
+            lng: flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lng,
+          });
+          map.setZoom(14);
+          emailFlag = false;
+        } else if (
+          !flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
+        ) {
+          // map.setZoom(11);
+          // map.setCenter({ lat: 23.0358311, lng: 72.5579656 });
+        }
+        drawLineFlag = false;
+        // }
+      }, 2000);
+    }
   }
 
   function myInitMap() {
     map = new window.google.maps.Map(document.getElementById("live-map"), {
       // mapId: "8e0a97af9386fef",
       center: { lat: 23.0225, lng: 72.5714 },
-      zoom: 11,
+      zoom: 12,
       disableDefaultUI: true,
       fullscreenControl: true,
       zoomControl: true,
@@ -439,8 +483,15 @@ const LiveMap = (props) => {
   };
 
   const filterButtonClickHandler = (e) => {
-    console.log(e.target.innerText);
     searchInputRef.current.value = "";
+    for (let i = 0; i < e.target.parentElement.children.length; i++) {
+      e.target.parentElement.children[i].style.boxShadow = null;
+      e.target.parentElement.children[i].style.transform = "scale(1)";
+    }
+    e.target.style.boxShadow = "0 10px 10px rgba(33, 33, 33, .3)";
+    e.target.style.transform = "scale(1.05)";
+    document.getElementById(prev_driverId)?.classList.remove("currentDriver");
+    setDriversFilterType(e.target.innerText.toLowerCase());
     if (e.target.innerText.toLowerCase() === "all")
       props.setDriverData(props.driver_data);
     else if (e.target.innerText.toLowerCase() === "on trip")
@@ -455,6 +506,12 @@ const LiveMap = (props) => {
           (data) => data.status === e.target.innerText.toLowerCase()
         )
       );
+    prev_driverEmail = null;
+    setOnTripDriverEmail(null);
+    // clearIntervalApiCall();
+    // clearIntervalFligthPath();
+    // startPointMarker?.setMap(null);
+    // endPointMarker?.setMap(null);
   };
 
   const onTripDriverClickHandler = (driverEmail, status, driverName) => {
@@ -524,6 +581,7 @@ const LiveMap = (props) => {
             className="search"
             onChange={driverSearchHandler}
             ref={searchInputRef}
+            placeholder="Serach Driver"
           />
           <div className="driverDetails">
             <br />
@@ -563,8 +621,8 @@ const LiveMap = (props) => {
                           ele?.status === "online"
                             ? "online"
                             : ele.status === "on trip"
-                            ? "ontrip"
-                            : ""
+                              ? "ontrip"
+                              : ""
                         }
                       ></p>
                     </div>
@@ -581,15 +639,15 @@ const LiveMap = (props) => {
                       onClick={
                         ele.status === "online"
                           ? () =>
-                              bookButtonClickHandler(
-                                ele.driverImage,
-                                ele.driverName,
-                                ele.carNumber,
-                                ele.vehicleType,
-                                ele.driverEmail,
-                                ele.carModel,
-                                ele.carColor
-                              )
+                            bookButtonClickHandler(
+                              ele.driverImage,
+                              ele.driverName,
+                              ele.carNumber,
+                              ele.vehicleType,
+                              ele.driverEmail,
+                              ele.carModel,
+                              ele.carColor
+                            )
                           : ""
                       }
                     >

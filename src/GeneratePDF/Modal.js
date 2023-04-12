@@ -2,10 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import useHttp from "../Hooks/use-http";
 import generatePDF from "./generatePdf";
 import "./Modal.css";
-import ReactPDF from "@react-pdf/renderer";
-import { PDFViewer } from "@react-pdf/renderer";
-import PDFMake from "pdfmake";
-import JsxPdf from "jsx-pdf";
 // import { OpenSans } from './font-descriptors';
 
 let drivers = [];
