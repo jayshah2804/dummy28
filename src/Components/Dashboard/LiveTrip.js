@@ -135,7 +135,7 @@ const LiveTrip = (props) => {
         "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9";
       // console.log(document.querySelector(`[src = "${markerUrl}"]`));
       let markerSrc = document.querySelector(`[src = "${markerUrl}"]`);
-      if (marker)
+      if (marker && markerSrc)
         markerSrc.style.transform = `rotate(${data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
           }deg)`;
       journeyStart = 1;
@@ -150,7 +150,7 @@ const LiveTrip = (props) => {
       // flightPlanCoordinates = [];
     }
 
-    if (!(data?.LivetripStatus?.toLowerCase() === "ended")) {
+    if (!(data?.LivetripStatus?.toLowerCase() === "ended") && data?.LiveTrip) {
       if (startPointMarker) startPointMarker.setMap(null);
       if (endPointMarker) endPointMarker.setMap(null);
       startPointMarker = new window.google.maps.Marker({

@@ -98,7 +98,7 @@ const LiveMap = (props) => {
     document.body.appendChild(script);
   }, [onTripDriverEmail, driverFilterType]);
 
-  if ((prev_driverEmail && prev_driverEmail !== onTripDriverEmail && myFlag) || prev_driverEmail == null) {
+  if ((prev_driverEmail && prev_driverEmail !== onTripDriverEmail && myFlag) || (prev_driverEmail == null && onTripDriverEmail == null)) {
     // console.log("here", trip_interval);
     clearIntervalApiCall();
     clearIntervalFligthPath();
@@ -271,7 +271,7 @@ const LiveMap = (props) => {
       var key = CryptoJS.enc.Utf8.parse(secretkey);
       var iv = CryptoJS.enc.Utf8.parse("84jfkfndl3ybdfkf");
 
-      let data = `FORMID|JSONDATA|JSONDATA|{"FORMID":"GETDRIVERLOCATIONS_PD","VehicleTypes":{"CorporateID":"9D9D690143564"},"Country":"INDIA","City":"AHMEDABAD","userId": "${sessionStorage.getItem("user")}"}`;
+      let data = `FORMID|JSONDATA|JSONDATA|{"FORMID":"GETDRIVERLOCATIONS_PD","VehicleTypes":{"CorporateID":"${sessionStorage.getItem("dptId")}"},"Country":"INDIA","City":"AHMEDABAD","userId": "${sessionStorage.getItem("user")}"}`;
       var cipherText = CryptoJS.AES.encrypt(
         data,
         key,
@@ -435,7 +435,7 @@ const LiveMap = (props) => {
         }
         if (
           (prev_driverEmail || prev_driverEmail == null) &&
-          (emailFlag || prev_driverEmail == null) &&
+          (emailFlag) &&
           flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
         ) {
           map.setCenter({

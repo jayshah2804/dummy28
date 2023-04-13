@@ -7,7 +7,7 @@ import endPoint from "../../Assets/Pin_icon50.png";
 // import dummy from "../../Assets/greenNew.png";
 
 let minBounds = 1;
-let maxBounds = 50;
+let maxBounds = 500;
 let dividend = 10;
 const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     const script = document.createElement("script");

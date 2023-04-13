@@ -34,12 +34,15 @@ const SideMenu = (props) => {
               sub: ["Departments", "Admins", "Trips"],
             });
           prev_corp = data.MenuList[i].CorporateName;
-          if (data.MenuList[i].DepartMentName)
+          if (data.MenuList[i].DepartMentName) {
+            if(data.MenuList[i].DepartMentName.toLowerCase().includes("admin"))
+              sessionStorage.setItem("dptId", data.MenuList[i].DepartmentID);
             sideMenu.push({
               main: data.MenuList[i].DepartMentName,
               deptId: data.MenuList[i].DepartmentID,
               sub: ["Staff Members"],
             });
+          }
         }
       } else {
         for (let i = 0; i < data.MenuList.length; i++) {
