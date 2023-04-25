@@ -111,41 +111,43 @@ const LiveMap = (props) => {
 
   const authenticateUser = (data) => {
     if (onTripDriverEmail == null) {
-      let driverDetails = JSON.parse(data);
-      for (let i = 0; i < onlineDriversMarker.length; i++) {
-        onlineDriversMarker[i]?.setMap(null);
-      }
-      onlineDriversMarker = [];
-      const infoWindow = new window.google.maps.InfoWindow();
-      // debugger;
-      for (let i = 0; i < driverDetails.length; i++) {
-        if (driverDetails[i].Latitude > 0 && (driverFilterType === "online" ? !(driverDetails[i].TripID) : (driverFilterType === "on trip" ? driverDetails[i].TripID : 1))) {
-          onlineDriversMarker[i] = new window.google.maps.Marker({
-            position: { lat: driverDetails[i].Latitude, lng: driverDetails[i].Longitude },
-            map,
-            icon: {
-              url: "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9",
-              scaledSize: new window.google.maps.Size(34, 34),
-              anchor: new window.google.maps.Point(17, 17),
-            },
-            myTitle: `${driverDetails[i].FullName}`,
-          });
-          onlineDriversMarker[i].addListener("mouseover", () => {
-            infoWindow.close();
-            infoWindow.setContent(onlineDriversMarker[i].myTitle);
-            infoWindow.open(onlineDriversMarker[i].getMap(), onlineDriversMarker[i]);
-          });
-        }
-      }
-      const markerUrl =
-        "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9";
-      setTimeout(() => {
+      if (data) {
+        let driverDetails = JSON.parse(data);
         for (let i = 0; i < onlineDriversMarker.length; i++) {
-          let markerSrc = document.querySelectorAll(`[src = "${markerUrl}"]`);
-          if (onlineDriversMarker[i] && markerSrc[i])
-            markerSrc[i].style.transform = `rotate(${driverDetails[i].Bearing}deg)`;
+          onlineDriversMarker[i]?.setMap(null);
         }
-      }, 2000);
+        onlineDriversMarker = [];
+        const infoWindow = new window.google.maps.InfoWindow();
+        // debugger;
+        for (let i = 0; i < driverDetails.length; i++) {
+          if (driverDetails[i].Latitude > 0 && (driverFilterType === "online" ? !(driverDetails[i].TripID) : (driverFilterType === "on trip" ? driverDetails[i].TripID : 1))) {
+            onlineDriversMarker[i] = new window.google.maps.Marker({
+              position: { lat: driverDetails[i].Latitude, lng: driverDetails[i].Longitude },
+              map,
+              icon: {
+                url: "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9",
+                scaledSize: new window.google.maps.Size(34, 34),
+                anchor: new window.google.maps.Point(17, 17),
+              },
+              myTitle: `${driverDetails[i].FullName}`,
+            });
+            onlineDriversMarker[i].addListener("mouseover", () => {
+              infoWindow.close();
+              infoWindow.setContent(onlineDriversMarker[i].myTitle);
+              infoWindow.open(onlineDriversMarker[i].getMap(), onlineDriversMarker[i]);
+            });
+          }
+        }
+        const markerUrl =
+          "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9";
+        setTimeout(() => {
+          for (let i = 0; i < onlineDriversMarker.length; i++) {
+            let markerSrc = document.querySelectorAll(`[src = "${markerUrl}"]`);
+            if (onlineDriversMarker[i] && markerSrc[i])
+              markerSrc[i].style.transform = `rotate(${driverDetails[i].Bearing}deg)`;
+          }
+        }, 2000);
+      }
     } else {
       if (data.Livetripdetails) {
         if (!driverFlag) {
@@ -271,7 +273,7 @@ const LiveMap = (props) => {
       var key = CryptoJS.enc.Utf8.parse(secretkey);
       var iv = CryptoJS.enc.Utf8.parse("84jfkfndl3ybdfkf");
 
-      let data = `FORMID|JSONDATA|JSONDATA|{"FORMID":"GETDRIVERLOCATIONS_PD","VehicleTypes":{"CorporateID":"${sessionStorage.getItem("dptId")}"},"Country":"INDIA","City":"AHMEDABAD","userId": "${sessionStorage.getItem("user")}"}`;
+      let data = `FORMID|JSONDATA|JSONDATA|{"FORMID":"GETDRIVERLOCATIONS_PD","VehicleTypes":{"CorporateID":"${sessionStorage.getItem("adminDepartmentID")}"},"Country":"INDIA","City":"AHMEDABAD","userId": "${sessionStorage.getItem("user")}"}`;
       var cipherText = CryptoJS.AES.encrypt(
         data,
         key,
@@ -284,7 +286,7 @@ const LiveMap = (props) => {
       // console.log(encodeURIComponent(cipherText));
       sendRequest(
         {
-          url: "/api/v1/Header/DriveronlineLocations",
+          url: "/api/v1/DriverList/DriveronlineLocations",
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -132,6 +132,7 @@ const DriverBooking = (props) => {
         }),
         redirect: "follow",
       };
+      console.log(requestOptions.body);
     } else if (isRequestSentToDriver === "yes") {
       url = "/map/service/ride/" + requestTripId + "/status";
       myHeaders = {

@@ -28,9 +28,12 @@ const Login = ({ login }) => {
     // console.log(data);
     if (!data.table1) setIsApiError(data + " Please try again later");
     else {
+      debugger;
       sessionStorage.setItem("userType", data.table1[0].userType);
       sessionStorage.setItem("user", emailInputRef.current.value);
       sessionStorage.setItem("adminName", data.table1[0].username);
+      sessionStorage.setItem("roleId", data.table1[0].roleID);
+      sessionStorage.setItem("adminDepartmentID", data.table1[0].adminDepartmentID);
       setIsCall(false);
       data.table1[0].message === "Success"
         ? login(true)

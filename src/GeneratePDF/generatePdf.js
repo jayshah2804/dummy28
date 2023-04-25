@@ -12,7 +12,7 @@ import frame2 from "../Assets/frame2.png";
 
 // define a generatePDF function that accepts a tickets argument
 let pageCount = 0;
-const heading = [
+const tripHeading = [
     "Sn.",
     "Driver Name",
     "Trip Date",
@@ -23,8 +23,21 @@ const heading = [
     "Drop Location",
     "Trip km",
 ]
+
+const shiftHeading = [
+    "Sn.",
+    "Driver Name",
+    "Shift Start Time",
+    "Shift End Time",
+    "Shift Started On",
+    "Shift Ended On"
+]
+
+const tripRows = ["DriverName", "TripDate", "StartTime", "EndTime", "RiderName", "ActualPickupName", "ActualDropOffName", "TripDistance"];
+const shiftRows = ["DriverName", "StartTime", "EndTime", "ShiftStartedOn", "ShiftEndedOn"];
+
 let months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount, kmCount, cpLogo, cpAddress, addressWidth) => {
+const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount, kmCount, cpLogo, cpAddress, addressWidth, isShift) => {
 
     const opt = { orientation: "portrait", unit: "px", compressPdf: true };
     const doc = new jsPDF(opt);
@@ -36,25 +49,36 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     //         if(heading[i] !== "Riders") tableColumn.push(heading[i]);
     //     }
     // }
-    tableColumn = heading;
+    tableColumn = isShift == "1" ? shiftHeading : tripHeading;
     // define an empty array of rows
     const tableRows = [];
 
     // for each ticket pass all its data into an array
     let i = 0;
-    console.log(data);
     data.forEach(ticket => {
-        const ticketData = [
-            ++i,
-            ticket.DriverName,
-            ticket.TripDate,
-            ticket.StartTime,
-            ticket.EndTime,
-            ticket.RiderName,
-            ticket.ActualPickupName ? ticket.ActualPickupName : ticket.PickupAddress,
-            ticket.ActualDropOffName ? ticket.ActualDropOffName : ticket.DropOffAddress,
-            ticket.TripDistance,
-        ];
+        let ticketData = [];
+        debugger;
+        if (isShift == "1")
+            ticketData = [
+                ++i,
+                ticket.DriverName,
+                ticket.StartTime,
+                ticket.EndTime,
+                ticket.ShiftStartedOn,
+                ticket.ShiftEndedOn
+            ];
+        else
+            ticketData = [
+                ++i,
+                ticket.DriverName,
+                ticket.TripDate,
+                ticket.StartTime,
+                ticket.EndTime,
+                ticket.RiderName,
+                ticket.ActualPickupName ? ticket.ActualPickupName : ticket.PickupAddress,
+                ticket.ActualDropOffName ? ticket.ActualDropOffName : ticket.DropOffAddress,
+                ticket.TripDistance,
+            ];
         tableRows.push(ticketData);
     });
 
@@ -63,27 +87,30 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     // doc.setFont('poppins'); // set font
     doc.setFont('openSans'); // set font
 
-    doc.setDrawColor(255, 255, 255);
-    doc.setFillColor(240, 240, 240);
-    doc.roundedRect(75, 58, 110, 40, 20, 20, "FD");
-    doc.addImage(frame2, 'png', 80, 63, 30, 30);
-    doc.setFontSize(15);
-    doc.setTextColor(34, 137, 203);
-    doc.text(`${tripsCount}`, 120, 75);
-    doc.setFontSize(11);
-    doc.setTextColor(54, 69, 79);
-    doc.text("Trips", 120, 87);
+    if (isShift != "1") {
+        doc.setDrawColor(255, 255, 255);
+        doc.setFillColor(240, 240, 240);
+        doc.roundedRect(75, 58, 110, 40, 20, 20, "FD");
+        doc.addImage(frame2, 'png', 80, 63, 30, 30);
+        doc.setFontSize(15);
 
-    doc.setDrawColor(255, 255, 255);
-    doc.setFillColor(240, 240, 240);
-    doc.roundedRect(250, 58, 110, 40, 20, 20, "FD");
-    doc.addImage(frame1, 'png', 255, 63, 30, 30);
-    doc.setFontSize(15);
-    doc.setTextColor(34, 137, 203);
-    doc.text(`${kmCount}`, 295, 75);
-    doc.setFontSize(11);
-    doc.setTextColor(54, 69, 79);
-    doc.text("Kilometers", 295, 87);
+        doc.setTextColor(34, 137, 203);
+        doc.text(`${tripsCount}`, 120, 75);
+        doc.setFontSize(11);
+        doc.setTextColor(54, 69, 79);
+        doc.text("Trips", 120, 87);
+
+        doc.setDrawColor(255, 255, 255);
+        doc.setFillColor(240, 240, 240);
+        doc.roundedRect(250, 58, 110, 40, 20, 20, "FD");
+        doc.addImage(frame1, 'png', 255, 63, 30, 30);
+        doc.setFontSize(15);
+        doc.setTextColor(34, 137, 203);
+        doc.text(`${kmCount}`, 295, 75);
+        doc.setFontSize(11);
+        doc.setTextColor(54, 69, 79);
+        doc.text("Kilometers", 295, 87);
+    }
 
     doc.setTextColor(0);
     doc.setFontSize(10);
@@ -92,12 +119,12 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
             function (data) {
                 doc.setFont('openSans'); // set font
                 doc.setFontSize(8);
-                doc.text("Trips Statement " + (riderName ? `of rider ${riderName}` : "") +
+                doc.text(`${isShift ? "Shifts Statement" : "Trips Statement"}` + (riderName ? `of rider ${riderName}` : "") +
                     (driverName ? ` from driver ${driverName}` : "") +
                     (startDate ?
                         ` from ${startDate.split("-")[2] + " " + months[+startDate.split("-")[1] - 1] + " " + startDate.split("-")[0]} to ${endDate.split("-")[2] + " " + months[+endDate.split("-")[1] - 1] + " " + endDate.split("-")[0]}` :
                         ` till ${new Date().getDate() + " " + months[new Date().getMonth()] + " " + new Date().getFullYear()}`),
-                    30, pageCount === 0 ? 115 : 65);
+                    30, isShift != "1" ? (pageCount === 0 ? 115 : 65) : (75));
                 doc.addImage(cpLogo, 'png', 190, 10, 70, 32);
                 doc.setFontSize(6);
                 doc.setTextColor(54, 69, 79);
@@ -116,7 +143,7 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
                 doc.line(332.5, 598, 440, 598);
                 doc.setFontSize(8);
                 doc.text("Page No. " + ++pageCount, 403, 608);
-            }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, startY: 120, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
+            }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, startY: isShift == "1" ? 80 : 120, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
     });
     const date = Date().split(" ");
     // we use a date string to generate our filename.

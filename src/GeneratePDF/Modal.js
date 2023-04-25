@@ -48,22 +48,24 @@ const Modal = (props) => {
 
   const authenticateUser = (data) => {
     if (isGeneratePdfClicked) {
-      if (data.TripdetailList) {
+      debugger;
+      if (data?.TripdetailList || data?.DriverShiftList) {
         let totalKm = 0;
-        for (let i = 0; i < data.TripdetailList.length; i++) {
+        for (let i = 0; i < data?.TripdetailList?.length; i++) {
           totalKm += +data.TripdetailList[i].TripDistance;
         }
         generatePDF(
           startDateRef.current.value,
           endDateRef.current.value,
-          data.TripdetailList,
+          props.isShift == "1" ? data.DriverShiftList :data.TripdetailList,
           selectedRiderData.name,
           selectedDriverData.name,
-          data.TripdetailList.length,
+          data.TripdetailList?.length,
           totalKm.toFixed(2),
           JSON.parse(data.CorporateLogo)[0].Image,
           document.getElementById("cpAddress").innerText,
-          document.getElementById("cpAddress").clientWidth
+          document.getElementById("cpAddress").clientWidth,
+          props.isShift
         );
       } else {
         setGeneratePdfError(true);
@@ -124,29 +126,46 @@ const Modal = (props) => {
         : "";
       sendRequest(
         {
-          url: "/api/v1/Report/ShuttleTripReport",
+          url: props.isShift != "1" ? "/api/v1/Report/ShuttleTripReport" : "/api/v1/DriverShift/DriverShiftDetailsReport",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: {
-            emailID: "jayshah9791@gmail.com",
+          body: props.isShift != "1" ? {
+            emailID: sessionStorage.getItem("user"),
             driverEmailID: selectedDriverData.email,
             fromDate: startDate ? startDate : "2018/01/01",
             toDate: endDate
               ? endDate
               : new Date()
-                  .getFullYear()
-                  .toString()
-                  .concat(
-                    "-",
-                    +new Date().getMonth() + 1,
-                    "-",
-                    new Date().getDate()
-                  ),
+                .getFullYear()
+                .toString()
+                .concat(
+                  "-",
+                  +new Date().getMonth() + 1,
+                  "-",
+                  new Date().getDate()
+                ),
             riderMobileNumber: selectedRiderData.number,
             corporateID: sessionStorage.getItem("corpId"),
             isPrivateTrip: props.isPrivateDriver ? "1" : "0",
+          } : {
+            emailID: sessionStorage.getItem("user"),
+            driverEmailID: selectedDriverData.email,
+            roleID: "1",
+            corporateID: sessionStorage.getItem("adminDepartmentID"),
+            startDate: startDate ? startDate : "2018/01/01",
+            endDate: endDate
+              ? endDate
+              : new Date()
+                .getFullYear()
+                .toString()
+                .concat(
+                  "-",
+                  +new Date().getMonth() + 1,
+                  "-",
+                  new Date().getDate()
+                )
           },
         },
         authenticateUser
@@ -245,31 +264,33 @@ const Modal = (props) => {
           <label htmlFor="startDate">End Date: </label>
           <input type="date" ref={endDateRef} id="endDate" />
           <br />
-          <div style={{ position: "relative" }}>
-            <label htmlFor="searchRider">Rider: </label>
-            <input
-              type="text"
-              id="searchRider"
-              onChange={riderSearchHandler}
-              ref={riderInputSearchRef}
-            />
-            {searchedRiderData && (
-              <div className="searchedRiders">
-                {searchedRiderData.map((rider) => (
-                  <p
-                    onClick={(e) => {
-                      riderInputSearchRef.current.value = e.target.innerText;
-                      selectedRiderData.name = rider.name;
-                      selectedRiderData.number = rider.number;
-                      setSearchedRiderData([]);
-                    }}
-                  >
-                    {rider.name + " ( " + rider.number + " )"}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
+          {props.isShift != "1" &&
+            <div style={{ position: "relative" }}>
+              <label htmlFor="searchRider">Rider: </label>
+              <input
+                type="text"
+                id="searchRider"
+                onChange={riderSearchHandler}
+                ref={riderInputSearchRef}
+              />
+              {searchedRiderData && (
+                <div className="searchedRiders">
+                  {searchedRiderData.map((rider) => (
+                    <p
+                      onClick={(e) => {
+                        riderInputSearchRef.current.value = e.target.innerText;
+                        selectedRiderData.name = rider.name;
+                        selectedRiderData.number = rider.number;
+                        setSearchedRiderData([]);
+                      }}
+                    >
+                      {rider.name + " ( " + rider.number + " )"}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          }
           {/* <br /> */}
           <label htmlFor="searchDriver">Driver: </label>
           <input

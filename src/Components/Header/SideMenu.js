@@ -35,8 +35,6 @@ const SideMenu = (props) => {
             });
           prev_corp = data.MenuList[i].CorporateName;
           if (data.MenuList[i].DepartMentName) {
-            if(data.MenuList[i].DepartMentName.toLowerCase().includes("admin"))
-              sessionStorage.setItem("dptId", data.MenuList[i].DepartmentID);
             sideMenu.push({
               main: data.MenuList[i].DepartMentName,
               deptId: data.MenuList[i].DepartmentID,
@@ -55,7 +53,7 @@ const SideMenu = (props) => {
       }
       sideMenu.push({
         main: "Private Driver",
-        sub: ["Trips", "Live Map"],
+        sub: ["Shifts","Create-Shift", "Trips", "Live Map"],
       });
       sideMenu.push(
         {

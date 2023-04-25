@@ -66,6 +66,14 @@ const SideMenuData = ({ main, corpId, sub, deptId, myActiveMenu, sideMenuClose }
         sideMenuClose(false);
         history.push("/privatedrive/" + e.target.innerText.toLowerCase().replaceAll(" ", ""));
       }
+      else if (e.target.innerText === "Create-Shift") {
+        sideMenuClose(false);
+        history.push("/privatedrive/shift-creation");
+      }
+      else if (e.target.innerText === "Shifts") {
+        sideMenuClose(false);
+        history.push("/privatedrive/shifts");
+      }
     }
     if (e.target.innerText === "Admins") {
       sideMenuClose(false);

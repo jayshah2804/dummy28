@@ -20,6 +20,8 @@ import PrivateTrips from "./Components/PrivateDriver/PrivateTrips";
 import LiveMap from "./Components/PrivateDriver/LiveMap";
 import DriverData from "./Components/PrivateDriver/DriverData";
 import ChatBot from "./Components/ChatBot/ChatBot";
+import ShiftCreation from "./Components/PrivateDriver/Create Shift/ShiftCreation";
+import Shifts from "./Components/PrivateDriver/Shifts/Shifts";
 
 let flag = true;
 let prevURL = "";
@@ -195,6 +197,12 @@ function App() {
               </Route>
               <Route path="/privatedrive/livemap">
                 <DriverData />
+              </Route>
+              <Route path="/privatedrive/shift-creation">
+                <ShiftCreation />
+              </Route>
+              <Route path="/privatedrive/shifts">
+                <Shifts />
               </Route>
               <Route path="/edit">
                 <AddDepartment />
