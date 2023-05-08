@@ -70,14 +70,17 @@ function Shifts(props) {
                     car_info:
                         data.DriverShiftList[i].Model +
                         "," +
-                        data.DriverShiftList[i].VehicaleNumber,
-                    // shift_id: data.DriverShiftList[i].DriverTripID,
+                        data.DriverShiftList[i].Color,
+                    shift_id: data.DriverShiftList[i].ShiftID,
                     // shift_date: data.DriverShiftList[i].StartTime.split("T")[0],
                     shift_startTime: data.DriverShiftList[i].StartTime.replace("T", " "),
                     shift_endTime: data.DriverShiftList[i].EndTime.replace("T", " "),
                     shift_startedOn: data.DriverShiftList[i].ShiftStartedOn?.replace("T", " "),
                     shift_endedOn: data.DriverShiftList[i].ShiftEndedOn?.replace("T", " "),
+                    reporting_location: data.DriverShiftList[i].ReportingLocaiton,
+                    reporting_latLng: data.DriverShiftList[i].ReportingLL,
                     status: data.DriverShiftList[i].Status,
+                    corporate: data.DriverShiftList[i].CorporateName
                 });
             }
         }
@@ -103,6 +106,7 @@ function Shifts(props) {
                         corporateID: sessionStorage.getItem("adminDepartmentID"),
                         startDate: startDate,
                         endDate: endDate,
+                        shiftID: "",
                     },
                 },
                 authenticateUser
@@ -167,7 +171,7 @@ function Shifts(props) {
         if (startDateRef.current.value && endDateRef.current.value) {
             startDate = startDateRef.current.value;
             endDate = endDateRef.current.value;
-            document.getElementById(prev_id).classList.remove("selected");
+            document.getElementById(prev_id)?.classList.remove("selected");
             prev_id = null;
             setIsDataFiltered(true);
             setCurrentPage(1);

@@ -49,7 +49,7 @@ let divFlag = 0;
 let driverList = [];
 let initial;
 
-const Main = () => {
+const Main = (props) => {
   // const [options, setOptions] = useState(initial);
   const [isRender, setIsRender] = useState();
   const [listData, setListData] = useState({});
@@ -77,12 +77,13 @@ const Main = () => {
     initial = Math.round(new Date().getTime() / 1000);
     let interval = setInterval(() => {
       let current = Math.round(new Date().getTime() / 1000);
-      // console.log(current - initial);
       if (current - initial > 1800) {
         clearInterval(interval);
         window.removeEventListener("mousemove", clearSessionTimeout);
         sessionStorage.setItem("login", false);
+        sessionStorage.setItem("splashFlag", 0);
         history.push("/");
+        props.setIsLoggedIn(false);
         setTimeout(() => {
           alert("Your session has been expired");
         }, 1000);
@@ -95,12 +96,13 @@ const Main = () => {
   }
 
   setTimeout(() => {
-    document.getElementById("splash").style.display = "none";
-    sessionStorage.setItem("splashFlag", "1");
+    if (document.getElementById("splash")) {
+      document.getElementById("splash").style.display = "none";
+      sessionStorage.setItem("splashFlag", "1");
+    }
   }, 2000);
 
   const authenticateUser = (data) => {
-    console.log(data);
     if (data === "Request failed!") {
       setIsApiError("No data available");
     } else {

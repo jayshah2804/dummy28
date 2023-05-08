@@ -27,10 +27,11 @@ const tripHeading = [
 const shiftHeading = [
     "Sn.",
     "Driver Name",
-    "Shift Start Time",
-    "Shift End Time",
-    "Shift Started On",
-    "Shift Ended On"
+    "Scheduled Time",
+    "Actual Time",
+    "Total km",
+    // "Shift Started On",
+    // "Shift Ended On"
 ]
 
 const tripRows = ["DriverName", "TripDate", "StartTime", "EndTime", "RiderName", "ActualPickupName", "ActualDropOffName", "TripDistance"];
@@ -57,15 +58,14 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     let i = 0;
     data.forEach(ticket => {
         let ticketData = [];
-        debugger;
         if (isShift == "1")
             ticketData = [
                 ++i,
                 ticket.DriverName,
-                ticket.StartTime,
-                ticket.EndTime,
-                ticket.ShiftStartedOn,
-                ticket.ShiftEndedOn
+                ticket.StartTime + " to\n" + ticket.EndTime,
+                // ticket.EndTime,
+                (!ticket.ShiftStartedOn ? "-" : ticket.ShiftStartedOn + " to\n" + (ticket.ShiftEndedOn ? ticket.ShiftEndedOn : "-")),
+                // ticket.ShiftEndedOn ? ticket.ShiftEndedOn : "-"
             ];
         else
             ticketData = [
@@ -149,7 +149,7 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     // we use a date string to generate our filename.
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
     var offsetY = 4.797777777777778; //var offsetY is for spacing
-    var lineHeight = 6.49111111111111
+    var lineHeight = 6.49111111111111;
     // var img = new Image(); //this mount a variable to img
     // img.src = sign //asign the src to the img variable
     // doc.setFontSize(10);

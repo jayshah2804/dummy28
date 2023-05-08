@@ -14,7 +14,6 @@ const DriverData = (props) => {
   }
 
   const authenticateUser = (data) => {
-    console.log(data);
     let collectedDriverData = [];
     if (data.RidersList?.length > 0) {
       rider_data = data.RidersList;

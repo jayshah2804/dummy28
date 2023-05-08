@@ -24,8 +24,8 @@ const Nav = (props) => {
   const [isResponse, setIsResponse] = useState(false);
 
   const authenticateUser = (data) => {
-    console.log(data.AdminImage);
-    setAdminData(data.AdminImage[0]);
+    if (data?.AdminImage[0])
+      setAdminData(data.AdminImage[0]);
   };
 
   const { isLoading, sendRequest } = useHttp();
@@ -61,7 +61,7 @@ const Nav = (props) => {
     setIsAdminPhotoClicked(false);
   }
   setTimeout(() => {
-    document.getElementById("a").addEventListener("click", () => {
+    document.getElementById("a")?.addEventListener("click", () => {
       document.body.style.overflow = "hidden";
     })
   })
@@ -73,7 +73,7 @@ const Nav = (props) => {
           <CgMenuMotion className={classes.menuIcon}
             onMouseEnter={sideMenuClickHandler}
           />
-          <img src={littleLogo} alt="" className={classes.littleLogo} style={{cursor: "pointer"}} onClick={() => history.push("/dashboard")} />
+          <img src={littleLogo} alt="" className={classes.littleLogo} style={{ cursor: "pointer" }} onClick={() => history.push("/dashboard")} />
         </div>
         <div className={classes.orgDetails}>
           {sessionStorage.getItem("userType") !== "AccountManager" &&

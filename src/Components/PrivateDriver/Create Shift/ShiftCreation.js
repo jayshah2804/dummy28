@@ -11,6 +11,7 @@ import ShiftMap from './ShiftMap';
 import loadingGif from "../../../Assets/loading-gif.gif";
 import Message from "../../../Modal/Message";
 import { AiOutlineDelete } from "react-icons/ai";
+import { useLocation } from 'react-router-dom';
 
 let corporates;
 let drivers;
@@ -19,13 +20,17 @@ let selectedDriver = {};
 var autocomplete = "";
 let shiftData = [];
 let marker;
+let map;
 let errorFileds = {
     coprorateNameError: "",
     departmentNameError: "",
     driverNameError: "",
     roMobileError: "",
     rpLocationError: "",
+    shiftTimingsError: ""
 }
+let shiftId = "";
+let latLng = "";
 
 const ShiftCreation = () => {
     const corporateNameRef = useRef();
@@ -35,27 +40,90 @@ const ShiftCreation = () => {
     const rpLocationInputRef = useRef();
     const [filteredCorporates, setIsFilteredCorporates] = useState([]);
     const [filteredDrivers, setIsFilteredDrivers] = useState([]);
-    const [isGetDriverData, setIsGetDriverData] = useState(sessionStorage.getItem("roleId") === "1" ? false : true);
+    // const [isGetDriverData, setIsGetDriverData] = useState(sessionStorage.getItem("roleId") === "1" ? false : true);
+    const [isGetDriverData, setIsGetDriverData] = useState(true);
     const [isNextClicked, setIsNextClicked] = useState(false);
     const [dateValues, setDateValues] = useState([]);
     const [shiftTimings, setShiftTimings] = useState([]);
     const [isShiftSaveClicked, setIsShiftSaveClicked] = useState(false);
     const [isShiftCreationSuccess, setIsShiftCreationSuccess] = useState(false);
+    const [isShiftDataCollected, setIsShiftDataCollected] = useState(false);
     const [formError, setFormError] = useState(errorFileds);
     const shiftStartTimeInputRef = useRef();
     const shiftEndTimeInputRef = useRef();
 
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    shiftId = queryParams.get("shiftId");
+
+    const getShiftDetails = (data) => {
+        // console.log(data.DriverShiftList[0]);
+        if (data.DriverShiftList) {
+            if (data.DriverShiftList[0].MobileNumber.length > 10)
+                reportingOfficerMobileInputRef.current.value = data.DriverShiftList[0].MobileNumber.slice(2);
+            else reportingOfficerMobileInputRef.current.value = data.DriverShiftList[0].MobileNumber;
+            rpLocationInputRef.current.value = data.DriverShiftList[0].ReportingLocaiton;
+            selectedDriver.name = data.DriverShiftList[0].DriverName;
+            selectedDriver.email = data.DriverShiftList[0].DriverEmailID;
+            driverNameRef.current.value = selectedDriver.name;
+            latLng = { lat: +data.DriverShiftList[0].ReportingLL.split(",")[0], lng: +data.DriverShiftList[0].ReportingLL.split(",")[1] }
+            // document.getElementById("shiftNext").click();
+            // debugger;
+            map.setCenter(latLng);
+            map?.setZoom(18);
+            marker.setVisible(true);
+            marker?.setPosition(latLng);
+            let a = [{}];
+            let startDate = data.DriverShiftList[0].StartTime.split(" ")[0];
+            let endDate = data.DriverShiftList[0].EndTime.split(" ")[0];
+            a[0].startDate = startDate.replace(/(\d\d)\-(\d\d)\-(\d{4})/, "$3-$1-$2");
+            a[0].startTime = data.DriverShiftList[0].StartTime.split(" ")[1];
+            a[0].endDate = endDate.replace(/(\d\d)\-(\d\d)\-(\d{4})/, "$3-$1-$2");
+            a[0].endTime = data.DriverShiftList[0].EndTime.split(" ")[1];
+            setShiftTimings(a);
+        }
+    }
+
     useEffect(() => {
+        if (shiftId) {
+            rpLocationInputRef.current.value = "Location";
+            reportingOfficerMobileInputRef.current.value = "00";
+            driverNameRef.current.value = "Name";
+            sendRequest(
+                {
+                    url: "/api/v1/DriverShift/GetDriverShiftDetails",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: {
+                        emailID: sessionStorage.getItem("user"),
+                        corporateID: sessionStorage.getItem("adminDepartmentID"),
+                        startDate: "",
+                        endDate: "",
+                        shiftID: shiftId,
+                    },
+                },
+                getShiftDetails
+            );
+        }
+    }, []);
+
+    useEffect(() => {
+        // if (!isNextClicked) {
+        console.log(isNextClicked);
         const script = document.createElement("script");
         script.src =
             "https://maps.googleapis.com/maps/api/js?key=AIzaSyAq88vEj-mQ9idalgeP1IuvulowkkFA-Nk&callback=initMap&libraries=places&v=weekly";
         script.async = true;
 
         document.body.appendChild(script);
+        // }
     }, [isNextClicked]);
 
     function initMap() {
-        var map = new window.google.maps.Map(document.getElementById("shift-map"), {
+        console.log("init");
+        map = new window.google.maps.Map(document.getElementById("shift-map"), {
             center: { lat: 23.0225, lng: 72.5714 },
             zoom: 11,
             disableDefaultUI: true,
@@ -63,7 +131,7 @@ const ShiftCreation = () => {
             zoomControl: true
         });
         marker = new window.google.maps.Marker({
-            position: "",
+            position: { lat: 22.9929777, lng: 72.5013096 },
             map: map,
             animation: window.google.maps.Animation.DROP,
         });
@@ -94,7 +162,7 @@ const ShiftCreation = () => {
 
     const shiftCreationResponse = (data) => {
         // debugger;
-        console.log(data);
+        // console.log(data);
         setIsShiftCreationSuccess(data.Message.toLowerCase() === "success" ? "success" : data.SystemMessage);
         setIsShiftSaveClicked(false);
     }
@@ -119,6 +187,10 @@ const ShiftCreation = () => {
         }
         if (isShiftSaveClicked) {
             let detailsRecord = [];
+            if (shiftTimings.length === 0) {
+                setFormError(prev => ({ ...prev, shiftTimingsError: "Please select atleast one shift timing" }));
+                return;
+            }
             for (let i = 0; i < shiftTimings.length; i++) {
                 detailsRecord.push({
                     StartTime: shiftTimings[i].startDate + " " + shiftTimings[i].startTime,
@@ -138,8 +210,10 @@ const ShiftCreation = () => {
                         detailsRecord: JSON.stringify(detailsRecord),
                         driverEmailID: selectedDriver.email,
                         reportingMobileNo: reportingOfficerMobileInputRef.current.value,
-                        reportingLL: marker.getPosition().lat() + "," + marker.getPosition().lng(),
-                        reportingLocaiton: autocomplete.getPlace().name
+                        // reportingLL: shiftId ? (latLng.lat + "," + latLng.lng) : (marker.getPosition().lat() + "," + marker.getPosition().lng()),
+                        reportingLL: (marker?.getPosition()?.lat() ? marker.getPosition().lat() : latLng.lat) + "," + (marker?.getPosition()?.lng() ? marker.getPosition().lng() : latLng.lng),
+                        reportingLocaiton: rpLocationInputRef.current.value,
+                        shiftID: shiftId ? shiftId : ""
                     },
                 },
                 shiftCreationResponse
@@ -214,6 +288,7 @@ const ShiftCreation = () => {
 
     const calenderCloseHandler = () => {
         // let newDetails = structuredClone(dateValues);
+        debugger;
         for (let i = 0; i < dateValues.length; i++) {
             if (!shiftData[i]) shiftData[i] = {};
             shiftData[i].startDate = dateValues[i].year + "-" + (dateValues[i].month.toString().length === 1 ? ("0" + dateValues[i].month) : dateValues[i].month) + "-" + (dateValues[i].day.toString().length === 1 ? ("0" + dateValues[i].day) : dateValues[i].day);
@@ -236,9 +311,9 @@ const ShiftCreation = () => {
     }
 
     const shiftRowCancelHandler = (i) => {
-        shiftData.filter((val, index) => index !== i);
-        setShiftTimings(prev => prev.filter((val, index) => index !== i));
-        setDateValues(prev => prev.filter((val, index) => index !== i));
+        shiftData?.filter((val, index) => index !== i);
+        setShiftTimings(prev => prev?.filter((val, index) => index !== i));
+        setDateValues(prev => prev?.filter((val, index) => index !== i));
     }
 
     const shiftRowValueChangeHandler = (e, i) => {
@@ -252,13 +327,14 @@ const ShiftCreation = () => {
     }
 
     const addShiftDetailsClickHandler = () => {
-        // debugger;
+        debugger;
         for (let i = 0; i < shiftData.length; i++) {
             if (!shiftData[i].startDate || !shiftData[i].startTime || !shiftData[i].endDate || !shiftData[i].endTime) {
                 return;
             }
         }
         let a = structuredClone(shiftData);
+        setFormError(prev => ({ ...prev, shiftTimingsError: "" }));
         setShiftTimings(a);
     }
 
@@ -286,7 +362,19 @@ const ShiftCreation = () => {
         }
     }
 
-    const nextSlideClickHandler = () => {
+    const nextSlideClickHandler = (isNextClicked) => {
+        if (isNextClicked) {
+            setTimeout(() => {
+                // if (marker?.getPosition()?.lat())
+                //     latLng.lat = marker.getPosition().lat();
+                // if (marker?.getPosition()?.lng())
+                //     latLng.lng = marker.getPosition().lng();
+                map.setCenter(shiftId ? { lat: latLng.lat, lng: latLng.lng } : { lat: marker.getPosition().lat(), lng: marker.getPosition().lng() });
+                map?.setZoom(18);
+                marker.setVisible(true);
+                marker?.setPosition(shiftId ? { lat: latLng.lat, lng: latLng.lng } : { lat: marker.getPosition().lat(), lng: marker.getPosition().lng() });
+            }, 1000);
+        }
         if (!corporateNameRef.current.value) {
             setFormError(prev => ({ ...prev, coprorateNameError: "Invalid Corporate Name" }));
         }
@@ -302,8 +390,8 @@ const ShiftCreation = () => {
         if (!driverNameRef.current.value) {
             setFormError(prev => ({ ...prev, driverNameError: "Invalid Driver Name" }));
         }
-        if ((corporateNameRef.current.value && departmentNameRef.current.value && reportingOfficerMobileInputRef.current.value && rpLocationInputRef.current.value && driverNameRef.current.value)) {
-            setIsNextClicked(true);
+        if ((corporateNameRef.current.value && departmentNameRef.current.value && reportingOfficerMobileInputRef?.current?.value?.length === 10 && rpLocationInputRef.current.value && driverNameRef.current.value)) {
+            setIsNextClicked(prev => !prev);
         }
     }
 
@@ -313,13 +401,15 @@ const ShiftCreation = () => {
             <div className='shift-container'>
                 <div className='shift-general-details'>
                     <div style={{ display: "flex", flexDirection: "column", gap: "20px", padding: "5%" }}>
-                        <TextField className="standard-basic" error={formError.coprorateNameError ? true : false} helperText={formError.coprorateNameError} label="Corporate" variant="standard" inputRef={corporateNameRef} onChange={corporateSearchHandler} />
-                        {filteredCorporates && (
-                            <div>
-                                {filteredCorporates.map(cp => <p onClick={() => corporateSelectHandler(cp.CorporateName, cp.DepartmentName, cp.DepartmentID)}>{cp.CorporateName}</p>)}
-                            </div>
-                        )}
-                        <TextField className="standard-basic" onChange={departmentNameChangeHandler} error={formError.departmentNameError ? true : false} helperText={formError.departmentNameError} label="Department" variant="standard" inputRef={departmentNameRef} />
+                        <div style={{ position: "relative" }}>
+                            <TextField className="standard-basic" error={formError.coprorateNameError ? true : false} helperText={formError.coprorateNameError} label="Corporate" variant="standard" inputRef={corporateNameRef} onChange={corporateSearchHandler} autoComplete='off' />
+                            {filteredCorporates && (
+                                <div className='searchedDriverList'>
+                                    {filteredCorporates.map(cp => <p onClick={() => corporateSelectHandler(cp.CorporateName, cp.DepartmentName, cp.DepartmentID)}>{cp.CorporateName}</p>)}
+                                </div>
+                            )}
+                        </div>
+                        <TextField className="standard-basic" onChange={departmentNameChangeHandler} error={formError.departmentNameError ? true : false} helperText={formError.departmentNameError} label="Department" variant="standard" inputRef={departmentNameRef} autoComplete='off' />
                         <div style={{ position: "relative" }}>
                             <TextField className="standard-basic" error={formError.driverNameError ? true : false} helperText={formError.driverNameError} label="Driver Details" variant="standard" onChange={driverSearchHandler} inputRef={driverNameRef} autoComplete='off' />
                             {filteredDrivers?.length > 0 && (
@@ -328,11 +418,12 @@ const ShiftCreation = () => {
                                 </div>
                             )}
                         </div>
-                        <TextField className="standard-basic" onChange={roMobileNumberChangeHandler} error={formError.roMobileError ? true : false} helperText={formError.roMobileError} label="Reporting Officer Mobile Number" variant="standard" inputRef={reportingOfficerMobileInputRef} />
-                        <TextField className="standard-basic" onChange={rpLocationChangeHandler} error={formError.rpLocationError ? true : false} helperText={formError.rpLocationError} label="Reporting Location" id="pac-input" variant="standard" inputRef={rpLocationInputRef} />
+                        <TextField className="standard-basic" onChange={roMobileNumberChangeHandler} error={formError.roMobileError ? true : false} helperText={formError.roMobileError} label="Reporting Officer Mobile Number" variant="standard" inputRef={reportingOfficerMobileInputRef} autoComplete='off' />
+                        <TextField className="standard-basic" onChange={rpLocationChangeHandler} error={formError.rpLocationError ? true : false} helperText={formError.rpLocationError} label="Reporting Location" id="pac-input" variant="standard" inputRef={rpLocationInputRef} autoComplete='off' />
                     </div>
+                    {isNextClicked && <div style={{ position: "absolute", backgroundColor: "whitesmoke", top: "0", left: "0", width: "100%", height: "80%", opacity: "0.3", cursor: "not-allowed" }}></div>}
                     <div style={{ alignSelf: "flex-end", marginTop: "30px" }}>
-                        <button style={{ backgroundColor: "rgba(34, 137, 203, 255)", width: "80px", color: "white", border: "1px solid rgba(34, 137, 203, 255)", padding: "7px 15px", borderRadius: "10px", cursor: "pointer" }} onClick={nextSlideClickHandler}>Next</button>
+                        <button id="shiftNext" style={{ backgroundColor: "rgba(34, 137, 203, 255)", width: "80px", color: "white", border: "1px solid rgba(34, 137, 203, 255)", padding: "7px 15px", borderRadius: "10px", cursor: "pointer" }} onClick={() => nextSlideClickHandler(isNextClicked)}>{isNextClicked ? "Back" : "Next"}</button>
                     </div>
                 </div>
                 <div className="shift-timing-details">
@@ -391,6 +482,7 @@ const ShiftCreation = () => {
                                                 </React.Fragment>
                                             )}
                                         </div>
+                                        {formError.shiftTimingsError && <p style={{ color: "red", textAlign: "left", padding: "20px" }}>{"*" + formError.shiftTimingsError}</p>}
                                     </div>
                                     <button className='shiftSaveButton' onClick={() => setIsShiftSaveClicked(true)} >Save</button>
                                 </div>
@@ -399,10 +491,9 @@ const ShiftCreation = () => {
                     }
                 </div>
             </div>
-            {isLoading && isShiftSaveClicked && <img src={loadingGif} className="loading-gif" />}
-            {console.log(isShiftCreationSuccess)}
+            {isLoading && (isShiftSaveClicked || shiftId) && <img src={loadingGif} className="loading-gif" />}
             {isShiftCreationSuccess && <Message type={isShiftCreationSuccess} driveErrorMessage={isShiftCreationSuccess?.toLowerCase()?.includes("greater") ? "Shift End Time should be greater than Current Time/ Start Time" : ""} message={selectedDriver.name + "'s shift has been created Successfully"} />}
-        </div >
+        </div>
     )
 }
 

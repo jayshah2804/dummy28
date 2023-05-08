@@ -20,7 +20,6 @@ const SideMenuData = ({ main, corpId, sub, deptId, myActiveMenu, sideMenuClose }
   const mainMenuClickHandler = (e) => {
     idOfOrg = e.target.id;
     dptName = e.target.innerText;
-    console.log(dptName);
     setSubMenuIsActive((prev) => !prev);
     if (e.target.innerText === "Dashboard") {
       sideMenuClose(false);

@@ -15,10 +15,9 @@ const SideMenu = (props) => {
   const { sendRequest } = useHttp();
 
   const authenticateUser = (data) => {
-    console.log(data);
-    sessionStorage.setItem("type", data.MenuList[0].CorporateType);
-    sessionStorage.setItem("document", data.MenuList[0].IsDocument);
-    sessionStorage.setItem("cpName", data.MenuList[0].CorporateName);
+    sessionStorage.setItem("type", data?.MenuList[0].CorporateType);
+    sessionStorage.setItem("document", data?.MenuList[0].IsDocument);
+    sessionStorage.setItem("cpName", data?.MenuList[0].CorporateName);
     let sideMenu = [];
     if (data.MenuList) {
       sessionStorage.setItem("corpId", data.MenuList[0].CorporateID);
@@ -53,7 +52,7 @@ const SideMenu = (props) => {
       }
       sideMenu.push({
         main: "Private Driver",
-        sub: ["Shifts","Create-Shift", "Trips", "Live Map"],
+        sub: ["Shifts", "Create-Shift", "Trips", "Live Map"],
       });
       sideMenu.push(
         {

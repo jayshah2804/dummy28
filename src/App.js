@@ -181,7 +181,7 @@ function App() {
                 <Trips />
               </Route>
               <Route path="/dashboard">
-                <Dashboard />
+                <Dashboard setIsLoggedIn={setIsLoggedIn} />
               </Route>
               <Route path="/new-registration">
                 <NewRegistration />
