@@ -37,7 +37,7 @@ const TimingsInfo = (props) => {
         TIMINGS[obj[props.defaultShuttleTimings[i].WeekDay]] =
           props.defaultShuttleTimings[i].StartTime.split("T")[1];
       }
-      console.log(TIMINGS);
+      // console.log(TIMINGS);
       setIsTimingChange((prev) => !prev);
     }
   }, []);

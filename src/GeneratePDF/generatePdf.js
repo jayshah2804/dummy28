@@ -29,6 +29,8 @@ const shiftHeading = [
     "Driver Name",
     "Scheduled Time",
     "Actual Time",
+    "Total Time",
+    "Total Trips",
     "Total km",
     // "Shift Started On",
     // "Shift Ended On"
@@ -65,7 +67,10 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
                 ticket.StartTime + " to\n" + ticket.EndTime,
                 // ticket.EndTime,
                 (!ticket.ShiftStartedOn ? "-" : ticket.ShiftStartedOn + " to\n" + (ticket.ShiftEndedOn ? ticket.ShiftEndedOn : "-")),
-                // ticket.ShiftEndedOn ? ticket.ShiftEndedOn : "-"
+                // ticket.ShiftEndedOn ? ticket.ShiftEndedOn : "-",
+                ticket.ShiftTime + " Hrs",
+                ticket.Totaltrip,
+                ticket.TripKm
             ];
         else
             ticketData = [
@@ -159,7 +164,8 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     // doc.fromHTML(renderToString(document.getElementById("jay")), function() {
     //     doc.save("Text.pdf");
     // });
-    doc.save(`report_${sessionStorage.getItem("cpName")}.pdf`);
+    // doc.save(`report_${sessionStorage.getItem("cpName")}.pdf`);
+    doc.output('dataurlnewwindow');
 };
 
 export default generatePDF;

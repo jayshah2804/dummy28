@@ -95,7 +95,7 @@
 }
 
 .timingsInfo-container .pickuptime-input::before {
-    content: "Time";
+    /* content: "Time"; */
 }
 
 .timingsInfo-container .droptime-input::before {
