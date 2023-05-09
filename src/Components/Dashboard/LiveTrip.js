@@ -149,8 +149,7 @@ const LiveTrip = (props) => {
       // journeyStart = 0;
       // flightPlanCoordinates = [];
     }
-
-    if (!(data?.LivetripStatus?.toLowerCase() === "ended") && data?.LiveTrip) {
+    if (!(data?.LivetripStatus?.toLowerCase() === "ended") && data?.Livetrip) {
       if (startPointMarker) startPointMarker.setMap(null);
       if (endPointMarker) endPointMarker.setMap(null);
       startPointMarker = new window.google.maps.Marker({
