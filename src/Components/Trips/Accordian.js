@@ -12,12 +12,13 @@ import Loading from "../../Loading/Loading";
 const RIDER_TITLE = [
   "Rider Name",
   "Pickup Location",
-  // "Shuttle Arrival Time",
-  "Boarding Time",
-  "Boarding (Lat Lng )",
+  "Actual Pickup Location",
+  "Pickup Time",
+  // "Boarding (Lat Lng )",
   "Drop Location",
-  "Alighting Time",
-  "Aligthing (Lat Lng)",
+  "Actual Drop Location",
+  "Drop Time",
+  // "Aligthing (Lat Lng)",
 ];
 
 const RIDER_DATA = [
@@ -114,7 +115,11 @@ const Accordian = (props) => {
           "," +
           data.TripdetailList[i].DropoffLongitude,
         route_name: data.TripdetailList[i].RouteName,
-        routeType: data.TripdetailList[i].RouteType
+        routeType: data.TripdetailList[i].RouteType,
+        actual_pickup_location: data.TripdetailList[i].ActualPickupName,
+        actual_drop_location: data.TripdetailList[i].ActualDropOffName,
+        actual_pickup_latLng: data.TripdetailList[i].ActualPickupAddress,
+        actual_drop_latLng: data.TripdetailList[i].ActualDropOffLatLong
       });
     }
     rider_details = trip_rider_list;
@@ -153,7 +158,8 @@ const Accordian = (props) => {
     rider_dataFlag++;
   }, [sendRequest, isActive]);
 
-  const tableRowClickHandler = (e) => {
+  const tableRowClickHandler = (e, journeyId) => {
+    // if (parent_prev_id !== e.target.parentElement.id && !prev_active_status)
     if (parent_prev_id !== e.target.parentElement.id && !prev_active_status)
       props.formyRender(parent_prev_id);
     setIsActive((prev) => !prev);
@@ -164,14 +170,14 @@ const Accordian = (props) => {
     evenFlag++;
 
     if (evenFlag % 2 !== 0) {
-      current_journeyId = e.target.parentElement.children[1].innerText;
+      current_journeyId = journeyId;
     }
   };
 
   return (
     <React.Fragment>
       {/* {console.log(riderData)} */}
-      <tr onClick={tableRowClickHandler} id={props.id + "tr"}>
+      <tr onClick={(e) => tableRowClickHandler(e, props.journey_id)} id={props.id + "tr"}>
         <td>
           <div className={classes.driverInfo}>
             {/* <img
@@ -218,16 +224,34 @@ const Accordian = (props) => {
                       return (
                         <tr id="myHandler">
                           <td>
-                            {/* <img src={photo} alt="" /> */}
                             {data.rider_name}
                           </td>
-                          <td>{data.pickup_location} </td>
-                          {/* <td>{data.shuttle_arrival_time} </td> */}
-                          <td>{data.boarding_time} </td>
-                          <td>{data.boarding_lat_lng} </td>
-                          <td>{data.drop_location} </td>
-                          <td>{data.alighting_time} </td>
-                          <td>{data.alighting_lat_lng} </td>
+                          <td>
+                            <div className={classes.locationRow}>
+                              <span>{data.pickup_location}</span>
+                              <span style={{ fontSize: "10px", color: "grey" }} >{"( " + data.boarding_lat_lng + " )"}</span>
+                            </div>
+                          </td>
+                          <td >
+                            <div className={classes.locationRow}>
+                              <span>{data.boarding_time ? (data.actual_pickup_location) : "-"}</span>
+                              {data.boarding_time && <span style={{ fontSize: "10px", color: "grey" }} >{"( " + data.actual_pickup_latLng + " )"}</span>}
+                            </div>
+                          </td>
+                          <td>{data.boarding_time ?? "-"} </td>
+                          <td>
+                            <div className={classes.locationRow} >
+                              <span>{data.drop_location + "\n"}</span>
+                              <span style={{ fontSize: "10px", color: "grey" }} >{"( " + data.alighting_lat_lng + " )"}</span>
+                            </div>
+                          </td>
+                          <td >
+                            <div className={classes.locationRow}>
+                              <span>{data.boarding_time ? (data.actual_drop_location + "\n") : "-"}</span>
+                              {data.boarding_time && <span style={{ fontSize: "10px", color: "grey" }} >{"( " + data.actual_drop_latLng + " )"}</span>}
+                            </div>
+                          </td>
+                          <td>{data.alighting_time ?? "-"} </td>
                         </tr>
                       );
                     })}

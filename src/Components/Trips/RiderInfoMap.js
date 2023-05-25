@@ -6,6 +6,9 @@ import startPoint from "../../Assets/Pin_icon_green50.png";
 import endPoint from "../../Assets/Pin_icon50.png";
 
 let routeType = "";
+let minBounds = 1;
+let maxBounds = 500;
+let dividend = 10;
 const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
   const script = document.createElement("script");
   script.src =
@@ -26,12 +29,19 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
       fullscreenControl: true,
       zoomControl: true,
     });
-    var bounds = new window.google.maps.LatLngBounds();
-    for (let i = 0; i < driverPath.length; i = i + 10) {
-      bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
+    if (driverPath) {
+      let currentBounds = Math.ceil(driverPath.length / dividend);
+      while (!(currentBounds < maxBounds && currentBounds >= minBounds)) {
+        if (currentBounds < minBounds) currentBounds = Math.ceil(driverPath.length / (Math.ceil(dividend) / 2));
+        else if (currentBounds > maxBounds) currentBounds = Math.ceil(driverPath.length / (Math.ceil(dividend) * 2));
+      }
+      var bounds = new window.google.maps.LatLngBounds();
+      for (let i = 0; i < driverPath.length; i = i + currentBounds) {
+        bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
+      }
       bounds.extend(new window.google.maps.LatLng(driverPath[driverPath.length - 1].lat, driverPath[driverPath.length - 1].lng));
+      map.fitBounds(bounds);
     }
-    map.fitBounds(bounds);
 
     let arr = [];
 

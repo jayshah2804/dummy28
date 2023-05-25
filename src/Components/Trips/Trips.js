@@ -38,9 +38,16 @@ let prev_id = "1";
 
 let tripListFlag = 0;
 let total_trip_data = "";
+let today = new Date()
+  .getFullYear()
+  .toString()
+  .concat("-", new Date().getMonth() + 1, "-", new Date().getDate());
+let startDate = today;
+let endDate = today;
 
 function App(props) {
   const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
+  const [isDataFiltered, setIsDataFiltered] = useState(true);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   let staffMoNumber = queryParams.get('staff');
@@ -72,35 +79,34 @@ function App(props) {
     }
     total_trip_data = trip_list;
     setFilteredData(trip_list);
+    setIsDataFiltered(false);
   };
 
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
-    let date = new Date();
-    console.log(date.getMonth());
-    let today = date.getFullYear().toString().concat("-", +date.getMonth() + 1, "-", date.getDate());
-    // if (tripListFlag > 0) {
-    console.log(tripListFlag);
-    sendRequest({
-      url: "/api/v1/ShuttleTrips/GetShuttleTrips",
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: {
-        emailID: sessionStorage.getItem("user"),
-        // emailID: "nihal@little.global",
-        corporateID: id ? id : (sessionStorage.getItem("userType") === "AccountManager" ? "" : sessionStorage.getItem("corpId")),
-        departmentID: "",
-        staffMobileNumber: staffMoNumber ? staffMoNumber : "",
-        fromDate: "2018-01-01",
-        toDate: today
-      }
-    }, authenticateUser);
-    // }
-    tripListFlag++;
-  }, [sendRequest, id]);
+    if (isDataFiltered) {
+      setFilteredData([]);
+      sendRequest({
+        url: "/api/v1/ShuttleTrips/GetShuttleTrips",
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          emailID: sessionStorage.getItem("user"),
+          // emailID: "nihal@little.global",
+          corporateID: id ? id : (sessionStorage.getItem("userType") === "AccountManager" ? "" : sessionStorage.getItem("corpId")),
+          departmentID: "",
+          staffMobileNumber: staffMoNumber ? staffMoNumber : "",
+          fromDate: startDate,
+          toDate: endDate
+        }
+      }, authenticateUser);
+      // }
+    }
+    // tripListFlag++;
+  }, [sendRequest, id, isDataFiltered]);
 
 
   function formatDate(date = new Date(), format = "mm/dd/yy") {
@@ -156,47 +162,55 @@ function App(props) {
   const filterButtonClickHandler = (e) => {
     startDateRef.current.value = "";
     endDateRef.current.value = "";
-    document.getElementById(e.target.id).classList.add("selected");
-    document.getElementById(prev_id).classList.remove("selected");
+    document.getElementById(e.target.id)?.classList.add("selected");
+    document.getElementById(prev_id)?.classList.remove("selected");
     prev_id = e.target.id;
 
     setCurrentPage(1);
+    setIsDataFiltered(true);
     myClick = true;
 
     if (e.target.innerText === "Today") {
-      let todayDate = formatDate();
-      setFilteredData(total_trip_data.filter((data) => data.trip_date === todayDate));
+      startDate = new Date()
+        .getFullYear()
+        .toString()
+        .concat("-", +new Date().getMonth() + 1, "-", new Date().getDate());
+      endDate = today;
     } else if (e.target.innerText === "This Week") {
-      let todayDate = formatDate();
-      setFilteredData(
-        total_trip_data.filter(
-          (data) => differenceInDays(data.trip_date, todayDate) <= 7
-        )
-      );
+      if (new Date().getDay() === 0)
+        startDate =
+          new Date().getFullYear() +
+          "-" +
+          (new Date().getMonth() + 1) +
+          "-" +
+          (new Date().getDate() - 6);
+      else
+        startDate =
+          new Date().getFullYear() +
+          "-" +
+          (new Date().getMonth() + 1) +
+          "-" +
+          (new Date().getDate() - (new Date().getDay() - 1));
+      endDate = today;
     } else if (e.target.innerText === "This Month") {
-      let todayDate = formatDate();
-      setFilteredData(
-        total_trip_data.filter(
-          (data) => differenceInDays(data.trip_date, todayDate) <= 31
-        )
-      );
+      startDate =
+        new Date().getFullYear() +
+        "-" +
+        (new Date().getMonth() + 1) +
+        "-" +
+        "1";
+      endDate = today;
     }
-  };
+  }
 
   const dateChangeHandler = () => {
     if (startDateRef.current.value && endDateRef.current.value) {
-      let startdate = formatToMMDDYYYYfromYYYYMMDD(startDateRef.current.value);
-      let enddate = formatToMMDDYYYYfromYYYYMMDD(endDateRef.current.value);
-      startdate = new Date(startdate);
-      enddate = new Date(enddate);
-      // console.log(startdate, enddate);
-      setFilteredData(
-        total_trip_data.filter(
-          (data) =>
-            new Date(data.trip_date) > startdate &&
-            new Date(data.trip_date) < enddate
-        )
-      );
+      startDate = startDateRef.current.value;
+      endDate = endDateRef.current.value;
+      document.getElementById(prev_id)?.classList.remove("selected");
+      prev_id = null;
+      setIsDataFiltered(true);
+      setCurrentPage(1);
     }
   };
 
@@ -223,16 +237,11 @@ function App(props) {
       <div className="table-container">
         <div className="header">
           <div onClick={filterButtonClickHandler} className="filter-buttons">
-            <button
-              onClick={allDataButtonClickHandler}
-              id="1"
-              className="selected"
-            >
-              All Data
+            <button id="1" className="selected">
+              Today
             </button>
-            <button id="2">Today</button>
-            <button id="3">This Week</button>
-            <button id="4">This Month</button>
+            <button id="2">This Week</button>
+            <button id="3">This Month</button>
           </div>
           <div>
             <div onChange={dateChangeHandler} className="datepicker">
