@@ -16,6 +16,12 @@ let selectedRiderData = {
 };
 let searchedDriverEmail = "";
 let searchedRiderNumber = "";
+let reportURLs = {
+  trips: "Report/ShuttleTripReport",
+  shifts: "DriverShift/DriverShiftDetailsReport",
+  bookingRequests: "ScheduleBooking/GetBookingRequestDetailsReport",
+  scheduleTrips: "ScheduleBooking/ScheduleTripReport"
+}
 const Modal = (props) => {
   const [searchedRiderData, setSearchedRiderData] = useState([]);
   const [searchedDriverData, setSearchedDriverData] = useState([]);
@@ -49,29 +55,42 @@ const Modal = (props) => {
   const authenticateUser = (data) => {
     if (isGeneratePdfClicked) {
       debugger;
-      if (data?.TripdetailList || data?.DriverShiftList) {
+      if (data?.ReportDetails) {
         let totalKm = 0;
-        for (let i = 0; i < data?.TripdetailList?.length; i++) {
-          totalKm += +data.TripdetailList[i].TripDistance;
+        let totalTrips = 0;
+        for (let i = 0; i < data?.ReportDetails?.length; i++) {
+          totalKm += +(data.ReportDetails[i].TripDistance ?? data.ReportDetails[i].TripKm);
+          totalTrips += data.ReportDetails[i]?.Totaltrip ? data.ReportDetails[i]?.Totaltrip : 0;
+        }
+        if (!(selectedDriverData.name || selectedRiderData.name)) {
+          for (let i = 0; i < data?.AdhocDriverList?.length; i++) {
+            totalKm += +data.AdhocDriverList[i].kilometers;
+          }
         }
         generatePDF(
           startDateRef.current.value,
           endDateRef.current.value,
-          props.isShift == "1" ? data.DriverShiftList :data.TripdetailList,
+          data.ReportDetails,
           selectedRiderData.name,
           selectedDriverData.name,
-          data.TripdetailList?.length,
+          totalTrips ? totalTrips : data.ReportDetails?.length,
           totalKm.toFixed(2),
           JSON.parse(data.CorporateLogo)[0].Image,
           document.getElementById("cpAddress").innerText,
           document.getElementById("cpAddress").clientWidth,
-          props.isShift
+          props.type === "bookingRequests",
+          props.type,
+          data.AdhocDriverList
         );
       } else {
         setGeneratePdfError(true);
         setTimeout(() => setGeneratePdfError(false), 4000);
       }
       setIsGeneratePdfClicked(false);
+      // selectedRiderData.number = "";
+      // selectedRiderData.name = "";
+      // selectedDriverData.name = "";
+      // selectedDriverData.email = "";
     } else {
       drivers = [];
       riders = [];
@@ -126,46 +145,31 @@ const Modal = (props) => {
         : "";
       sendRequest(
         {
-          url: props.isShift != "1" ? "/api/v1/Report/ShuttleTripReport" : "/api/v1/DriverShift/DriverShiftDetailsReport",
+          url: "/api/v1/" + reportURLs[props.type],
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: props.isShift != "1" ? {
+          body: {
             emailID: sessionStorage.getItem("user"),
             driverEmailID: selectedDriverData.email,
-            fromDate: startDate ? startDate : "2018/01/01",
-            toDate: endDate
-              ? endDate
-              : new Date()
-                .getFullYear()
-                .toString()
-                .concat(
-                  "-",
-                  +new Date().getMonth() + 1,
-                  "-",
-                  new Date().getDate()
-                ),
             riderMobileNumber: selectedRiderData.number,
-            corporateID: sessionStorage.getItem("corpId"),
+            corporateID: props.type === "trips" ? sessionStorage.getItem("corpId") : sessionStorage.getItem("adminDepartmentID"),
             isPrivateTrip: props.isPrivateDriver ? "1" : "0",
-          } : {
-            emailID: sessionStorage.getItem("user"),
-            driverEmailID: selectedDriverData.email,
-            roleID: "1",
-            corporateID: sessionStorage.getItem("adminDepartmentID"),
-            startDate: startDate ? startDate : "2018/01/01",
-            endDate: endDate
-              ? endDate
-              : new Date()
-                .getFullYear()
-                .toString()
-                .concat(
-                  "-",
-                  +new Date().getMonth() + 1,
-                  "-",
-                  new Date().getDate()
-                )
+            startDate: startDate,
+            endDate: endDate,
+            // startDate: startDate ? startDate : "2018/01/01",
+            // endDate: endDate
+            //   ? endDate
+            //   : new Date()
+            //     .getFullYear()
+            //     .toString()
+            //     .concat(
+            //       "-",
+            //       +new Date().getMonth() + 1,
+            //       "-",
+            //       new Date().getDate()
+            //     )
           },
         },
         authenticateUser

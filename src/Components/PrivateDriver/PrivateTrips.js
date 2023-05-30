@@ -137,8 +137,8 @@ function PrivateTrips(props) {
     (myClick
       ? currentPage * recordsPerPage - (filteredData.length % recordsPerPage)
       : currentPage * recordsPerPage +
-        recordsPerPage -
-        (filteredData.length % recordsPerPage)) > filteredData.length
+      recordsPerPage -
+      (filteredData.length % recordsPerPage)) > filteredData.length
   )
     toRecords = filteredData.length;
   else toRecords = currentPage * recordsPerPage;
@@ -300,6 +300,7 @@ function PrivateTrips(props) {
         <Modal
           setIsExportButtonClicked={setIsExportButtonClicked}
           isPrivateDriver="1"
+          type="trips"
         />
       )}
       {isExportButtonClicked && <div className="add-route-fullcontainer"></div>}

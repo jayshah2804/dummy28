@@ -12,7 +12,7 @@ import frame2 from "../Assets/frame2.png";
 
 // define a generatePDF function that accepts a tickets argument
 let pageCount = 0;
-const tripHeading = [
+const tripsHeading = [
     "Sn.",
     "Driver Name",
     "Trip Date",
@@ -22,9 +22,20 @@ const tripHeading = [
     "Pickup Location",
     "Drop Location",
     "Trip km",
+];
+const scheduleTripsHeading = [
+    "Sn.",
+    "Driver Name",
+    "Trip Date",
+    "Start Time",
+    "End Time",
+    "Guest Name",
+    "Pickup Location",
+    "Drop Location",
+    "Trip km",
 ]
 
-const shiftHeading = [
+const shiftsHeading = [
     "Sn.",
     "Driver Name",
     "Scheduled Time",
@@ -32,47 +43,68 @@ const shiftHeading = [
     "Total Time",
     "Total Trips",
     "Total km",
-    // "Shift Started On",
-    // "Shift Ended On"
-]
+];
 
-const tripRows = ["DriverName", "TripDate", "StartTime", "EndTime", "RiderName", "ActualPickupName", "ActualDropOffName", "TripDistance"];
-const shiftRows = ["DriverName", "StartTime", "EndTime", "ShiftStartedOn", "ShiftEndedOn"];
+const bookingRequestsHeading = [
+    "Sn.",
+    "Guest Name",
+    "Pickup Date",
+    "Drop Date",
+    "Vehicle Type",
+    "Driver Name",
+    "Pickup Location",
+    "Drop Location",
+];
+
+const adHocHeading = [
+    "Sn.",
+    "Driver Name",
+    // "Trip Date",
+    "Start Date Time",
+    "End Date Time",
+    "km",
+];
 
 let months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount, kmCount, cpLogo, cpAddress, addressWidth, isShift) => {
-
+const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount, kmCount, cpLogo, cpAddress, addressWidth, isSchedueBooking, type, adHocDriverList) => {
+    debugger;
     const opt = { orientation: "portrait", unit: "px", compressPdf: true };
     const doc = new jsPDF(opt);
     let current_date_time = new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear() + " | " + (new Date().getHours() > 12 ? new Date().getHours() - 12 + ":" + (new Date().getMinutes().toString().length === 1 ? "0" + new Date().getMinutes() : new Date().getMinutes()) + " pm" : new Date().getHours() + ":" + (new Date().getMinutes().toString().length === 1 ? "0" + new Date().getMinutes() : new Date().getMinutes()) + " am");
     pageCount = 0;
     let tableColumn = [];
-    // if (riderName) {
-    //     for (let i = 0; i < heading.length; i++) {
-    //         if(heading[i] !== "Riders") tableColumn.push(heading[i]);
-    //     }
-    // }
-    tableColumn = isShift == "1" ? shiftHeading : tripHeading;
+
+    tableColumn = eval(type + "Heading");
     // define an empty array of rows
     const tableRows = [];
 
     // for each ticket pass all its data into an array
-    let i = 0;
+    let i = 0, j = 0;
     data.forEach(ticket => {
         let ticketData = [];
-        if (isShift == "1")
+        if ((type + "Heading") === "shiftsHeading")
             ticketData = [
                 ++i,
                 ticket.DriverName,
                 ticket.StartTime + " to\n" + ticket.EndTime,
-                // ticket.EndTime,
                 (!ticket.ShiftStartedOn ? "-" : ticket.ShiftStartedOn + " to\n" + (ticket.ShiftEndedOn ? ticket.ShiftEndedOn : "-")),
-                // ticket.ShiftEndedOn ? ticket.ShiftEndedOn : "-",
-                ticket.ShiftTime + " Hrs",
+                ticket.ShiftTime ? ticket.ShiftTime + " Hrs" : "-",
                 ticket.Totaltrip,
-                ticket.TripKm
+                ticket.TripKm ?? "-"
             ];
-        else
+        else if ((type + "Heading") === "scheduleTripsHeading")
+            ticketData = [
+                ++i,
+                ticket.DriverName,
+                ticket.StartedOnDate,
+                ticket.StartedOnTime,
+                ticket.EndedOnTime,
+                ticket.GuestName,
+                ticket.ActualPickupName ? ticket.ActualPickupName : ticket.PickupAddress,
+                ticket.ActualDropOffName ? ticket.ActualDropOffName : ticket.DropOffAddress,
+                ticket.TripDistance,
+            ];
+        else if ((type + "Heading") === "tripsHeading")
             ticketData = [
                 ++i,
                 ticket.DriverName,
@@ -83,16 +115,41 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
                 ticket.ActualPickupName ? ticket.ActualPickupName : ticket.PickupAddress,
                 ticket.ActualDropOffName ? ticket.ActualDropOffName : ticket.DropOffAddress,
                 ticket.TripDistance,
+            ]
+        else if ((type + "Heading") === "bookingRequestsHeading")
+            ticketData = [
+                ++i,
+                ticket.GuestName,
+                ticket.PickupDateTime,
+                ticket.DropOffDateTime,
+                ticket.VehicleType,
+                ticket.DriverName ? ticket.DriverName : "-",
+                ticket.PickupAddress,
+                ticket.DropoffAddress,
             ];
         tableRows.push(ticketData);
     });
+    let adHocRows = [];
+    adHocDriverList?.forEach(ticket => {
+        let ticketData = [];
+        ticketData = [
+            ++j,
+            ticket.DriverName,
+            // ticket.TripDate,
+            ticket.StartTime.replace("T", " "),
+            ticket.EndTime.replace("T", " "),
+            ticket.kilometers,
+        ];
+        adHocRows.push(ticketData);
+    }
+    )
 
     doc.addFont(openSans, 'openSans', 'normal');
 
     // doc.setFont('poppins'); // set font
     doc.setFont('openSans'); // set font
 
-    if (isShift != "1") {
+    if (isSchedueBooking != "1") {
         doc.setDrawColor(255, 255, 255);
         doc.setFillColor(240, 240, 240);
         doc.roundedRect(75, 58, 110, 40, 20, 20, "FD");
@@ -124,12 +181,12 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
             function (data) {
                 doc.setFont('openSans'); // set font
                 doc.setFontSize(8);
-                doc.text(`${isShift ? "Shifts Statement" : "Trips Statement"}` + (riderName ? `of rider ${riderName}` : "") +
+                doc.text(`${isSchedueBooking ? "Shifts Statement" : "Trips Statement"}` + (riderName ? `of rider ${riderName}` : "") +
                     (driverName ? ` from driver ${driverName}` : "") +
                     (startDate ?
                         ` from ${startDate.split("-")[2] + " " + months[+startDate.split("-")[1] - 1] + " " + startDate.split("-")[0]} to ${endDate.split("-")[2] + " " + months[+endDate.split("-")[1] - 1] + " " + endDate.split("-")[0]}` :
                         ` till ${new Date().getDate() + " " + months[new Date().getMonth()] + " " + new Date().getFullYear()}`),
-                    30, isShift != "1" ? (pageCount === 0 ? 115 : 65) : (75));
+                    30, isSchedueBooking != "1" ? (pageCount === 0 ? 115 : 65) : (75));
                 doc.addImage(cpLogo, 'png', 190, 10, 70, 32);
                 doc.setFontSize(6);
                 doc.setTextColor(54, 69, 79);
@@ -148,8 +205,15 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
                 doc.line(332.5, 598, 440, 598);
                 doc.setFontSize(8);
                 doc.text("Page No. " + ++pageCount, 403, 608);
-            }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, startY: isShift == "1" ? 80 : 120, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
+            }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, startY: isSchedueBooking == "1" ? 80 : 120, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
     });
+    if (adHocRows.length > 0 && !driverName && !riderName)
+        doc.autoTable(adHocHeading, adHocRows, {
+            didDrawPage:
+                function (data) {
+                    doc.text("Ad Hoc Driver Data", 30, doc.autoTable.previous.finalY + 20);
+                }, styles: { fontSize: 7, font: "openSans" }, startY: doc.autoTable.previous.finalY + 30, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
+        });
     const date = Date().split(" ");
     // we use a date string to generate our filename.
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];

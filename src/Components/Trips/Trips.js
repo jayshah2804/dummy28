@@ -293,7 +293,7 @@ function App(props) {
                     /> */}
         </div>
       </div>
-      {isExportButtonClicked && <Modal setIsExportButtonClicked={setIsExportButtonClicked} />}
+      {isExportButtonClicked && <Modal setIsExportButtonClicked={setIsExportButtonClicked} type="trips" />}
       {isExportButtonClicked && <div className="add-route-fullcontainer"></div>}
     </div>
   );

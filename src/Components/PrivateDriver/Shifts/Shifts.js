@@ -277,6 +277,7 @@ function Shifts(props) {
                     setIsExportButtonClicked={setIsExportButtonClicked}
                     isPrivateDriver="1"
                     isShift = "1"
+                    type="shifts"
                 />
             )}
             {isExportButtonClicked && <div className="add-route-fullcontainer"></div>}

@@ -83,7 +83,7 @@
   margin-bottom: 25px;
 }
 
-textarea {
+.textarea {
   resize: none;
   border: none;
   outline: none;
@@ -110,7 +110,7 @@ textarea {
     width: 320px;
   }
 
-  textarea {
+  .textarea {
     width: 320px;
   }
 

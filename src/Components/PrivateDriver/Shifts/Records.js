@@ -34,7 +34,7 @@ const Records = ({ isLoading, data, headers }) => {
                                 <td>{item.shift_startedOn ? item.shift_startedOn : "-"}</td>
                                 <td>{item.shift_endedOn ? item.shift_endedOn : "-"}</td>
                                 {/* <td>{item.status ? item.status : "-"}</td> */}
-                                <td>{new Date() > new Date(item.shift_startTime) ?
+                                <td>{((new Date() > new Date(item.shift_startTime)) || item.shift_endedOn) ?
                                     (item.status ? item.status : "Expired") :
                                     <img onClick={() => history.push("/privatedrive/shift-creation?shiftId=" + item.shift_id)} style={{ width: "17px", height: "17px", cursor: "pointer" }} src={editImage} alt="edit" title="Click to edit details" />
                                 }

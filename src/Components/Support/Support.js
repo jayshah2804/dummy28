@@ -101,7 +101,7 @@ const Support = () => {
                     {isError.lastNameError && <span className={classes.error}>{isError.lastNameError}</span>}
                     <input type="text" placeholder='Subject' name='subject' ref={subjectInputRef} onChange={subjectChangeHandler} autoComplete="off" />
                     {isError.subjectError && <span className={classes.error}>{isError.subjectError}</span>}
-                    <textarea placeholder='Message' name='message' ref={messageInputRef} onChange={messageChangeHandler} autoComplete="off" />
+                    <textarea className='textarea' placeholder='Message' name='message' ref={messageInputRef} onChange={messageChangeHandler} autoComplete="off" />
                     {isError.messageError && <span className={classes.error}>{isError.messageError}</span>}
                     {emailResponse?.message && <p id={emailResponse.success} >{emailResponse.message}</p>}
                     <button type="submit" onClick={querySubmitHandler}>{isLoading ? "Loading..." : "Submit"}</button>
