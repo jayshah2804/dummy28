@@ -207,13 +207,32 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
                 doc.text("Page No. " + ++pageCount, 403, 608);
             }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, startY: isSchedueBooking == "1" ? 80 : 120, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
     });
-    if (adHocRows.length > 0 && !driverName && !riderName)
+    if (adHocRows.length > 0 && !driverName && !riderName) {
+        doc.text("Ad Hoc Driver Data", 30, doc.autoTable.previous.finalY + 20);
         doc.autoTable(adHocHeading, adHocRows, {
             didDrawPage:
                 function (data) {
-                    doc.text("Ad Hoc Driver Data", 30, doc.autoTable.previous.finalY + 20);
-                }, styles: { fontSize: 7, font: "openSans" }, startY: doc.autoTable.previous.finalY + 30, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
+                    doc.addImage(cpLogo, 'png', 190, 10, 70, 32);
+                    doc.setFontSize(6);
+                    doc.setTextColor(54, 69, 79);
+                    doc.text(cpAddress, (450 - ((doc.getFontSize() * addressWidth) / 12)) / 2, 50);
+                    doc.addImage(littleImage, 'png', 10, 575, 45, 20);
+                    doc.text("Printed by " + sessionStorage.getItem("adminName"), 450 - ((doc.getFontSize() * (("Printed by " + sessionStorage.getItem("adminName")).length)) / 2), 588);
+                    doc.text(current_date_time, 448 - ((doc.getFontSize() * (current_date_time.length)) / 2), 595);
+                    doc.setLineWidth(1);
+                    doc.setDrawColor(42, 149, 69);
+                    doc.line(10, 598, 117.5, 598);
+                    doc.setDrawColor(34, 137, 203);
+                    doc.line(117.5, 598, 225, 598);
+                    doc.setDrawColor(226, 44, 29);
+                    doc.line(225, 598, 332.5, 598);
+                    doc.setDrawColor(245, 174, 48);
+                    doc.line(332.5, 598, 440, 598);
+                    doc.setFontSize(8);
+                    doc.text("Page No. " + ++pageCount, 403, 608);
+                }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, startY: doc.autoTable.previous.finalY + 30, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
         });
+    }
     const date = Date().split(" ");
     // we use a date string to generate our filename.
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
