@@ -12,7 +12,7 @@ import frame2 from "../Assets/frame2.png";
 
 // define a generatePDF function that accepts a tickets argument
 let pageCount = 0;
-const tripsHeading = [
+window.tripsHeading = [
     "Sn.",
     "Driver Name",
     "Trip Date",
@@ -23,7 +23,7 @@ const tripsHeading = [
     "Drop Location",
     "Trip km",
 ];
-const scheduleTripsHeading = [
+window.scheduleTripsHeading = [
     "Sn.",
     "Driver Name",
     "Trip Date",
@@ -35,7 +35,7 @@ const scheduleTripsHeading = [
     "Trip km",
 ]
 
-const shiftsHeading = [
+window.shiftsHeading = [
     "Sn.",
     "Driver Name",
     "Scheduled Time",
@@ -45,7 +45,7 @@ const shiftsHeading = [
     "Total km",
 ];
 
-const bookingRequestsHeading = [
+window.bookingRequestsHeading = [
     "Sn.",
     "Guest Name",
     "Pickup Date",
@@ -74,7 +74,7 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     pageCount = 0;
     let tableColumn = [];
 
-    tableColumn = eval(type + "Heading");
+    tableColumn = window[type + "Heading"];
     // define an empty array of rows
     const tableRows = [];
 
