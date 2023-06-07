@@ -130,11 +130,14 @@ const ShiftCreation = () => {
             fullscreenControl: true,
             zoomControl: true
         });
+        // if (!marker?.getPosition()?.lat()) {
         marker = new window.google.maps.Marker({
-            position: { lat: 22.9929777, lng: 72.5013096 },
+            position: { lat: marker?.getPosition()?.lat() ?? 22.9929777, lng: marker?.getPosition()?.lng() ?? 72.5013096 },
             map: map,
             animation: window.google.maps.Animation.DROP,
         });
+        // }
+        // debugger;
         let input = document.getElementById("pac-input");
         autocomplete = new window.google.maps.places.Autocomplete(input, { componentRestrictions: { country: ["in"] } });
         marker.setVisible(false);
@@ -286,13 +289,13 @@ const ShiftCreation = () => {
         setIsFilteredDrivers([]);
     }
 
-    const calenderCloseHandler = () => {
+    const calenderCloseHandler = (data) => {
         // let newDetails = structuredClone(dateValues);
-        debugger;
-        for (let i = 0; i < dateValues.length; i++) {
+        // debugger;
+        for (let i = 0; i < data.length; i++) {
             if (!shiftData[i]) shiftData[i] = {};
-            shiftData[i].startDate = dateValues[i].year + "-" + (dateValues[i].month.toString().length === 1 ? ("0" + dateValues[i].month) : dateValues[i].month) + "-" + (dateValues[i].day.toString().length === 1 ? ("0" + dateValues[i].day) : dateValues[i].day);
-            shiftData[i].endDate = + dateValues[i].year + "-" + (dateValues[i].month.toString().length === 1 ? ("0" + dateValues[i].month) : dateValues[i].month) + "-" + (dateValues[i].day.toString().length === 1 ? ("0" + dateValues[i].day) : dateValues[i].day);
+            shiftData[i].startDate = data[i].year + "-" + (data[i].month.toString().length === 1 ? ("0" + data[i].month) : data[i].month) + "-" + (data[i].day.toString().length === 1 ? ("0" + data[i].day) : data[i].day);
+            shiftData[i].endDate = + data[i].year + "-" + (data[i].month.toString().length === 1 ? ("0" + data[i].month) : data[i].month) + "-" + (data[i].day.toString().length === 1 ? ("0" + data[i].day) : data[i].day);
         }
         console.log(shiftData);
     }
@@ -327,7 +330,7 @@ const ShiftCreation = () => {
     }
 
     const addShiftDetailsClickHandler = () => {
-        debugger;
+        // debugger;
         for (let i = 0; i < shiftData.length; i++) {
             if (!shiftData[i].startDate || !shiftData[i].startTime || !shiftData[i].endDate || !shiftData[i].endTime) {
                 return;
@@ -363,6 +366,7 @@ const ShiftCreation = () => {
     }
 
     const nextSlideClickHandler = (isNextClicked) => {
+        // debugger;
         if (isNextClicked) {
             setTimeout(() => {
                 // if (marker?.getPosition()?.lat())
@@ -442,9 +446,10 @@ const ShiftCreation = () => {
                                                     shiftStartTimeInputRef.current.value = "";
                                                     shiftEndTimeInputRef.current.value = "";
                                                 }
+                                                calenderCloseHandler(data);
                                             }}
                                             sort
-                                            onClose={calenderCloseHandler}
+                                            // onClose={calenderCloseHandler}
                                             // inputClass="custom-input"
                                             style={{ border: "none", height: "30px", paddingLeft: "7px", borderRadius: "5px", width: "150px" }}
                                             editable={false}
