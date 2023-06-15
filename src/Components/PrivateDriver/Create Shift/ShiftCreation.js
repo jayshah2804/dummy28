@@ -252,7 +252,7 @@ const ShiftCreation = () => {
     const driverSearchHandler = (e) => {
         if (e.target.value)
             setIsFilteredDrivers(drivers?.filter(data =>
-                data.DriverName.toLowerCase().includes(e.target.value) || data.Model.toLowerCase().includes(e.target.value)));
+                data.DriverName.toLowerCase().includes(e.target.value.toLowerCase()) || data.Model.toLowerCase().includes(e.target.value.toLowerCase())));
         else setIsFilteredDrivers([]);
     }
 
@@ -292,6 +292,7 @@ const ShiftCreation = () => {
     const calenderCloseHandler = (data) => {
         // let newDetails = structuredClone(dateValues);
         // debugger;
+        shiftData = [];
         for (let i = 0; i < data.length; i++) {
             if (!shiftData[i]) shiftData[i] = {};
             shiftData[i].startDate = data[i].year + "-" + (data[i].month.toString().length === 1 ? ("0" + data[i].month) : data[i].month) + "-" + (data[i].day.toString().length === 1 ? ("0" + data[i].day) : data[i].day);
