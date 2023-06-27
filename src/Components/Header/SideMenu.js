@@ -55,6 +55,10 @@ const SideMenu = (props) => {
         sub: ["Shifts", "Create-Shift", "Trips", "Live Map"],
       });
       sideMenu.push(
+        // {
+        //   main: "Schedule Booking",
+        //   sub: ["New booking", "Previous bookings", "Trips"]
+        // },
         {
           main: "Departments",
         },
@@ -127,8 +131,10 @@ const SideMenu = (props) => {
     flag = true;
   } else {
     if (flag) {
-      document.getElementById("mySidemenu").style.minWidth = null;
-      document.getElementById("mySidemenu").style.width = "0px";
+      if (document.getElementById("mySidemenu")) {
+        document.getElementById("mySidemenu").style.minWidth = null;
+        document.getElementById("mySidemenu").style.width = "0px";
+      }
     }
   }
 
