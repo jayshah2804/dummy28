@@ -268,7 +268,7 @@ const Modal = (props) => {
           <label htmlFor="startDate">End Date: </label>
           <input type="date" ref={endDateRef} id="endDate" />
           <br />
-          {props.isShift != "1" &&
+          {(props.isShift != "1" && props.type !== "scheduleTrips" && props.type !== "bookingRequests") &&
             <div style={{ position: "relative" }}>
               <label htmlFor="searchRider">Rider: </label>
               <input
@@ -295,30 +295,33 @@ const Modal = (props) => {
               )}
             </div>
           }
-          {/* <br /> */}
-          <label htmlFor="searchDriver">Driver: </label>
-          <input
-            type="text"
-            id="searchDriver"
-            onChange={driverSearchHandler}
-            ref={driverInputSearchRef}
-          />
-          {searchedDriverData && (
-            <div className="searchedRiders">
-              {searchedDriverData.map((driver) => (
-                <p
-                  onClick={(e) => {
-                    driverInputSearchRef.current.value = e.target.innerText;
-                    selectedDriverData.name = driver.name;
-                    selectedDriverData.email = driver.email;
-                    setSearchedDriverData([]);
-                  }}
-                >
-                  {driver.name}
-                </p>
-              ))}
-            </div>
-          )}
+          {!(props.type === "scheduleTrips" || props.type === "bookingRequests") &&
+            <React.Fragment>
+              <label htmlFor="searchDriver">Driver: </label>
+              <input
+                type="text"
+                id="searchDriver"
+                onChange={driverSearchHandler}
+                ref={driverInputSearchRef}
+              />
+              {searchedDriverData && (
+                <div className="searchedRiders">
+                  {searchedDriverData.map((driver) => (
+                    <p
+                      onClick={(e) => {
+                        driverInputSearchRef.current.value = e.target.innerText;
+                        selectedDriverData.name = driver.name;
+                        selectedDriverData.email = driver.email;
+                        setSearchedDriverData([]);
+                      }}
+                    >
+                      {driver.name}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </React.Fragment>
+          }
           <br />
         </main>
         <footer>

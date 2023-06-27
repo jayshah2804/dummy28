@@ -22,16 +22,16 @@
 
 .stop-main-container {
     display: flex;
-    width: 1180px;
+    width: 98vw;
+    height: 85vh;
 }
 
 .stopInfo-container {
-    margin: 50px 2%;
+    margin: 50px 1.5%;
     margin-bottom: 20px;
-    /* width: 70%; */
-    width: 1000px;
-    /* height: 470px; */
-    height: 450px;
+    width: 80%;
+    /* height: 450px; */
+    height: 88%;
 }
 
 .stopInfo-container .sub-header {
@@ -40,34 +40,26 @@
     align-items: center;
     font-size: 14px;
     color: rgb(75, 73, 73);
-    width: 90%;
-}
-
-.stopInfo-container .route-operation {
-    font-size: 14px;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
-    margin-bottom: -10px;
-    gap: 15px;
-    color: rgb(226, 44, 29);
-    font-weight: bold;
-    cursor: pointer;
     width: 100%;
 }
 
-.stopInfo-container .route-operation span {
+.stopInfo-container .sub-header span {
+    color: rgb(226, 44, 29);
+    font-weight: bold;
+    cursor: pointer;
     text-decoration: underline;
 }
 
-.stopInfo-container .route-operation span:hover {
+/* .stopInfo-container .sub-header span {} */
+
+.stopInfo-container .sub-header span:hover {
     text-decoration: none;
 }
 
 #stops-map {
     margin-top: 10px;
     position: relative;
-    height: 82%;
+    height: 85%;
     min-height: 350px;
     width: 100%;
     border-radius: 10px;
@@ -75,7 +67,7 @@
 
 .stopInfo-container .footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin-top: 20px;
     width: 100%;
@@ -123,6 +115,52 @@
     margin-left: 5px;
 }
 
+#infowindow-container {
+    width: 100%;
+    /* max-width: 350px; */
+}
+
+#riderCheckBoxList {
+    margin-top: 3px;
+}
+
+#riderHeaderText {
+    color: rgb(100, 99, 99);
+}
+
+#infoWindowAssignButton {
+    background-color: rgba(42, 149, 69, 255);
+    border: 1px solid rgba(42, 149, 69, 255);
+    color: white;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 13px;
+    cursor: pointer;
+    float: right;
+    margin-top: 10px;
+}
+
+#infoWindowAssignButton:hover {
+    background-color: green;
+}
+
+#riderCheckboxSubContainer {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+#infowindow-stopName {
+    width: 100%;
+    text-align: center;
+    padding: 0 10px;
+}
+
+#tickmarkImage {
+    width: 20px;
+    height: 20px;
+}
+
 #infowindow-assign {
     margin-left: 5px;
     color: rgba(34, 137, 203, 255);
@@ -138,9 +176,9 @@
 }
 
 .stop-container {
-    margin-top: 55px;
+    margin-top: 50px;
     /* margin-left: 2%; */
-    width: 25%;
+    width: 20%;
     /* height: 400px; */
     /* background-color: whitesmoke; */
     /* height: calc(100vh-100px); */
@@ -202,7 +240,7 @@
     margin-bottom: 10px;
     background-color: white;
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 0;
 }

@@ -86,11 +86,15 @@ const SideMenuData = ({ main, corpId, sub, deptId, myActiveMenu, sideMenuClose }
       sideMenuClose(false);
       history.push(`/staff?departmentId=${e.target.id}`)
     }
+    if (dptName.toLowerCase() === "schedule booking") {
+      sideMenuClose(false);
+      history.push(`/schedule-booking/${e.target.innerText.toLowerCase()}`)
+    }
   };
 
   return (
     <React.Fragment>
-      <div className={classes.menu}>
+      <div className={classes.menu} style={{display: "flex", marginTop: "18px", alignItems: "center"}} >
         <MdOutlineDashboard className={classes.frontIcons} />
         {/* {main.toLowerCase() === "dashboard" && <AiOutlineBarChart className={classes.frontIcons} />}
         {main.toLowerCase().includes("corporate") && <BiBriefcase className={classes.frontIcons} />} */}
@@ -100,14 +104,16 @@ const SideMenuData = ({ main, corpId, sub, deptId, myActiveMenu, sideMenuClose }
         >
           {main}
         </NavLink> */}
-        <div id={corpId} className={classes.mainMenu} onClick={mainMenuClickHandler}>
-          {main}
-        </div>
-        {sub && (
-          <div className={classes.dropIcons}>
-            {subMenuIsAvtive ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+        <div className={classes.mainMenuContainer} >
+          <div id={corpId} className={classes.mainMenu} onClick={mainMenuClickHandler}>
+            {main}
           </div>
-        )}
+          {sub && (
+            <div className={classes.dropIcons}>
+              {subMenuIsAvtive ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+            </div>
+          )}
+        </div>
       </div>
       {subMenuIsAvtive && (
         <div>

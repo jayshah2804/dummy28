@@ -8,6 +8,7 @@ import threedots from "../../../Assets/route_3dots.png";
 import endPoint from "../../../Assets/place_outline.png";
 import useHttp from "../../../Hooks/use-http";
 import loadingGif from "../../../Assets/loading-gif.gif";
+import tickMark from "../../../Assets/Tickmark.png";
 import Message from "../../../Modal/Message";
 
 let stop_number = 0;
@@ -46,6 +47,8 @@ const polyline2 = {
   strokeWeight: 5,
 };
 
+let staffUIds = new Set();
+
 const StopInfo = (props) => {
   const [filteredData, setFilteredData] = useState([]);
   const [isRender, setIsRender] = useState();
@@ -68,6 +71,7 @@ const StopInfo = (props) => {
     myRecord = [];
     stop_number = 0;
     myStopNumberInfo = {};
+    staffUIds = new Set();
   }
 
   sessionStorage.setItem(
@@ -100,7 +104,7 @@ const StopInfo = (props) => {
       editedwayPoints = [];
       myStopNumberInfo = {};
       stop_number = 0;
-
+      // debugger;
       for (i; i < detailsLength; i++) {
         // for (let i = 0; i < details?.length - 1; i++) {
         editedStopDetails.push({
@@ -109,7 +113,9 @@ const StopInfo = (props) => {
           lng: details[i].StopLongitude,
           mNumber: [details[i].MobileNumber],
           riders: [details[i].OfficialName],
+          uId: [details[i]?.OfficialId?.toString()]
         });
+        staffUIds.add(details[i]?.OfficialId?.toString());
         // editaedFlightPanCoordinates.push({
         //   lat: details[i].StopLatitude,
         //   lng: details[i].StopLongitude
@@ -131,6 +137,7 @@ const StopInfo = (props) => {
           },
           mNumber: [details[i].MobileNumber],
           status: true,
+          uId: [details[i]?.OfficialId?.toString()]
         });
         if (i !== 0) {
           myStopNumberInfo[details[i].MobileNumber] = stop_number + 1;
@@ -189,6 +196,7 @@ const StopInfo = (props) => {
                   : +data.StaffList[i].DropLL.split(",")[1],
             },
             status: false,
+            uId: [data.StaffList[i].StaffId.toString()]
           });
         }
       }
@@ -202,6 +210,7 @@ const StopInfo = (props) => {
       // console.log(STOP_DETAILS, "stop");
       if (props.routeId) {
         // waypts.push({ location: studentData[0].location, stopover: true });
+        // debugger;
         STOP_DETAILS.push(editedStopDetails);
         STOP_DETAILS = STOP_DETAILS.flat();
         // flightPlanCoordinates.push(editaedFlightPanCoordinates);
@@ -217,6 +226,7 @@ const StopInfo = (props) => {
         waypts.pop();
         // dst = [waypts.pop().location];
       }
+      console.log("studentData", studentData);
       // console.log(STOP_DETAILS, waypts);
       // }
       // console.log(studentData, "studentData");
@@ -288,7 +298,7 @@ const StopInfo = (props) => {
         });
       }
       let shuttleRoute = [];
-      let staffList = [];
+      let staffList = Array.from(staffUIds).join(",");
       for (
         let i =
           sessionStorage.getItem("routeType").toLowerCase() === "pickup"
@@ -306,11 +316,11 @@ const StopInfo = (props) => {
           StopLatitude: STOP_DETAILS[i].lat,
           StopLongitude: STOP_DETAILS[i].lng,
         });
-        for (let j = 0; j < STOP_DETAILS[i].mNumber?.length; j++) {
-          staffList.push({
-            MobileNumber: STOP_DETAILS[i].mNumber[j],
-          });
-        }
+        // for (let j = 0; j < STOP_DETAILS[i].mNumber?.length; j++) {
+        //   staffList.push({
+        //     MobileNumber: STOP_DETAILS[i].mNumber[j],
+        //   });
+        // }
       }
       if (sessionStorage.getItem("routeType").toLowerCase() === "pickup")
         shuttleRoute.push({
@@ -338,7 +348,7 @@ const StopInfo = (props) => {
       obj.ShuttleTypeID = sessionStorage.getItem("shuttleType");
       obj.ShuttleTiming = JSON.stringify(shuttleTiming);
       obj.ShuttleRoute = JSON.stringify(shuttleRoute);
-      obj.StaffList = JSON.stringify(staffList);
+      obj.StaffList = staffList;
       var dataInfo = obj;
       // console.log(dataInfo);
 
@@ -355,32 +365,6 @@ const StopInfo = (props) => {
       );
     }
   }, [sendRequest, isSubmitClicked]);
-
-  const undoRouteClickHandler = () => {
-    // if (previewRouteFlag) previewRouteFlag = !previewRouteFlag;
-    // console.log(waypts, dst);
-    if (dst.length > 0) {
-      stop_number--;
-      dst.pop();
-      waypts.pop();
-      if (!previewRouteFlag) {
-        STOP_DETAILS.pop();
-        filteredData[myRecord[myRecord.length - 1]].status = false;
-        myRecord.pop();
-        previewRouteFlag = false;
-      } else {
-        previewRouteFlag = !previewRouteFlag;
-      }
-      // filteredData[myRecord].status = false;
-      setIsRender((prev) => !prev);
-    }
-    // console.log(waypts, dst);
-    // if (flightPlanCoordinates.length > 1) {
-    //   // studentCount -= filteredData[prev_id].name.length;
-    //   flightPlanCoordinates.pop();
-    //   setIsRender(prev => !prev);
-    // }
-  };
 
   const resetRouteClickHandler = () => {
     let response = window.confirm(
@@ -401,8 +385,9 @@ const StopInfo = (props) => {
           mNumber: structuredClone(ridersData)[0].mNumber,
         },
       ];
-      filteredData.map((data) => (data.status = false));
+      // filteredData.map((data) => (data.status = false));
       myRecord = [];
+      staffUIds = new Set();
       setIsRender((prev) => !prev);
     }
   };
@@ -502,7 +487,7 @@ const StopInfo = (props) => {
         lng: STOP_DETAILS[i].lng
       })
     }
-    // debugger;
+    debugger;
     let service = new window.google.maps.DistanceMatrixService();
     service.getDistanceMatrix({
       origins,
@@ -518,8 +503,8 @@ const StopInfo = (props) => {
       let totalDistance = 0;
       for (let i = 0; i < response?.rows?.length; i++) {
         if (response.rows[i].elements[0].distance.text.includes("mi"))
-          totalDistance += +(response.rows[i].elements[0].distance.text.split(" ")[0]) * 1.60934;
-        else totalDistance += +(response.rows[i].elements[1].distance.text.split(" ")[0]) * 1.60934;
+          totalDistance += +(response.rows[0].elements[i].distance.text.split(" ")[0]) * 1.60934;
+        else totalDistance += +(response.rows[1].elements[i].distance.text.split(" ")[0]) * 1.60934;
       }
       approximate_distance = +totalDistance.toFixed(2);
       document.getElementById("approxKm").innerText = approximate_distance + " km";
@@ -554,6 +539,100 @@ const StopInfo = (props) => {
     const infoWindow = new window.google.maps.InfoWindow();
     let icon;
     let myTitle;
+
+    const selectAllRidersClickHandler = (e) => {
+      for (let i = 0; i < filteredData[e.target.parentElement.id].uId.length; i++) {
+        if (e.target.checked)
+          document.getElementById(filteredData[e.target.parentElement.id].uId[i]).checked = true;
+        else document.getElementById(filteredData[e.target.parentElement.id].uId[i]).checked = false;
+      }
+    }
+
+    const saveAssignButtonClickHandler = (e, id) => {
+      debugger;
+      let alreadyRouteCreateFlag = false;
+      let isChecked = false;
+      for (let i = 0; i < document.getElementById(id).children.length; i++) {
+        if (staffUIds.has(document.getElementById(id).children[i].children[0].id)) alreadyRouteCreateFlag = true;
+        if (document.getElementById(id).children[i].children[0].checked) {
+          staffUIds.add(document.getElementById(id).children[i].children[0].id.toString());
+          isChecked = true;
+        }
+        else {
+          staffUIds.delete(document.getElementById(id).children[i].children[0].id.toString());
+          if (!isChecked && i === document.getElementById(id).children.length - 1 && !alreadyRouteCreateFlag) {
+            return;
+          }
+        };
+      }
+
+      if (staffUIds.size === 0) {
+        let indexToBeSpliced = 0;
+        for (let i = 0; i < STOP_DETAILS.length; i++) {
+          if (STOP_DETAILS[i].stop.toLowerCase() === e.target.parentElement.children[0].innerText.toLowerCase()) {
+            indexToBeSpliced = i;
+            break;
+          }
+        }
+        STOP_DETAILS.splice(indexToBeSpliced, 1);
+        if (indexToBeSpliced > waypts.length) waypts.splice(indexToBeSpliced - 2, 1);
+        else waypts.splice(indexToBeSpliced - 1, 1);
+        dst.splice(indexToBeSpliced - 1, 1);
+      }
+
+      // console.log(e.target.parentElement.id);
+      if (!alreadyRouteCreateFlag) {
+        if (previewRouteFlag) {
+          dst.pop();
+          waypts.pop();
+          previewRouteFlag = false;
+        }
+
+        if (dst.length > 0)
+          waypts.push({
+            location: dst[dst.length - 1], //KP
+            stopover: true,
+          });
+
+        dst.push({
+          lat: filteredData[e.target.parentElement.id].location.lat,
+          lng: filteredData[e.target.parentElement.id].location.lng,
+        });
+        filteredData[e.target.parentElement.id].status = true;
+
+        prev_id = e.target.parentElement.id;
+
+        myRecord.push(e.target.parentElement.id);
+        STOP_DETAILS.push({
+          stop: filteredData[e.target.parentElement.id].stop,
+          riders: filteredData[e.target.parentElement.id].name,
+          lat: filteredData[e.target.parentElement.id].location.lat,
+          lng: filteredData[e.target.parentElement.id].location.lng,
+          mNumber: filteredData[e.target.parentElement.id].mNumber,
+          uId: filteredData[e.target.parentElement.id].uId
+        });
+        myStopNumberInfo[STOP_DETAILS[STOP_DETAILS.length - 1].mNumber[0]] =
+          stop_number + 1;
+        stop_number++;
+        setTimeout(() => {
+          document.getElementById("asdf").click();
+        });
+      } else if (!isChecked && alreadyRouteCreateFlag == true && staffUIds.size !== 0) {
+        let targetIndex = 0;
+        for (let i = 0; i < STOP_DETAILS.length; i++) {
+          if (STOP_DETAILS[i].uId?.includes(document.getElementById(id).children[0].children[0].id)) {
+            targetIndex = i;
+            break;
+          }
+        }
+        STOP_DETAILS.splice(targetIndex, 1);
+        if (targetIndex > waypts.length) waypts.splice(targetIndex - 2, 1);
+        else waypts.splice(targetIndex - 1, 1);
+        dst.splice(targetIndex - 1, 1);
+        // STOP_DETAILS = STOP_DETAILS.filter(data => !(data?.uId?.includes(document.getElementById(id).children[0].children[0].id)));
+      }
+      setIsRender((prev) => !prev);
+    }
 
     const assignButtonClickHandler = (e) => {
       if (previewRouteFlag) {
@@ -619,7 +698,8 @@ const StopInfo = (props) => {
       // }
     };
 
-    // console.log(filteredData);
+    console.log(filteredData);
+    // debugger;
     filteredData.forEach((position, i) => {
       // console.log(filteredData[i]);
       if (i === 0) {
@@ -628,17 +708,26 @@ const StopInfo = (props) => {
       } else {
         // console.log(position.stop.split(",")[0], position.status);
         icon = studentDummyImage;
-        if (position.status)
-          // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><p id="infowindow-success">Assigned</div>`;
-          myTitle = `<div id="infowindow-container" ><h3>${myStopNumberInfo[position.mNumber[0]]
-            ? myStopNumberInfo[position.mNumber[0]] + ". "
-            : ""
-            }${position.stop.split(",")[0]
-            }</h3><p id="infowindow-success">Assigned</div>`;
-        // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><div id=${i}><span id='infowindow-assign'>Assign rider</span></div></div>`;
-        else
-          myTitle = `<div><div id="infowindow-container" ><h3>${position.stop.split(",")[0]
-            }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
+        // if (position.status) {
+        // myTitle = `<div id="infowindow-container" ><h3>${myStopNumberInfo[position.mNumber[0]]
+        //   ? myStopNumberInfo[position.mNumber[0]] + ". "
+        //   : ""
+        //   }${position.stop.split(",")[0]
+        //   }</h3></div>`;
+        // }
+        // else {
+        // myTitle = `<div id=${i}>` + `<div id="infowindow-container" ><h3>${myStopNumberInfo[position?.mNumber[0]]
+        //   ? myStopNumberInfo[position?.mNumber[0]] + ". "
+        //   : ""
+        // }${position.stop.split(",")[0]
+        myTitle = `<div id=${i}>` + `<div id="infowindow-container" ><h4 id="infowindow-stopName">${position.stop
+          // }</h3></h3></div><input type="checkbox" id="select-all-riders" />Select All<div id="riderCheckBoxList">`
+          }</h4></div><hr /><div id="riderCheckBoxList">`
+        for (let j = 0; j < position.name.length; j++) {
+          myTitle += `<div id="riderCheckboxSubContainer" ><input id=${position.uId[j]} type="checkbox" /><label for=${position.uId[j]}>${position.name[j]}</label></div>`
+        }
+        myTitle += `</div><button id="infoWindowAssignButton">Save</button></div >`;
+        // }
       }
 
       const marker = new window.google.maps.Marker({
@@ -649,15 +738,21 @@ const StopInfo = (props) => {
         optimized: false,
       });
 
-      marker.addListener("mouseover", () => {
-        // infoWindow.close();
+      marker.addListener("click", () => {
+        // debugger;
         infoWindow.setContent(marker.myTitle);
         infoWindow.open(marker.getMap(), marker);
+        setTimeout(() => {
+          for (let key of staffUIds) {
+            if (document.getElementById(key))
+              document.getElementById(key).checked = true;
+          }
+        })
         infoWindow.open(
           setTimeout(() => {
-            document
-              .getElementById("infowindow-assign")
-              .addEventListener("click", assignButtonClickHandler);
+            // document.getElementById("infowindow-assign").addEventListener("click", assignButtonClickHandler);
+            document.getElementById("infoWindowAssignButton").addEventListener("click", (e) => saveAssignButtonClickHandler(e, "riderCheckBoxList"));
+            // document.getElementById("select-all-riders").addEventListener("click", (e) => selectAllRidersClickHandler(e))
           })
         );
       });
@@ -679,18 +774,22 @@ const StopInfo = (props) => {
   };
 
   const submitClickHandler = () => {
-    props.nextWizard("Submit");
-    type = "submit";
-    setIsSubmitClicked(true);
+    if (staffUIds.size > 0) {
+      props.nextWizard("Submit");
+      type = "submit";
+      setIsSubmitClicked(true);
+    } else alert("Please add atleast one stop");
   };
 
   if (myFlag && filteredData.length > 0) {
+    debugger;
     let arr = [];
     for (let i = 0; i < filteredData.length; i++) {
       if (arr.includes(filteredData[i].stop)) {
         let index = arr.indexOf(filteredData[i].stop);
         filteredData[index].name.push(filteredData[i].name.toString());
         filteredData[index].mNumber.push(filteredData[i].mNumber.toString());
+        filteredData[index].uId.push(filteredData[i]?.uId?.toString());
         filteredData.splice(i, 1);
         i--;
       }
@@ -701,11 +800,14 @@ const StopInfo = (props) => {
     }
     // STOP_DETAILS = [];
     arr = [];
+    let editFLag = false;
+    if (props.routeId) editFLag = true;
     for (let i = 0; i < STOP_DETAILS.length; i++) {
       if (arr.includes(STOP_DETAILS[i].stop)) {
         let index = arr.indexOf(STOP_DETAILS[i].stop);
         STOP_DETAILS[index].riders.push(STOP_DETAILS[i].riders.toString());
         STOP_DETAILS[index].mNumber.push(STOP_DETAILS[i].mNumber.toString());
+        STOP_DETAILS[index].uId.push(STOP_DETAILS[i]?.uId?.toString());
         STOP_DETAILS.splice(i, 1);
         flightPlanCoordinates.splice(i, 1);
         i--;
@@ -714,93 +816,64 @@ const StopInfo = (props) => {
         arr.push(STOP_DETAILS[i].stop);
     }
 
+    if (editFLag) {
+      for (let i = 0; i < filteredData.length; i++) {
+        for (let j = (sessionStorage.getItem("routeType").toLowerCase() === "pickup" ? 1 : 0); j < (sessionStorage.getItem("routeType").toLowerCase() === "pickup" ? STOP_DETAILS.length : STOP_DETAILS.length - 1); j++) {
+          if (STOP_DETAILS[j].stop.includes(filteredData[i].stop)) {
+            if (filteredData[i]?.name) STOP_DETAILS[j].riders = structuredClone(filteredData[i]?.name);
+            if (filteredData[i]?.mNumber) STOP_DETAILS[j].mNumber = structuredClone(filteredData[i]?.mNumber);
+            if (filteredData[i]?.uId) STOP_DETAILS[j].uId = structuredClone(filteredData[i]?.uId);
+          }
+        }
+      }
+    }
+
     setFilteredData(filteredData);
     myFlag = false;
   }
 
-  const crossClickHandler = (e, targetIndex) => {
-    if (targetIndex) {
-      for (let i = 0; i < filteredData.length; i++) {
-        if (filteredData[i].stop === STOP_DETAILS[targetIndex].stop)
-          filteredData[i].status = false;
-      }
-      STOP_DETAILS.splice(targetIndex, 1);
-      // flightPlanCoordinates.splice(targetIndex, 1);
-    } else {
-      let holdingIndex = 0;
-      let presentIndex = 0;
-      // console.log(STOP_DETAILS, waypts);
-      for (let i = 0; i < STOP_DETAILS.length; i++) {
-        if (
-          STOP_DETAILS[i].stop !== e.target.parentNode.children[0].innerText
-        ) {
-          STOP_DETAILS[holdingIndex] = STOP_DETAILS[i];
-          holdingIndex++;
-        } else presentIndex = i;
-      }
-
-      for (let i = 0; i < filteredData.length; i++) {
-        if (filteredData[i].stop === e.target.parentNode.children[0].innerText)
-          filteredData[i].status = false;
-      }
-      STOP_DETAILS.length = holdingIndex;
-      // debugger;
-      // console.log(presentIndex, waypts, dst);
-      if (presentIndex > waypts.length) waypts.splice(presentIndex - 2, 1);
-      else waypts.splice(presentIndex - 1, 1);
-      dst.splice(presentIndex - 1, 1);
-    }
-    // console.log(filteredData);
-    stop_number = 0;
-    myStopNumberInfo = {};
-    for (let i = 1; i < STOP_DETAILS.length; i++) {
-      myStopNumberInfo[STOP_DETAILS[i].mNumber[0]] = stop_number + 1;
-      stop_number++;
-    }
-    setIsRender((prev) => !prev);
-  };
-  const subCrossClickHandler = (e) => {
-    let targetIndex = 0;
-    for (let i = 0; i < STOP_DETAILS.length; i++) {
-      // console.log(STOP_DETAILS[i].riders);
-      // console.log(e.target.parentNode.children[0].innerText);
-      if (
-        STOP_DETAILS[i].riders?.includes(
-          e.target.parentNode.children[0].innerText
-        )
-      ) {
-        targetIndex = i;
-      }
-    }
-
+  const crossClickHandler = (e) => {
     let holdingIndex = 0;
-    if (STOP_DETAILS[targetIndex].riders.length > 1) {
-      for (let i = 0; i < STOP_DETAILS[targetIndex].riders.length; i++) {
-        if (
-          STOP_DETAILS[targetIndex].riders[i] !==
-          e.target.parentNode.children[0].innerText
-        ) {
-          STOP_DETAILS[targetIndex].riders[holdingIndex] =
-            STOP_DETAILS[targetIndex].riders[i];
-          STOP_DETAILS[targetIndex].mNumber[holdingIndex] =
-            STOP_DETAILS[targetIndex].mNumber[i];
-          holdingIndex++;
+    let presentIndex = 0;
+
+    for (let i = 0; i < STOP_DETAILS.length; i++) {
+      if (
+        STOP_DETAILS[i].stop !== e.target.parentNode.children[0].innerText
+      ) {
+        STOP_DETAILS[holdingIndex] = STOP_DETAILS[i];
+        holdingIndex++;
+      } else {
+        presentIndex = i;
+        for (let j = 0; j < STOP_DETAILS[i]?.uId?.length; j++) {
+          staffUIds.delete(STOP_DETAILS[i].uId[j].toString());
         }
       }
-      STOP_DETAILS = structuredClone(STOP_DETAILS);
-      STOP_DETAILS[targetIndex].riders.length = holdingIndex;
-      STOP_DETAILS[targetIndex].mNumber.length = holdingIndex;
-
-      for (let i = 0; i < filteredData.length; i++) {
-        if (filteredData[i].stop === e.target.parentNode.children[0].innerText)
-          filteredData[i].status = false;
-      }
-      // console.log(STOP_DETAILS);
-      // console.log(RIDER_DATA);
-      setIsRender((prev) => !prev);
-    } else {
-      crossClickHandler(null, targetIndex);
     }
+
+    STOP_DETAILS.length = holdingIndex;
+    if (presentIndex > waypts.length) waypts.splice(presentIndex - 2, 1);
+    else waypts.splice(presentIndex - 1, 1);
+    dst.splice(presentIndex - 1, 1);
+    setIsRender((prev) => !prev);
+  };
+
+  const subCrossClickHandler = (e, uId) => {
+    let targetIndex = 0;
+    for (let i = 0; i < STOP_DETAILS.length; i++) {
+      if (STOP_DETAILS[i]?.uId?.includes(uId)) {
+        targetIndex = i;
+        break;
+      }
+    }
+    // debugger;
+    if (e.target.parentElement.parentElement.children.length <= 1) {
+      STOP_DETAILS.splice(targetIndex, 1);
+      if (targetIndex > waypts.length) waypts.splice(targetIndex - 2, 1);
+      else waypts.splice(targetIndex - 1, 1);
+      dst.splice(targetIndex - 1, 1);
+    }
+    staffUIds.delete(uId);
+    setIsRender((prev) => !prev);
   };
 
   function slist(target) {
@@ -1022,23 +1095,28 @@ const StopInfo = (props) => {
                   )}
                   <div className="studenNames-contaner">
                     {data?.riders?.map((name, index) => (
-                      <div
-                        className="tempMyStudents"
-                        style={{
-                          marginRight: "5px",
-                          borderRadius: "0px",
-                          marginTop: "5px",
-                          display: "inline-block",
-                        }}
-                      >
-                        <p>{name}</p>
-                        <span
-                          className="studentCross"
-                          onClick={subCrossClickHandler}
-                        >
-                          X
-                        </span>
-                      </div>
+                      <React.Fragment>
+                        {console.log(data)}
+                        {staffUIds.has(data?.uId[index]) &&
+                          <div
+                            className="tempMyStudents"
+                            style={{
+                              marginRight: "5px",
+                              borderRadius: "0px",
+                              marginTop: "5px",
+                              display: "inline-block",
+                            }}
+                          >
+                            <p>{name}</p>
+                            <span
+                              className="studentCross"
+                              onClick={(e) => subCrossClickHandler(e, data.uId[index].toString())}
+                            >
+                              X
+                            </span>
+                          </div>
+                        }
+                      </React.Fragment>
                     ))}
                   </div>
                 </div>
@@ -1057,11 +1135,11 @@ const StopInfo = (props) => {
       <div className="stopInfo-container">
         <div className="sub-header">
           <p>Select stops for the route</p>
+          <span onClick={resetRouteClickHandler}>Reset route</span>
           {/* <span>Shuttle capacity: {shuttleSeatingCapacity}</span> */}
         </div>
         <div className="route-operation">
           {/* <span onClick={undoRouteClickHandler}>Undo route operation</span> */}
-          <span onClick={resetRouteClickHandler}>Reset route</span>
         </div>
         {isLoading && type !== "submit" ? (
           <img
@@ -1076,10 +1154,10 @@ const StopInfo = (props) => {
         ) : (
           <div id="stops-map"></div>
         )}
-        <div className="footer" style={{ padding: 0 }}>
-          <button className="preview" onClick={previewClickHandler}>
+        <div className="footer" style={{ padding: 0, justifyContent: "flex-end" }}>
+          {/* <button className="preview" onClick={previewClickHandler}>
             Preview Route
-          </button>
+          </button> */}
           <div style={{ display: "flex", gap: "15px" }}>
             <button className="back" onClick={backClickHandler}>
               Back
