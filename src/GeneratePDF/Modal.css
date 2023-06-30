@@ -2,7 +2,8 @@
     background-color: white;
     border: 1px solid gray;
     width: 500px;
-    height: 300px;
+    /* min-height: 250px; */
+    height: auto;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -15,9 +16,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* gap: 44%; */
+    gap: 35px;
     justify-content: space-around;
-    height: 90%;
+    height: 100%;
 }
 
 .generatePdf-container label {

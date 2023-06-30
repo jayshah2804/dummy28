@@ -1,5 +1,5 @@
 .menuContainer::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
   height: 4px;
 }
 
@@ -10,7 +10,7 @@
 
 /* Handle */
 .menuContainer::-webkit-scrollbar-thumb {
-  background: gray;
+  background: rgb(175, 174, 174);
 }
 
 /* Handle on hover */

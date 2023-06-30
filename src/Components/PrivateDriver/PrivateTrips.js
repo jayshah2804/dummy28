@@ -54,7 +54,7 @@ function PrivateTrips(props) {
   let staffMoNumber = queryParams.get("staff");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(7);
+  const [recordsPerPage, setRecordsPerPage] = useState(7);
   const [filteredData, setFilteredData] = useState([]);
   const [isDataFiltered, setIsDataFiltered] = useState(true);
   const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
@@ -71,7 +71,7 @@ function PrivateTrips(props) {
           driver_name: data.TripList[i].DriverName,
           car_info:
             data.TripList[i].VehicaleModel +
-            "," +
+            ", " +
             data.TripList[i].VehicaleNumber,
           journey_id: data.TripList[i].DriverTripID,
           trip_date: data.TripList[i].StartedOnDate,
@@ -275,6 +275,11 @@ function PrivateTrips(props) {
             Showing {fromRecords} to {toRecords} of {filteredData.length}{" "}
             entries{" "}
           </p>
+          {/* <select onChange={(e) => setRecordsPerPage(e.target.value)}>
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+          </select> */}
           <ReactPaginate
             breakLabel="..."
             nextLabel=">"

@@ -121,13 +121,13 @@ const Accordian = (props) => {
         id={props.id + "tr"}
       >
         <td>
-          <div className={classes.driverInfo}>
-            <div className={classes.div}>
-              <p>{props.driver_name}</p>
-              <p className={classes.carInfo} id={props.journey_id}>
-                {props.car_info}
-              </p>
-            </div>
+          {/* <div className={classes.driverInfo}> */}
+          <div className={classes.div}>
+            <p>{props.driver_name}</p>
+            <p className={classes.carInfo} id={props.journey_id}>
+              {props.car_info}
+            </p>
+            {/* </div> */}
           </div>
         </td>
         <td>{props.journey_id} </td>
@@ -137,7 +137,7 @@ const Accordian = (props) => {
         <td>{props.total_trip_time} </td>
         <td>{props.trip_status} </td>
         <td className={classes.totalTrip}>
-          {props.total_trip_km}{" "}
+          <span style={{width: "30%"}}>{props.total_trip_km}{" "}</span>
           {isActive ? (
             <MdArrowDropDown className={classes.toggleIcon} />
           ) : (

@@ -56,7 +56,7 @@ const Records = ({ isLoading, data, headers }) => {
                 <td>{myData.route}</td>
                 <td>{myData.city}</td>
                 <td>{myData.country}</td>
-                <td>{myData.zone_price}</td>
+                {/* <td>{myData.zone_price}</td> */}
                 <td>
                   {myData.route_type.toLowerCase() === "picking"
                     ? "Pickup"

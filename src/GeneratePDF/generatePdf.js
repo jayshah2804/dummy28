@@ -229,7 +229,7 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
                     doc.setDrawColor(245, 174, 48);
                     doc.line(332.5, 598, 440, 598);
                     doc.setFontSize(8);
-                    doc.text("Page No. " + ++pageCount, 403, 608);
+                    // doc.text("Page No. " + ++pageCount, 403, 608);
                 }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, startY: doc.autoTable.previous.finalY + 30, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
         });
     }

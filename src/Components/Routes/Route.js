@@ -167,7 +167,7 @@ const TRIP_TITLE = [
     "Route Name",
     "City",
     "Country",
-    "Zone Price",
+    // "Zone Price",
     "Route Type",
 ];
 
