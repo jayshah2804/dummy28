@@ -78,7 +78,7 @@ const StopInfo = (props) => {
   // useEffect(() => {
   const script = document.createElement("script");
   script.src =
-    "https://maps.googleapis.com/maps/api/js?key=AIzaSyAq88vEj-mQ9idalgeP1IuvulowkkFA-Nk&callback=myInitMap&libraries=places&v=weekly";
+    "https://maps.googleapis.com/maps/api/js?key=AIzaSyDHdkmGjsfNqasFs6m9CooShFZsqWHcdUs&callback=myInitMap&libraries=places&v=weekly";
   script.async = true;
   document.body.appendChild(script);
   // }, []);
@@ -492,55 +492,71 @@ const StopInfo = (props) => {
     for (let i = 0; i < STOP_DETAILS.length - 1; i++) {
       origins.push({
         lat: STOP_DETAILS[i].lat,
-        lng: STOP_DETAILS[i].lng
-      })
+        lng: STOP_DETAILS[i].lng,
+      });
     }
     let destinations = [];
     for (let i = 1; i < STOP_DETAILS.length; i++) {
       destinations.push({
         lat: STOP_DETAILS[i].lat,
-        lng: STOP_DETAILS[i].lng
-      })
+        lng: STOP_DETAILS[i].lng,
+      });
     }
     // debugger;
     let service = new window.google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-      origins,
-      destinations,
-      travelMode: window.google.maps.TravelMode.DRIVING,
-      avoidHighways: false,
-      avoidTolls: false,
-      unitSystem: window.google.maps.UnitSystem.IMPERIAL
-    },
-      callback);
+    service.getDistanceMatrix(
+      {
+        origins,
+        destinations,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+        avoidHighways: false,
+        avoidTolls: false,
+        unitSystem: window.google.maps.UnitSystem.IMPERIAL,
+      },
+      callback
+    );
 
     function callback(response, status) {
       let totalDistance = 0;
       for (let i = 0; i < response?.rows?.length; i++) {
         if (response.rows[i].elements[0].distance.text.includes("mi"))
-          totalDistance += +(response.rows[i].elements[0].distance.text.split(" ")[0]) * 1.60934;
-        else totalDistance += +(response.rows[i].elements[1].distance.text.split(" ")[0]) * 1.60934;
+          totalDistance +=
+            +response.rows[i].elements[0].distance.text.split(" ")[0] * 1.60934;
+        else
+          totalDistance +=
+            +response.rows[i].elements[1].distance.text.split(" ")[0] * 1.60934;
       }
       approximate_distance = +totalDistance.toFixed(2);
-      document.getElementById("approxKm").innerText = approximate_distance + " km";
+      document.getElementById("approxKm").innerText =
+        approximate_distance + " km";
       // console.log(approximate_distance);
     }
     // debugger;
     if (previewRouteFlag) {
       let service = new window.google.maps.DistanceMatrixService();
-      service.getDistanceMatrix({
-        origins: [{ lat: destinations[destinations.length - 1].lat, lng: destinations[destinations.length - 1].lng }],
-        destinations: [{ lat: origins[0].lat, lng: origins[0].lng }],
-        travelMode: window.google.maps.TravelMode.DRIVING,
-        avoidHighways: false,
-        avoidTolls: false,
-        unitSystem: window.google.maps.UnitSystem.IMPERIAL
-      },
-        previewCallback);
+      service.getDistanceMatrix(
+        {
+          origins: [
+            {
+              lat: destinations[destinations.length - 1].lat,
+              lng: destinations[destinations.length - 1].lng,
+            },
+          ],
+          destinations: [{ lat: origins[0].lat, lng: origins[0].lng }],
+          travelMode: window.google.maps.TravelMode.DRIVING,
+          avoidHighways: false,
+          avoidTolls: false,
+          unitSystem: window.google.maps.UnitSystem.IMPERIAL,
+        },
+        previewCallback
+      );
     }
     function previewCallback(response, status) {
-      approximate_distance += +(+(response.rows[0].elements[0].distance.text.split(" ")[0]) * 1.60934).toFixed(2);
-      document.getElementById("approxKm").innerText = approximate_distance.toFixed(2) + " km";
+      approximate_distance += +(
+        +response.rows[0].elements[0].distance.text.split(" ")[0] * 1.60934
+      ).toFixed(2);
+      document.getElementById("approxKm").innerText =
+        approximate_distance.toFixed(2) + " km";
     }
 
     directionsService.route(request, function (response, status) {
@@ -630,15 +646,18 @@ const StopInfo = (props) => {
         icon = studentDummyImage;
         if (position.status)
           // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><p id="infowindow-success">Assigned</div>`;
-          myTitle = `<div id="infowindow-container" ><h3>${myStopNumberInfo[position.mNumber[0]]
-            ? myStopNumberInfo[position.mNumber[0]] + ". "
-            : ""
-            }${position.stop.split(",")[0]
-            }</h3><p id="infowindow-success">Assigned</div>`;
+          myTitle = `<div id="infowindow-container" ><h3>${
+            myStopNumberInfo[position.mNumber[0]]
+              ? myStopNumberInfo[position.mNumber[0]] + ". "
+              : ""
+          }${
+            position.stop.split(",")[0]
+          }</h3><p id="infowindow-success">Assigned</div>`;
         // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><div id=${i}><span id='infowindow-assign'>Assign rider</span></div></div>`;
         else
-          myTitle = `<div><div id="infowindow-container" ><h3>${position.stop.split(",")[0]
-            }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
+          myTitle = `<div><div id="infowindow-container" ><h3>${
+            position.stop.split(",")[0]
+          }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
       }
 
       const marker = new window.google.maps.Marker({
@@ -696,8 +715,7 @@ const StopInfo = (props) => {
       }
       // console.log(filteredData);
       // console.log(filteredData[i],i);
-      else
-        arr.push(filteredData[i].stop);
+      else arr.push(filteredData[i].stop);
     }
     // STOP_DETAILS = [];
     arr = [];
@@ -709,9 +727,7 @@ const StopInfo = (props) => {
         STOP_DETAILS.splice(i, 1);
         flightPlanCoordinates.splice(i, 1);
         i--;
-      }
-      else
-        arr.push(STOP_DETAILS[i].stop);
+      } else arr.push(STOP_DETAILS[i].stop);
     }
 
     setFilteredData(filteredData);
@@ -940,18 +956,18 @@ const StopInfo = (props) => {
       if (i !== 0) {
         document
           .getElementsByClassName("stopNames-container")
-        [i].addEventListener("mouseover", () => {
-          document
-            .getElementsByClassName("cross")
-          [i].classList.add("myClassName");
-        });
+          [i].addEventListener("mouseover", () => {
+            document
+              .getElementsByClassName("cross")
+              [i].classList.add("myClassName");
+          });
         document
           .getElementsByClassName("stopNames-container")
-        [i].addEventListener("mouseleave", () => {
-          document
-            .getElementsByClassName("cross")
-          [i].classList.remove("myClassName");
-        });
+          [i].addEventListener("mouseleave", () => {
+            document
+              .getElementsByClassName("cross")
+              [i].classList.remove("myClassName");
+          });
       }
     }
     for (
@@ -961,18 +977,18 @@ const StopInfo = (props) => {
     ) {
       document
         .getElementsByClassName("tempMyStudents")
-      [i].addEventListener("mouseover", () => {
-        document
-          .getElementsByClassName("studentCross")
-        [i].classList.add("myStudentClass");
-      });
+        [i].addEventListener("mouseover", () => {
+          document
+            .getElementsByClassName("studentCross")
+            [i].classList.add("myStudentClass");
+        });
       document
         .getElementsByClassName("tempMyStudents")
-      [i].addEventListener("mouseleave", () => {
-        document
-          .getElementsByClassName("studentCross")
-        [i].classList.remove("myStudentClass");
-      });
+        [i].addEventListener("mouseleave", () => {
+          document
+            .getElementsByClassName("studentCross")
+            [i].classList.remove("myStudentClass");
+        });
     }
     setTimeout(() => {
       document.getElementById("asdf").click();
@@ -983,7 +999,9 @@ const StopInfo = (props) => {
     <div className="stop-main-container">
       <div className="stop-container">
         {/* {approximate_distance && */}
-        <span style={{ marginLeft: "40px", fontSize: "12px" }}>Approximate Distance: <span id="approxKm"></span> </span>
+        <span style={{ marginLeft: "40px", fontSize: "12px" }}>
+          Approximate Distance: <span id="approxKm"></span>{" "}
+        </span>
         {/* } */}
         <ul id="sortlist" className="stop-subcontainer">
           {STOP_DETAILS.map((data, index) => {
