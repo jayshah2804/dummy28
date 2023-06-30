@@ -113,8 +113,10 @@ const StopInfo = (props) => {
           lng: details[i].StopLongitude,
           mNumber: [details[i].MobileNumber],
           riders: [details[i].OfficialName],
-          uId: [details[i]?.OfficialId?.toString()]
+          uId: [details[i]?.OfficialId?.toString()],
+          dptName: [details[i]?.dptName]
         });
+        // debugger;
         staffUIds.add(details[i]?.OfficialId?.toString());
         // editaedFlightPanCoordinates.push({
         //   lat: details[i].StopLatitude,
@@ -137,7 +139,8 @@ const StopInfo = (props) => {
           },
           mNumber: [details[i].MobileNumber],
           status: true,
-          uId: [details[i]?.OfficialId?.toString()]
+          uId: [details[i]?.OfficialId?.toString()],
+          dptName: [details[i]?.dptName]
         });
         if (i !== 0) {
           myStopNumberInfo[details[i].MobileNumber] = stop_number + 1;
@@ -201,6 +204,7 @@ const StopInfo = (props) => {
           });
         }
       }
+      // debugger;
       STOP_DETAILS.push({
         stop: studentData[0].stop,
         lat: studentData[0].location.lat,
@@ -488,7 +492,7 @@ const StopInfo = (props) => {
         lng: STOP_DETAILS[i].lng
       })
     }
-    debugger;
+    // debugger;
     let service = new window.google.maps.DistanceMatrixService();
     service.getDistanceMatrix({
       origins,
@@ -550,7 +554,7 @@ const StopInfo = (props) => {
     }
 
     const saveAssignButtonClickHandler = (e, id) => {
-      debugger;
+      // debugger;
       let alreadyRouteCreateFlag = false;
       let isChecked = false;
       for (let i = 0; i < document.getElementById(id).children.length; i++) {
@@ -780,7 +784,6 @@ const StopInfo = (props) => {
   };
 
   if (myFlag && filteredData.length > 0) {
-    debugger;
     let arr = [];
     for (let i = 0; i < filteredData.length; i++) {
       if (arr.includes(filteredData[i].stop)) {
