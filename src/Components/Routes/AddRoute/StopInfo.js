@@ -196,7 +196,8 @@ const StopInfo = (props) => {
                   : +data.StaffList[i].DropLL.split(",")[1],
             },
             status: false,
-            uId: [data.StaffList[i].StaffId.toString()]
+            uId: [data.StaffList[i].StaffId.toString()],
+            dptName: [data.StaffList[i].dptName]
           });
         }
       }
@@ -698,8 +699,6 @@ const StopInfo = (props) => {
       // }
     };
 
-    console.log(filteredData);
-    // debugger;
     filteredData.forEach((position, i) => {
       // console.log(filteredData[i]);
       if (i === 0) {
@@ -724,7 +723,7 @@ const StopInfo = (props) => {
           // }</h3></h3></div><input type="checkbox" id="select-all-riders" />Select All<div id="riderCheckBoxList">`
           }</h4></div><hr /><div id="riderCheckBoxList">`
         for (let j = 0; j < position.name.length; j++) {
-          myTitle += `<div id="riderCheckboxSubContainer" ><input id=${position.uId[j]} type="checkbox" /><label for=${position.uId[j]}>${position.name[j]}</label></div>`
+          myTitle += `<div id="riderCheckboxSubContainer" ><input id=${position.uId[j]} type="checkbox" /><label for=${position.uId[j]}>${position.name[j] + " (" + position.dptName[j] + ")"}</label></div>`
         }
         myTitle += `</div><button id="infoWindowAssignButton">Save</button></div >`;
         // }
@@ -739,7 +738,6 @@ const StopInfo = (props) => {
       });
 
       marker.addListener("click", () => {
-        // debugger;
         infoWindow.setContent(marker.myTitle);
         infoWindow.open(marker.getMap(), marker);
         setTimeout(() => {
@@ -790,6 +788,7 @@ const StopInfo = (props) => {
         filteredData[index].name.push(filteredData[i].name.toString());
         filteredData[index].mNumber.push(filteredData[i].mNumber.toString());
         filteredData[index].uId.push(filteredData[i]?.uId?.toString());
+        filteredData[index].dptName.push(filteredData[i]?.dptName);
         filteredData.splice(i, 1);
         i--;
       }
@@ -808,6 +807,7 @@ const StopInfo = (props) => {
         STOP_DETAILS[index].riders.push(STOP_DETAILS[i].riders.toString());
         STOP_DETAILS[index].mNumber.push(STOP_DETAILS[i].mNumber.toString());
         STOP_DETAILS[index].uId.push(STOP_DETAILS[i]?.uId?.toString());
+        STOP_DETAILS[index].dptName.push(STOP_DETAILS[i]?.dptName);
         STOP_DETAILS.splice(i, 1);
         flightPlanCoordinates.splice(i, 1);
         i--;
