@@ -5,6 +5,7 @@ let baseURL =
   window.location.origin === "https://corp.little.global"
     ? "https://corp.little.global/server"
     : "";
+
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

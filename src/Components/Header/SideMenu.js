@@ -55,10 +55,10 @@ const SideMenu = (props) => {
         sub: ["Shifts", "Create-Shift", "Trips", "Live Map"],
       });
       sideMenu.push(
-        // {
-        //   main: "Schedule Booking",
-        //   sub: ["New booking", "Previous bookings", "Trips"]
-        // },
+        {
+          main: "Schedule Booking",
+          sub: ["New booking", "Previous bookings", "Trips"]
+        },
         {
           main: "Departments",
         },

@@ -1,0 +1,197 @@
+tr {
+    cursor: pointer;
+}
+
+.pending {
+    color: orange;
+    border: 1px solid orange;
+    border-radius: 10px;
+    width: 47%;
+    padding: 7px 7px;
+}
+
+.cancelled {
+    color: rgb(226, 44, 29);
+    border: 1px solid rgb(226, 44, 29);
+    border-radius: 10px;
+    width: 47%;
+    padding: 7px 7px;
+}
+
+.started,
+.arrived {
+    color: gray;
+    border: 1px solid gray;
+    border-radius: 10px;
+    width: 47%;
+    padding: 7px 7px;
+}
+
+.ended {
+    color: rgba(42, 149, 69, 255);
+    border: 1px solid rgba(42, 149, 69, 255);
+    border-radius: 10px;
+    width: 47%;
+    padding: 7px 7px;
+}
+
+.accepted {
+    color: rgba(34, 137, 203, 255);
+    border: 1px solid rgba(34, 137, 203, 255);
+    border-radius: 10px;
+    width: 47%;
+    padding: 7px 7px;
+}
+
+.cancelBooking {
+    background-color: rgb(226, 44, 29);
+    color: white;
+    border: 1px solid rgb(226, 44, 29);
+    padding: 4px 9px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.disable {
+    padding: 4px 9px;
+    cursor: no-drop;
+    border-radius: 5px;
+    color: grey;
+}
+
+.cancelBooking:hover {
+    background-color: rgb(197, 5, 5);
+}
+
+.twoEntries {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.icon:hover {
+    transform: scale(1.1);
+}
+
+.twoEntriesRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.driverInfo {
+    display: flex;
+    gap: 5px;
+    margin-left: 5px;
+}
+
+.driverPhoto {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.driverInfo .div {
+    display: flex;
+    flex-direction: column;
+}
+
+.riderTable {
+    border-collapse: collapse;
+    /* overflow: scroll; */
+    background-color: white;
+    margin: 10px;
+    border: 1px solid rgb(216, 215, 215);
+}
+
+.riderTable .riderName {
+    /* display: flex; */
+    /* align-items: center; */
+    /* gap: 3px; */
+}
+
+.riderTable .riderName img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.riderTable tr:hover {
+    cursor: default;
+    background-color: white;
+}
+
+.riderTable th {
+    line-height: 14px;
+    /* background-color: rgb(240, 248, 248); */
+    background-color: #f9f9f9;
+}
+
+.riderTable tr {
+    line-height: 12px;
+}
+
+.riderTable th {
+    font-size: 12px;
+}
+
+.riderTable tr td {
+    font-size: 12px;
+}
+
+.rideTableContainer {
+    height: auto;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.carInfo {
+    color: gray;
+    font-size: 11px;
+}
+
+.totalTrip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.toggleIcon {
+    font-size: 30px;
+    color: rgb(18, 116, 155);
+}
+
+.green {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(42, 149, 69, 255);
+    align-self: center;
+    display: inline-block;
+}
+
+.red {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(226, 44, 29);
+    align-self: center;
+    display: inline-block;
+}
+
+.line {
+    width: 100px;
+    height: 2px;
+    background-color: rgba(34, 137, 203, 255);
+    display: inline-block;
+}

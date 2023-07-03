@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import useHttp from '../../Hooks/use-http';
-import "./NewRegistration.css";
 import { BiUpload } from "react-icons/bi";
 
+import "./NewRegistration.css";
+import useHttp from '../../Hooks/use-http';
 import loadingGif from "../../Assets/loading-gif.gif";
+
 
 let corporateLogo = "";
 let adminPhoto = "";
-
 const DATA_ERRORS = {
     countryError: "",
     industryError: "",
@@ -31,9 +29,9 @@ const DATA_ERRORS = {
     contractStartDateError: "",
     contractEndDateError: ""
 }
-
 let isFormValid = false;
 let apiFlag = 0;
+
 const NewRegistration = () => {
     const [formError, setFormError] = useState(DATA_ERRORS);
     const [isValid, setIsValid] = useState(false);
@@ -68,27 +66,6 @@ const NewRegistration = () => {
     const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
-        console.log({
-            countryID: countrySelectRef.current.value,
-            industry: industrySelectRef.current.value,
-            corporateType: typeSelectRef.current.value,
-            corporatename: corporateNameInputRef.current.value,
-            corporatedomain: corporateDomainInputRef.current.value,
-            corporateLogo: corporateLogo,
-            adminName: adminNameInputRef.current.value,
-            adminEmail: adminEmailInputRef.current.value,
-            adminImage: adminPhoto,
-            adminContactNo: adminMobileInputRef.current.value,
-            invoiceContactName: invoiceContactNameInputRef.current.value,
-            invoiceContactEmail: invoiceContactEmailInputRef.current.value,
-            accountManagerID: "nihal@little.global",
-            salesExecutives: "nihal@little.global",
-            corporateLatlong: latLngInputRef.current.value,
-            creditPeriod: CreditPeriodInputRef.current.value,
-            contractstartdate: contractStartDateInputRef.current.value,
-            contractEnddate: contractEndDateInputRef.current.value,
-            password: ""
-        });
         if (isValid)
             sendRequest({
                 url: "/api/v1/Corporate/CorporateRegistration",
@@ -121,8 +98,6 @@ const NewRegistration = () => {
         apiFlag++;
     }, [sendRequest, isValid])
 
-
-
     const countryChangeHandler = () => {
         if (countrySelectRef.current.value) {
             isFormValid = true;
@@ -133,6 +108,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, countryError: "country name is invalid" }));
         }
     }
+
     const industryChangeHandler = () => {
         if (industrySelectRef.current.value) {
             isFormValid = true;
@@ -143,6 +119,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, industryError: "Industry name is invalid" }));
         }
     }
+
     const corporateTypeChangeHandler = () => {
         if (typeSelectRef.current.value) {
             isFormValid = true;
@@ -153,6 +130,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, corporateTypeError: "Corporate type is invalid" }));
         }
     }
+
     const corprateNameChangeHandler = () => {
         if (corporateNameInputRef.current.value) {
             isFormValid = true;
@@ -163,6 +141,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, corporateNameError: "Corporate name is Invalid" }));
         }
     }
+
     const corprateDomainChangeHandler = () => {
         if (corporateDomainInputRef.current.value) {
             isFormValid = true;
@@ -173,6 +152,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, corporateDomainError: "Corporate domain is Invalid" }));
         }
     }
+
     const adminNameChangeHandler = () => {
         if (adminNameInputRef.current.value) {
             isFormValid = true;
@@ -183,6 +163,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, adminNameError: "admin name is Invalid" }));
         }
     }
+
     const adminEmailChangeHandler = () => {
         if (adminEmailInputRef.current.value) {
             isFormValid = true;
@@ -193,6 +174,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, adminEmailError: "admin email is Invalid" }));
         }
     }
+
     const adminContactChangeHandler = () => {
         if (adminMobileInputRef.current.value) {
             isFormValid = true;
@@ -203,6 +185,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, adminContactError: "admin contact is Invalid" }));
         }
     }
+
     const invoiceContactNameChangeHandler = () => {
         if (invoiceContactNameInputRef.current.value) {
             isFormValid = true;
@@ -213,6 +196,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, invoiceContactNameError: "invoice contact name is Invalid" }));
         }
     }
+
     const invoiceContactEmailChangeHandler = () => {
         if (invoiceContactEmailInputRef.current.value) {
             isFormValid = true;
@@ -223,6 +207,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, invoiceContactEmailError: "invoice contact email is Invalid" }));
         }
     }
+
     const accountManagerChangeHandler = () => {
         if (accountManagerSelectRef.current.value) {
             isFormValid = true;
@@ -233,6 +218,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, accountManagerError: "account manager is Invalid" }));
         }
     }
+
     const salesExecutiveChangeHandler = () => {
         if (salesExecutiveSelectRef.current.value) {
             isFormValid = true;
@@ -243,6 +229,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, salesExecutiveError: "sales executive is Invalid" }));
         }
     }
+
     const latLngChangeHandler = () => {
         if (latLngInputRef.current.value) {
             isFormValid = true;
@@ -253,6 +240,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, latLngError: "Lat, lng is Invalid" }));
         }
     }
+
     const creditPeriodChangeHandler = () => {
         if (CreditPeriodInputRef.current.value) {
             isFormValid = true;
@@ -281,6 +269,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, contractStartDateError: "contarct start date is Invalid" }));
         }
     }
+
     const contractEndDateChangeHandler = () => {
         if (contractEndDateInputRef.current.value) {
             isFormValid = true;
@@ -291,6 +280,7 @@ const NewRegistration = () => {
             setFormError(prev => ({ ...prev, contractEndDateError: "contarct end date is Invalid" }));
         }
     }
+
     const corporateLogoChangeHandler = (e) => {
         if (corporateLogoInputRef.current.value) {
             let a = corporateLogoInputRef.current.value.split("/");
@@ -308,6 +298,7 @@ const NewRegistration = () => {
             }
         }
     }
+    
     const adminPhotoChangeHandler = (e) => {
         if (adminPhotoInputRef.current.value) {
             let a = adminPhotoInputRef.current.value.split("/");

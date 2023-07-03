@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import useHttp from "../Hooks/use-http";
 import generatePDF from "./generatePdf";
 import "./Modal.css";
-// import { OpenSans } from './font-descriptors';
 
 let drivers = [];
 let riders = [];
@@ -14,8 +14,6 @@ let selectedRiderData = {
   name: "",
   number: "",
 };
-let searchedDriverEmail = "";
-let searchedRiderNumber = "";
 let reportURLs = {
   trips: "Report/ShuttleTripReport",
   shifts: "DriverShift/DriverShiftDetailsReport",
@@ -54,7 +52,6 @@ const Modal = (props) => {
 
   const authenticateUser = (data) => {
     if (isGeneratePdfClicked) {
-      debugger;
       if (data?.ReportDetails) {
         let totalKm = 0;
         let totalTrips = 0;
@@ -87,10 +84,6 @@ const Modal = (props) => {
         setTimeout(() => setGeneratePdfError(false), 4000);
       }
       setIsGeneratePdfClicked(false);
-      // selectedRiderData.number = "";
-      // selectedRiderData.name = "";
-      // selectedDriverData.name = "";
-      // selectedDriverData.email = "";
     } else {
       drivers = [];
       riders = [];
@@ -136,7 +129,6 @@ const Modal = (props) => {
       );
     }
     if (isGeneratePdfClicked) {
-      // debugger;
       let startDate = startDateRef.current.value
         ? formatToMMDDYYYYfromYYYYMMDD(startDateRef.current.value)
         : "";
@@ -158,18 +150,6 @@ const Modal = (props) => {
             isPrivateTrip: props.isPrivateDriver ? "1" : "0",
             startDate: startDate,
             endDate: endDate,
-            // startDate: startDate ? startDate : "2018/01/01",
-            // endDate: endDate
-            //   ? endDate
-            //   : new Date()
-            //     .getFullYear()
-            //     .toString()
-            //     .concat(
-            //       "-",
-            //       +new Date().getMonth() + 1,
-            //       "-",
-            //       new Date().getDate()
-            //     )
           },
         },
         authenticateUser
@@ -213,12 +193,6 @@ const Modal = (props) => {
     setIsGeneratePdfClicked(true);
   };
 
-  // const riderSelectedHandler = (e) => {
-  //     riderInputSearchRef.current.value = e.target.innerText;
-  //     searchedRiderNumber = rider.number;
-  //     setSearchedRiderData([]);
-  // }
-
   return (
     <div className="generatePdf-container">
       <header>
@@ -240,7 +214,6 @@ const Modal = (props) => {
             <React.Fragment>
               <div class="wrapper">
                 <div class="progressbar">
-                  {/* <div class="stylization"></div> */}
                 </div>
                 <span
                   id="progressBarText"

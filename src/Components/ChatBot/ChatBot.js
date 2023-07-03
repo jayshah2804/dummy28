@@ -98,6 +98,7 @@ const ChatBot = () => {
               type="text"
               id="chatInput"
               placeholder="Type your message"
+              autoComplete="off"
               onKeyDown={(e) =>
                 e.key === "Enter" ? chatInputEnteredClick() : ""
               }
@@ -124,7 +125,7 @@ const ChatBot = () => {
         </p>
       )} */}
       <img
-        src={ !isChatbotOpen ? ChatBotImage : cancelImage}
+        src={!isChatbotOpen ? ChatBotImage : cancelImage}
         onClick={() => setIsChatbotOpen((prev) => !prev)}
       />
     </div>

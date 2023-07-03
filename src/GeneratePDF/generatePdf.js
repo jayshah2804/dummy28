@@ -1,16 +1,11 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import littleImage from "../Assets/Little_logo.jpg"
-// import openSans from "../Assets/OpenSans-Regular.ttf";
 import openSans from "../Assets/OpenSans-Medium.ttf";
-import "./generatePdf.css";
+
 import frame1 from "../Assets/frame1.png";
 import frame2 from "../Assets/frame2.png";
-// Date Fns is used to format the dates we receive
-// from our API call
-// import { format } from "date-fns";
+import littleImage from "../Assets/Little_logo.jpg"
 
-// define a generatePDF function that accepts a tickets argument
 let pageCount = 0;
 window.tripsHeading = [
     "Sn.",
@@ -23,6 +18,7 @@ window.tripsHeading = [
     "Drop Location",
     "Trip km",
 ];
+
 window.scheduleTripsHeading = [
     "Sn.",
     "Driver Name",
@@ -59,26 +55,22 @@ window.bookingRequestsHeading = [
 const adHocHeading = [
     "Sn.",
     "Driver Name",
-    // "Trip Date",
     "Start Date Time",
     "End Date Time",
     "km",
 ];
 
 let months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount, kmCount, cpLogo, cpAddress, addressWidth, isSchedueBooking, type, adHocDriverList) => {
-    debugger;
     const opt = { orientation: "portrait", unit: "px", compressPdf: true };
     const doc = new jsPDF(opt);
     let current_date_time = new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear() + " | " + (new Date().getHours() > 12 ? new Date().getHours() - 12 + ":" + (new Date().getMinutes().toString().length === 1 ? "0" + new Date().getMinutes() : new Date().getMinutes()) + " pm" : new Date().getHours() + ":" + (new Date().getMinutes().toString().length === 1 ? "0" + new Date().getMinutes() : new Date().getMinutes()) + " am");
     pageCount = 0;
     let tableColumn = [];
-
     tableColumn = window[type + "Heading"];
-    // define an empty array of rows
     const tableRows = [];
 
-    // for each ticket pass all its data into an array
     let i = 0, j = 0;
     data.forEach(ticket => {
         let ticketData = [];
@@ -129,13 +121,13 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
             ];
         tableRows.push(ticketData);
     });
+
     let adHocRows = [];
     adHocDriverList?.forEach(ticket => {
         let ticketData = [];
         ticketData = [
             ++j,
             ticket.DriverName,
-            // ticket.TripDate,
             ticket.StartTime.replace("T", " "),
             ticket.EndTime.replace("T", " "),
             ticket.kilometers,
@@ -145,9 +137,7 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     )
 
     doc.addFont(openSans, 'openSans', 'normal');
-
-    // doc.setFont('poppins'); // set font
-    doc.setFont('openSans'); // set font
+    doc.setFont('openSans');
 
     if (isSchedueBooking != "1") {
         doc.setDrawColor(255, 255, 255);
@@ -179,7 +169,7 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
     doc.autoTable(tableColumn, tableRows, {
         didDrawPage:
             function (data) {
-                doc.setFont('openSans'); // set font
+                doc.setFont('openSans');
                 doc.setFontSize(8);
                 doc.text(`${isSchedueBooking ? "Shifts Statement" : "Trips Statement"}` + (riderName ? `of rider ${riderName}` : "") +
                     (driverName ? ` from driver ${driverName}` : "") +
@@ -208,7 +198,8 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
             }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, startY: isSchedueBooking == "1" ? 80 : 120, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
     });
     if (adHocRows.length > 0 && !driverName && !riderName) {
-        doc.text("Ad Hoc Driver Data", 30, doc.autoTable.previous.finalY + 20);
+        doc.addPage();
+        doc.text("Ad Hoc Driver Data", 30, 70);
         doc.autoTable(adHocHeading, adHocRows, {
             didDrawPage:
                 function (data) {
@@ -229,26 +220,12 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
                     doc.setDrawColor(245, 174, 48);
                     doc.line(332.5, 598, 440, 598);
                     doc.setFontSize(8);
-                    // doc.text("Page No. " + ++pageCount, 403, 608);
-                }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, startY: doc.autoTable.previous.finalY + 30, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
+                    doc.text("Page No. " + ++pageCount, 403, 608);
+                }, margin: { top: 70, bottom: 80 }, styles: { fontSize: 7, font: "openSans" }, startY: 80, columnStyles: { 6: { columnWidth: 85 }, 7: { columnWidth: 85 } }, bodyStyles: { fontSize: 6 }, headStyles: { fillColor: [34, 137, 203] }
         });
     }
-    const date = Date().split(" ");
-    // we use a date string to generate our filename.
-    const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
-    var offsetY = 4.797777777777778; //var offsetY is for spacing
-    var lineHeight = 6.49111111111111;
-    // var img = new Image(); //this mount a variable to img
-    // img.src = sign //asign the src to the img variable
-    // doc.setFontSize(10);
-    // doc.addImage(img, 'jpg', 170, doc.autoTable.previous.finalY + lineHeight * 1.5 + offsetY, 50, 20)// use the method doc.autoTable.previous.finalY + lineHeight * 1.5 + offsetY to be able to position the image of the signature below the table at a safe distance from it 
-    // doc.text(180, doc.autoTable.previous.finalY + lineHeight * 5 + offsetY, "Nihal Chaudhary") // later add the text below the signature
-    // // doc.text(165, doc.autoTable.previous.finalY + lineHeight * 6 + offsetY, "Country Manager, Little India") //more text
-    // doc.fromHTML(renderToString(document.getElementById("jay")), function() {
-    //     doc.save("Text.pdf");
-    // });
-    // doc.save(`report_${sessionStorage.getItem("cpName")}.pdf`);
-    doc.output('dataurlnewwindow');
+
+    doc.output('dataurlnewwindow', { filename: "Report" });
 };
 
 export default generatePDF;

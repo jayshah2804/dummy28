@@ -1,0 +1,112 @@
+tr {
+    cursor: pointer;
+}
+
+.driverInfo {
+    display: flex;
+    gap: 5px;
+    margin-left: 5px;
+}
+
+.driverPhoto {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.driverInfo .div {
+    display: flex;
+    flex-direction: column;
+}
+
+.riderTable {
+    border-collapse: collapse;
+    /* overflow: scroll; */
+    background-color: white;
+    margin: 10px;
+    border: 1px solid rgb(216, 215, 215);
+}
+
+.riderTable .riderName {
+    /* display: flex; */
+    /* align-items: center; */
+    /* gap: 3px; */
+}
+
+.riderTable .riderName img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.riderTable tr:hover {
+    cursor: default;
+    background-color: white;
+}
+
+.riderTable th {
+    line-height: 14px;
+    /* background-color: rgb(240, 248, 248); */
+    background-color: #f9f9f9;
+}
+
+.riderTable tr {
+    line-height: 10px;
+}
+
+.riderTable th {
+    font-size: 12px;
+}
+
+.riderTable tr td {
+    font-size: 10px;
+}
+
+.rideTableContainer {
+    height: auto;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.carInfo {
+    color: gray;
+    font-size: 11px;
+}
+
+.totalTrip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggleIcon {
+    font-size: 30px;
+    color: rgb(18, 116, 155);
+}
+
+.green {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(42, 149, 69, 255);
+    align-self: center;
+    display: inline-block;
+}
+
+.red {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(226, 44, 29);
+    align-self: center;
+    display: inline-block;
+}
+
+.line {
+    width: 100px;
+    height: 2px;
+    background-color: rgba(34, 137, 203, 255);
+    display: inline-block;
+}

@@ -1,9 +1,9 @@
 import React from 'react';
-import studentDropImage from "../../Assets/student_dummy_photo.png";
+import studentDropImage from "../../../Assets/student_dummy_photo.png";
 // import studentDummyImage from "../../Assets/student_dummy_photo.png";
-import studentDummyImage from "../../Assets/new_student_marker.png";
-import startPoint from "../../Assets/Pin_icon_green50.png";
-import endPoint from "../../Assets/Pin_icon50.png";
+import studentDummyImage from "../../../Assets/new_student_marker.png";
+import startPoint from "../../../Assets/Pin_icon_green50.png";
+import endPoint from "../../../Assets/Pin_icon50.png";
 // import dummy from "../../Assets/greenNew.png";
 
 let minBounds = 1;
