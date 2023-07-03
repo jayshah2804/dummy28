@@ -752,6 +752,7 @@ const StopInfo = (props) => {
         })
         infoWindow.open(
           setTimeout(() => {
+            //comment
             // document.getElementById("infowindow-assign").addEventListener("click", assignButtonClickHandler);
             document.getElementById("infoWindowAssignButton").addEventListener("click", (e) => saveAssignButtonClickHandler(e, "riderCheckBoxList"));
             // document.getElementById("select-all-riders").addEventListener("click", (e) => selectAllRidersClickHandler(e))
