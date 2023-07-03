@@ -114,7 +114,7 @@ const StopInfo = (props) => {
           mNumber: [details[i].MobileNumber],
           riders: [details[i].OfficialName],
           uId: [details[i]?.OfficialId?.toString()],
-          dptName: [details[i]?.dptName]
+          dptName: [details[i]?.dptName],
         });
         // debugger;
         staffUIds.add(details[i]?.OfficialId?.toString());
@@ -140,7 +140,7 @@ const StopInfo = (props) => {
           mNumber: [details[i].MobileNumber],
           status: true,
           uId: [details[i]?.OfficialId?.toString()],
-          dptName: [details[i]?.dptName]
+          dptName: [details[i]?.dptName],
         });
         if (i !== 0) {
           myStopNumberInfo[details[i].MobileNumber] = stop_number + 1;
@@ -200,7 +200,7 @@ const StopInfo = (props) => {
             },
             status: false,
             uId: [data.StaffList[i].StaffId.toString()],
-            dptName: [data.StaffList[i].dptName]
+            dptName: [data.StaffList[i].dptName],
           });
         }
       }
@@ -482,55 +482,71 @@ const StopInfo = (props) => {
     for (let i = 0; i < STOP_DETAILS.length - 1; i++) {
       origins.push({
         lat: STOP_DETAILS[i].lat,
-        lng: STOP_DETAILS[i].lng
-      })
+        lng: STOP_DETAILS[i].lng,
+      });
     }
     let destinations = [];
     for (let i = 1; i < STOP_DETAILS.length; i++) {
       destinations.push({
         lat: STOP_DETAILS[i].lat,
-        lng: STOP_DETAILS[i].lng
-      })
+        lng: STOP_DETAILS[i].lng,
+      });
     }
     // debugger;
     let service = new window.google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-      origins,
-      destinations,
-      travelMode: window.google.maps.TravelMode.DRIVING,
-      avoidHighways: false,
-      avoidTolls: false,
-      unitSystem: window.google.maps.UnitSystem.IMPERIAL
-    },
-      callback);
+    service.getDistanceMatrix(
+      {
+        origins,
+        destinations,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+        avoidHighways: false,
+        avoidTolls: false,
+        unitSystem: window.google.maps.UnitSystem.IMPERIAL,
+      },
+      callback
+    );
 
     function callback(response, status) {
       let totalDistance = 0;
       for (let i = 0; i < response?.rows?.length; i++) {
         if (response.rows[i].elements[0].distance.text.includes("mi"))
-          totalDistance += +(response.rows[0].elements[i].distance.text.split(" ")[0]) * 1.60934;
-        else totalDistance += +(response.rows[1].elements[i].distance.text.split(" ")[0]) * 1.60934;
+          totalDistance +=
+            +response.rows[i].elements[0].distance.text.split(" ")[0] * 1.60934;
+        else
+          totalDistance +=
+            +response.rows[i].elements[1].distance.text.split(" ")[0] * 1.60934;
       }
       approximate_distance = +totalDistance.toFixed(2);
-      document.getElementById("approxKm").innerText = approximate_distance + " km";
+      document.getElementById("approxKm").innerText =
+        approximate_distance + " km";
       // console.log(approximate_distance);
     }
     // debugger;
     if (previewRouteFlag) {
       let service = new window.google.maps.DistanceMatrixService();
-      service.getDistanceMatrix({
-        origins: [{ lat: destinations[destinations.length - 1].lat, lng: destinations[destinations.length - 1].lng }],
-        destinations: [{ lat: origins[0].lat, lng: origins[0].lng }],
-        travelMode: window.google.maps.TravelMode.DRIVING,
-        avoidHighways: false,
-        avoidTolls: false,
-        unitSystem: window.google.maps.UnitSystem.IMPERIAL
-      },
-        previewCallback);
+      service.getDistanceMatrix(
+        {
+          origins: [
+            {
+              lat: destinations[destinations.length - 1].lat,
+              lng: destinations[destinations.length - 1].lng,
+            },
+          ],
+          destinations: [{ lat: origins[0].lat, lng: origins[0].lng }],
+          travelMode: window.google.maps.TravelMode.DRIVING,
+          avoidHighways: false,
+          avoidTolls: false,
+          unitSystem: window.google.maps.UnitSystem.IMPERIAL,
+        },
+        previewCallback
+      );
     }
     function previewCallback(response, status) {
-      approximate_distance += +(+(response.rows[0].elements[0].distance.text.split(" ")[0]) * 1.60934).toFixed(2);
-      document.getElementById("approxKm").innerText = approximate_distance.toFixed(2) + " km";
+      approximate_distance += +(
+        +response.rows[0].elements[0].distance.text.split(" ")[0] * 1.60934
+      ).toFixed(2);
+      document.getElementById("approxKm").innerText =
+        approximate_distance.toFixed(2) + " km";
     }
 
     directionsService.route(request, function (response, status) {
@@ -546,41 +562,64 @@ const StopInfo = (props) => {
     let myTitle;
 
     const selectAllRidersClickHandler = (e) => {
-      for (let i = 0; i < filteredData[e.target.parentElement.id].uId.length; i++) {
+      for (
+        let i = 0;
+        i < filteredData[e.target.parentElement.id].uId.length;
+        i++
+      ) {
         if (e.target.checked)
-          document.getElementById(filteredData[e.target.parentElement.id].uId[i]).checked = true;
-        else document.getElementById(filteredData[e.target.parentElement.id].uId[i]).checked = false;
+          document.getElementById(
+            filteredData[e.target.parentElement.id].uId[i]
+          ).checked = true;
+        else
+          document.getElementById(
+            filteredData[e.target.parentElement.id].uId[i]
+          ).checked = false;
       }
-    }
+    };
 
     const saveAssignButtonClickHandler = (e, id) => {
       // debugger;
       let alreadyRouteCreateFlag = false;
       let isChecked = false;
       for (let i = 0; i < document.getElementById(id).children.length; i++) {
-        if (staffUIds.has(document.getElementById(id).children[i].children[0].id)) alreadyRouteCreateFlag = true;
+        if (
+          staffUIds.has(document.getElementById(id).children[i].children[0].id)
+        )
+          alreadyRouteCreateFlag = true;
         if (document.getElementById(id).children[i].children[0].checked) {
-          staffUIds.add(document.getElementById(id).children[i].children[0].id.toString());
+          staffUIds.add(
+            document.getElementById(id).children[i].children[0].id.toString()
+          );
           isChecked = true;
-        }
-        else {
-          staffUIds.delete(document.getElementById(id).children[i].children[0].id.toString());
-          if (!isChecked && i === document.getElementById(id).children.length - 1 && !alreadyRouteCreateFlag) {
+        } else {
+          staffUIds.delete(
+            document.getElementById(id).children[i].children[0].id.toString()
+          );
+          if (
+            !isChecked &&
+            i === document.getElementById(id).children.length - 1 &&
+            !alreadyRouteCreateFlag
+          ) {
             return;
           }
-        };
+        }
       }
 
       if (staffUIds.size === 0) {
         let indexToBeSpliced = 0;
         for (let i = 0; i < STOP_DETAILS.length; i++) {
-          if (STOP_DETAILS[i].stop.toLowerCase() === e.target.parentElement.children[0].innerText.toLowerCase()) {
+          if (
+            STOP_DETAILS[i].stop.toLowerCase() ===
+            e.target.parentElement.children[0].innerText.toLowerCase()
+          ) {
             indexToBeSpliced = i;
             break;
           }
         }
         STOP_DETAILS.splice(indexToBeSpliced, 1);
-        if (indexToBeSpliced > waypts.length) waypts.splice(indexToBeSpliced - 2, 1);
+        if (indexToBeSpliced > waypts.length)
+          waypts.splice(indexToBeSpliced - 2, 1);
         else waypts.splice(indexToBeSpliced - 1, 1);
         dst.splice(indexToBeSpliced - 1, 1);
       }
@@ -614,7 +653,7 @@ const StopInfo = (props) => {
           lat: filteredData[e.target.parentElement.id].location.lat,
           lng: filteredData[e.target.parentElement.id].location.lng,
           mNumber: filteredData[e.target.parentElement.id].mNumber,
-          uId: filteredData[e.target.parentElement.id].uId
+          uId: filteredData[e.target.parentElement.id].uId,
         });
         myStopNumberInfo[STOP_DETAILS[STOP_DETAILS.length - 1].mNumber[0]] =
           stop_number + 1;
@@ -622,10 +661,18 @@ const StopInfo = (props) => {
         setTimeout(() => {
           document.getElementById("asdf").click();
         });
-      } else if (!isChecked && alreadyRouteCreateFlag == true && staffUIds.size !== 0) {
+      } else if (
+        !isChecked &&
+        alreadyRouteCreateFlag == true &&
+        staffUIds.size !== 0
+      ) {
         let targetIndex = 0;
         for (let i = 0; i < STOP_DETAILS.length; i++) {
-          if (STOP_DETAILS[i].uId?.includes(document.getElementById(id).children[0].children[0].id)) {
+          if (
+            STOP_DETAILS[i].uId?.includes(
+              document.getElementById(id).children[0].children[0].id
+            )
+          ) {
             targetIndex = i;
             break;
           }
@@ -637,7 +684,7 @@ const StopInfo = (props) => {
         // STOP_DETAILS = STOP_DETAILS.filter(data => !(data?.uId?.includes(document.getElementById(id).children[0].children[0].id)));
       }
       setIsRender((prev) => !prev);
-    }
+    };
 
     const assignButtonClickHandler = (e) => {
       if (previewRouteFlag) {
@@ -711,26 +758,20 @@ const StopInfo = (props) => {
       } else {
         // console.log(position.stop.split(",")[0], position.status);
         icon = studentDummyImage;
-        // if (position.status) {
-        // myTitle = `<div id="infowindow-container" ><h3>${myStopNumberInfo[position.mNumber[0]]
-        //   ? myStopNumberInfo[position.mNumber[0]] + ". "
-        //   : ""
-        //   }${position.stop.split(",")[0]
-        //   }</h3></div>`;
-        // }
-        // else {
-        // myTitle = `<div id=${i}>` + `<div id="infowindow-container" ><h3>${myStopNumberInfo[position?.mNumber[0]]
-        //   ? myStopNumberInfo[position?.mNumber[0]] + ". "
-        //   : ""
-        // }${position.stop.split(",")[0]
-        myTitle = `<div id=${i}>` + `<div id="infowindow-container" ><h4 id="infowindow-stopName">${position.stop
-          // }</h3></h3></div><input type="checkbox" id="select-all-riders" />Select All<div id="riderCheckBoxList">`
-          }</h4></div><hr /><div id="riderCheckBoxList">`
-        for (let j = 0; j < position.name.length; j++) {
-          myTitle += `<div id="riderCheckboxSubContainer" ><input id=${position.uId[j]} type="checkbox" /><label for=${position.uId[j]}>${position.name[j] + " (" + position.dptName[j] + ")"}</label></div>`
-        }
-        myTitle += `</div><button id="infoWindowAssignButton">Save</button></div >`;
-        // }
+        if (position.status)
+          // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><p id="infowindow-success">Assigned</div>`;
+          myTitle = `<div id="infowindow-container" ><h3>${
+            myStopNumberInfo[position.mNumber[0]]
+              ? myStopNumberInfo[position.mNumber[0]] + ". "
+              : ""
+          }${
+            position.stop.split(",")[0]
+          }</h3><p id="infowindow-success">Assigned</div>`;
+        // myTitle = `<div id="infowindow-container" ><h3>${position.name.toString()}</h3><div id=${i}><span id='infowindow-assign'>Assign rider</span></div></div>`;
+        else
+          myTitle = `<div><div id="infowindow-container" ><h3>${
+            position.stop.split(",")[0]
+          }</h3><div id=${i}><span id='infowindow-assign'>Assign riders</span></div></div><div>${position.name.toString()}</div></div>`;
       }
 
       const marker = new window.google.maps.Marker({
@@ -749,11 +790,15 @@ const StopInfo = (props) => {
             if (document.getElementById(key))
               document.getElementById(key).checked = true;
           }
-        })
+        });
         infoWindow.open(
           setTimeout(() => {
             // document.getElementById("infowindow-assign").addEventListener("click", assignButtonClickHandler);
-            document.getElementById("infoWindowAssignButton").addEventListener("click", (e) => saveAssignButtonClickHandler(e, "riderCheckBoxList"));
+            document
+              .getElementById("infoWindowAssignButton")
+              .addEventListener("click", (e) =>
+                saveAssignButtonClickHandler(e, "riderCheckBoxList")
+              );
             // document.getElementById("select-all-riders").addEventListener("click", (e) => selectAllRidersClickHandler(e))
           })
         );
@@ -797,8 +842,7 @@ const StopInfo = (props) => {
       }
       // console.log(filteredData);
       // console.log(filteredData[i],i);
-      else
-        arr.push(filteredData[i].stop);
+      else arr.push(filteredData[i].stop);
     }
     // STOP_DETAILS = [];
     arr = [];
@@ -814,18 +858,31 @@ const StopInfo = (props) => {
         STOP_DETAILS.splice(i, 1);
         flightPlanCoordinates.splice(i, 1);
         i--;
-      }
-      else
-        arr.push(STOP_DETAILS[i].stop);
+      } else arr.push(STOP_DETAILS[i].stop);
     }
 
     if (editFLag) {
       for (let i = 0; i < filteredData.length; i++) {
-        for (let j = (sessionStorage.getItem("routeType").toLowerCase() === "pickup" ? 1 : 0); j < (sessionStorage.getItem("routeType").toLowerCase() === "pickup" ? STOP_DETAILS.length : STOP_DETAILS.length - 1); j++) {
+        for (
+          let j =
+            sessionStorage.getItem("routeType").toLowerCase() === "pickup"
+              ? 1
+              : 0;
+          j <
+          (sessionStorage.getItem("routeType").toLowerCase() === "pickup"
+            ? STOP_DETAILS.length
+            : STOP_DETAILS.length - 1);
+          j++
+        ) {
           if (STOP_DETAILS[j].stop.includes(filteredData[i].stop)) {
-            if (filteredData[i]?.name) STOP_DETAILS[j].riders = structuredClone(filteredData[i]?.name);
-            if (filteredData[i]?.mNumber) STOP_DETAILS[j].mNumber = structuredClone(filteredData[i]?.mNumber);
-            if (filteredData[i]?.uId) STOP_DETAILS[j].uId = structuredClone(filteredData[i]?.uId);
+            if (filteredData[i]?.name)
+              STOP_DETAILS[j].riders = structuredClone(filteredData[i]?.name);
+            if (filteredData[i]?.mNumber)
+              STOP_DETAILS[j].mNumber = structuredClone(
+                filteredData[i]?.mNumber
+              );
+            if (filteredData[i]?.uId)
+              STOP_DETAILS[j].uId = structuredClone(filteredData[i]?.uId);
           }
         }
       }
@@ -840,9 +897,7 @@ const StopInfo = (props) => {
     let presentIndex = 0;
 
     for (let i = 0; i < STOP_DETAILS.length; i++) {
-      if (
-        STOP_DETAILS[i].stop !== e.target.parentNode.children[0].innerText
-      ) {
+      if (STOP_DETAILS[i].stop !== e.target.parentNode.children[0].innerText) {
         STOP_DETAILS[holdingIndex] = STOP_DETAILS[i];
         holdingIndex++;
       } else {
@@ -1016,18 +1071,18 @@ const StopInfo = (props) => {
       if (i !== 0) {
         document
           .getElementsByClassName("stopNames-container")
-        [i].addEventListener("mouseover", () => {
-          document
-            .getElementsByClassName("cross")
-          [i].classList.add("myClassName");
-        });
+          [i].addEventListener("mouseover", () => {
+            document
+              .getElementsByClassName("cross")
+              [i].classList.add("myClassName");
+          });
         document
           .getElementsByClassName("stopNames-container")
-        [i].addEventListener("mouseleave", () => {
-          document
-            .getElementsByClassName("cross")
-          [i].classList.remove("myClassName");
-        });
+          [i].addEventListener("mouseleave", () => {
+            document
+              .getElementsByClassName("cross")
+              [i].classList.remove("myClassName");
+          });
       }
     }
     for (
@@ -1037,18 +1092,18 @@ const StopInfo = (props) => {
     ) {
       document
         .getElementsByClassName("tempMyStudents")
-      [i].addEventListener("mouseover", () => {
-        document
-          .getElementsByClassName("studentCross")
-        [i].classList.add("myStudentClass");
-      });
+        [i].addEventListener("mouseover", () => {
+          document
+            .getElementsByClassName("studentCross")
+            [i].classList.add("myStudentClass");
+        });
       document
         .getElementsByClassName("tempMyStudents")
-      [i].addEventListener("mouseleave", () => {
-        document
-          .getElementsByClassName("studentCross")
-        [i].classList.remove("myStudentClass");
-      });
+        [i].addEventListener("mouseleave", () => {
+          document
+            .getElementsByClassName("studentCross")
+            [i].classList.remove("myStudentClass");
+        });
     }
     setTimeout(() => {
       document.getElementById("asdf").click();
@@ -1059,7 +1114,9 @@ const StopInfo = (props) => {
     <div className="stop-main-container">
       <div className="stop-container">
         {/* {approximate_distance && */}
-        <span style={{ marginLeft: "40px", fontSize: "12px" }}>Approximate Distance: <span id="approxKm"></span> </span>
+        <span style={{ marginLeft: "40px", fontSize: "12px" }}>
+          Approximate Distance: <span id="approxKm"></span>{" "}
+        </span>
         {/* } */}
         <ul id="sortlist" className="stop-subcontainer">
           {STOP_DETAILS.map((data, index) => {
@@ -1100,7 +1157,7 @@ const StopInfo = (props) => {
                     {data?.riders?.map((name, index) => (
                       <React.Fragment>
                         {console.log(data)}
-                        {staffUIds.has(data?.uId[index]) &&
+                        {staffUIds.has(data?.uId[index]) && (
                           <div
                             className="tempMyStudents"
                             style={{
@@ -1113,12 +1170,17 @@ const StopInfo = (props) => {
                             <p>{name}</p>
                             <span
                               className="studentCross"
-                              onClick={(e) => subCrossClickHandler(e, data.uId[index].toString())}
+                              onClick={(e) =>
+                                subCrossClickHandler(
+                                  e,
+                                  data.uId[index].toString()
+                                )
+                              }
                             >
                               X
                             </span>
                           </div>
-                        }
+                        )}
                       </React.Fragment>
                     ))}
                   </div>
@@ -1157,7 +1219,10 @@ const StopInfo = (props) => {
         ) : (
           <div id="stops-map"></div>
         )}
-        <div className="footer" style={{ padding: 0, justifyContent: "flex-end" }}>
+        <div
+          className="footer"
+          style={{ padding: 0, justifyContent: "flex-end" }}
+        >
           {/* <button className="preview" onClick={previewClickHandler}>
             Preview Route
           </button> */}

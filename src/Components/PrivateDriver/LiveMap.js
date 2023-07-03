@@ -86,8 +86,12 @@ const LiveMap = (props) => {
 
   useEffect(() => {
     prev_driverEmail = "";
-    document.getElementsByClassName("filter-buttons")[0].children[0].style.boxShadow = "0 10px 10px rgba(33, 33, 33, .3)"
-    document.getElementsByClassName("filter-buttons")[0].children[0].style.transform = "scale(1.05)"
+    document.getElementsByClassName(
+      "filter-buttons"
+    )[0].children[0].style.boxShadow = "0 10px 10px rgba(33, 33, 33, .3)";
+    document.getElementsByClassName(
+      "filter-buttons"
+    )[0].children[0].style.transform = "scale(1.05)";
   }, []);
 
   useEffect(() => {
@@ -98,7 +102,10 @@ const LiveMap = (props) => {
     document.body.appendChild(script);
   }, [onTripDriverEmail, driverFilterType]);
 
-  if ((prev_driverEmail && prev_driverEmail !== onTripDriverEmail && myFlag) || (prev_driverEmail == null && onTripDriverEmail == null)) {
+  if (
+    (prev_driverEmail && prev_driverEmail !== onTripDriverEmail && myFlag) ||
+    (prev_driverEmail == null && onTripDriverEmail == null)
+  ) {
     // console.log("here", trip_interval);
     clearIntervalApiCall();
     clearIntervalFligthPath();
@@ -120,9 +127,19 @@ const LiveMap = (props) => {
         const infoWindow = new window.google.maps.InfoWindow();
         // debugger;
         for (let i = 0; i < driverDetails.length; i++) {
-          if (driverDetails[i].Latitude > 0 && (driverFilterType === "online" ? !(driverDetails[i].TripID) : (driverFilterType === "on trip" ? driverDetails[i].TripID : 1))) {
+          if (
+            driverDetails[i].Latitude > 0 &&
+            (driverFilterType === "online"
+              ? !driverDetails[i].TripID
+              : driverFilterType === "on trip"
+              ? driverDetails[i].TripID
+              : 1)
+          ) {
             onlineDriversMarker[i] = new window.google.maps.Marker({
-              position: { lat: driverDetails[i].Latitude, lng: driverDetails[i].Longitude },
+              position: {
+                lat: driverDetails[i].Latitude,
+                lng: driverDetails[i].Longitude,
+              },
               map,
               icon: {
                 url: "https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9",
@@ -134,7 +151,10 @@ const LiveMap = (props) => {
             onlineDriversMarker[i].addListener("mouseover", () => {
               infoWindow.close();
               infoWindow.setContent(onlineDriversMarker[i].myTitle);
-              infoWindow.open(onlineDriversMarker[i].getMap(), onlineDriversMarker[i]);
+              infoWindow.open(
+                onlineDriversMarker[i].getMap(),
+                onlineDriversMarker[i]
+              );
             });
           }
         }
@@ -144,7 +164,9 @@ const LiveMap = (props) => {
           for (let i = 0; i < onlineDriversMarker.length; i++) {
             let markerSrc = document.querySelectorAll(`[src = "${markerUrl}"]`);
             if (onlineDriversMarker[i] && markerSrc[i])
-              markerSrc[i].style.transform = `rotate(${driverDetails[i].Bearing}deg)`;
+              markerSrc[
+                i
+              ].style.transform = `rotate(${driverDetails[i].Bearing}deg)`;
           }
         }, 2000);
       }
@@ -153,9 +175,9 @@ const LiveMap = (props) => {
         if (!driverFlag) {
           if (
             flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat !==
-            data.Livetripdetails[0]?.Latitude &&
+              data.Livetripdetails[0]?.Latitude &&
             flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lng !==
-            data.Livetripdetails[0]?.Longitude
+              data.Livetripdetails[0]?.Longitude
           )
             flightPlanCoordinates.push({
               lat: data.Livetripdetails[0].Latitude,
@@ -181,8 +203,9 @@ const LiveMap = (props) => {
         // setTimeout(() => {
         let markerSrc = document.querySelector(`[src = "${markerUrl}"]`);
         if (marker && markerSrc)
-          markerSrc.style.transform = `rotate(${data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
-            }deg)`;
+          markerSrc.style.transform = `rotate(${
+            data.Livetripdetails[data.Livetripdetails.length - 1].Bearing
+          }deg)`;
         // }, 1000);
         // });
 
@@ -203,19 +226,20 @@ const LiveMap = (props) => {
         startPointMarker = new window.google.maps.Marker({
           position: data.Livetrip[0].ActualPickupName
             ? {
-              lat: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[0],
-              lng: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[1],
-            }
+                lat: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[0],
+                lng: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[1],
+              }
             : {
-              lat: data?.Livetrip[0]?.PickupLatitude,
-              lng: data?.Livetrip[0]?.PickupLongitude,
-            },
+                lat: data?.Livetrip[0]?.PickupLatitude,
+                lng: data?.Livetrip[0]?.PickupLongitude,
+              },
           map,
           icon: startPoint,
-          myTitle: `${data.Livetrip[0].ActualPickupName
-            ? data.Livetrip[0].ActualPickupName
-            : data?.Livetrip[0]?.PickupAddress?.split(",")[0]
-            }`,
+          myTitle: `${
+            data.Livetrip[0].ActualPickupName
+              ? data.Livetrip[0].ActualPickupName
+              : data?.Livetrip[0]?.PickupAddress?.split(",")[0]
+          }`,
         });
         endPointMarker = new window.google.maps.Marker({
           position: {
@@ -273,16 +297,16 @@ const LiveMap = (props) => {
       var key = CryptoJS.enc.Utf8.parse(secretkey);
       var iv = CryptoJS.enc.Utf8.parse("84jfkfndl3ybdfkf");
 
-      let data = `FORMID|JSONDATA|JSONDATA|{"FORMID":"GETDRIVERLOCATIONS_PD","VehicleTypes":{"CorporateID":"${sessionStorage.getItem("adminDepartmentID")}"},"Country":"INDIA","City":"AHMEDABAD","userId": "${sessionStorage.getItem("user")}"}`;
-      var cipherText = CryptoJS.AES.encrypt(
-        data,
-        key,
-        {
-          iv: iv,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-        }
-      ).toString();
+      let data = `FORMID|JSONDATA|JSONDATA|{"FORMID":"GETDRIVERLOCATIONS_PD","VehicleTypes":{"CorporateID":"${sessionStorage.getItem(
+        "adminDepartmentID"
+      )}"},"Country":"INDIA","City":"AHMEDABAD","userId": "${sessionStorage.getItem(
+        "user"
+      )}"}`;
+      var cipherText = CryptoJS.AES.encrypt(data, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      }).toString();
       // console.log(encodeURIComponent(cipherText));
       sendRequest(
         {
@@ -292,7 +316,7 @@ const LiveMap = (props) => {
             "Content-Type": "application/json",
           },
           body: {
-            cipherText: encodeURIComponent(cipherText)
+            cipherText: encodeURIComponent(cipherText),
           },
         },
         authenticateUser
@@ -303,8 +327,7 @@ const LiveMap = (props) => {
   function intervalApiCall() {
     flightPlanCoordinates = [];
     // console.log("prev_driverEmail", prev_driverEmail, onTripDriverEmail);
-    if (prev_driverEmail == null)
-      driverFlag = true;
+    if (prev_driverEmail == null) driverFlag = true;
     else {
       prev_driverEmail && prev_driverEmail === onTripDriverEmail
         ? (driverFlag = false)
@@ -371,8 +394,7 @@ const LiveMap = (props) => {
       flightPath2 = new window.google.maps.Polyline({
         path: flightPlanCoordinates,
       });
-    }
-    else {
+    } else {
       marker = new window.google.maps.Marker({
         position: flightPlanCoordinates[flightPlanCoordinates.length - 1],
         map,
@@ -437,7 +459,7 @@ const LiveMap = (props) => {
         }
         if (
           (prev_driverEmail || prev_driverEmail == null) &&
-          (emailFlag) &&
+          emailFlag &&
           flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat
         ) {
           map.setCenter({
@@ -623,8 +645,8 @@ const LiveMap = (props) => {
                           ele?.status === "online"
                             ? "online"
                             : ele.status === "on trip"
-                              ? "ontrip"
-                              : ""
+                            ? "ontrip"
+                            : ""
                         }
                       ></p>
                     </div>
@@ -641,15 +663,15 @@ const LiveMap = (props) => {
                       onClick={
                         ele.status === "online"
                           ? () =>
-                            bookButtonClickHandler(
-                              ele.driverImage,
-                              ele.driverName,
-                              ele.carNumber,
-                              ele.vehicleType,
-                              ele.driverEmail,
-                              ele.carModel,
-                              ele.carColor
-                            )
+                              bookButtonClickHandler(
+                                ele.driverImage,
+                                ele.driverName,
+                                ele.carNumber,
+                                ele.vehicleType,
+                                ele.driverEmail,
+                                ele.carModel,
+                                ele.carColor
+                              )
                           : ""
                       }
                     >

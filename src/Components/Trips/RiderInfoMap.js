@@ -32,22 +32,45 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
     if (driverPath) {
       let currentBounds = Math.ceil(driverPath.length / dividend);
       while (!(currentBounds < maxBounds && currentBounds >= minBounds)) {
-        if (currentBounds < minBounds) currentBounds = Math.ceil(driverPath.length / (Math.ceil(dividend) / 2));
-        else if (currentBounds > maxBounds) currentBounds = Math.ceil(driverPath.length / (Math.ceil(dividend) * 2));
+        if (currentBounds < minBounds)
+          currentBounds = Math.ceil(
+            driverPath.length / (Math.ceil(dividend) / 2)
+          );
+        else if (currentBounds > maxBounds)
+          currentBounds = Math.ceil(
+            driverPath.length / (Math.ceil(dividend) * 2)
+          );
       }
       var bounds = new window.google.maps.LatLngBounds();
       for (let i = 0; i < driverPath.length; i = i + currentBounds) {
-        bounds.extend(new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng));
+        bounds.extend(
+          new window.google.maps.LatLng(driverPath[i].lat, driverPath[i].lng)
+        );
       }
-      bounds.extend(new window.google.maps.LatLng(driverPath[driverPath.length - 1].lat, driverPath[driverPath.length - 1].lng));
+      bounds.extend(
+        new window.google.maps.LatLng(
+          driverPath[driverPath.length - 1].lat,
+          driverPath[driverPath.length - 1].lng
+        )
+      );
       map.fitBounds(bounds);
     }
 
     let arr = [];
 
     for (let i = 0; i < RIDER_DATA.length; i++) {
-      if (arr.includes(routeType ? RIDER_DATA[i].drop_location : RIDER_DATA[i].pickup_location)) {
-        let index = arr.indexOf(routeType ? RIDER_DATA[i].drop_location : RIDER_DATA[i].pickup_location);
+      if (
+        arr.includes(
+          routeType
+            ? RIDER_DATA[i].drop_location
+            : RIDER_DATA[i].pickup_location
+        )
+      ) {
+        let index = arr.indexOf(
+          routeType
+            ? RIDER_DATA[i].drop_location
+            : RIDER_DATA[i].pickup_location
+        );
         RIDER_DATA[index].rider_name.push(RIDER_DATA[i].rider_name.toString());
         // RIDER_DATA[index].mNumber.push(filteredData[i].mNumber.toString());
         RIDER_DATA.splice(i, 1);
@@ -57,14 +80,22 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
       // console.log(filteredData[i],i);
       else {
         RIDER_DATA[i].rider_name = [RIDER_DATA[i].rider_name];
-        arr.push(routeType ? RIDER_DATA[i].drop_location : RIDER_DATA[i].pickup_location);
+        arr.push(
+          routeType
+            ? RIDER_DATA[i].drop_location
+            : RIDER_DATA[i].pickup_location
+        );
       }
     }
 
     const tourStops = [
       {
-        lat: routeType ? RIDER_DATA[0].startingLocationLat : +RIDER_DATA[0].alighting_lat_lng.split(",")[0],
-        lng: routeType ? RIDER_DATA[0].startingLocationLong : +RIDER_DATA[0].alighting_lat_lng.split(",")[1],
+        lat: routeType
+          ? RIDER_DATA[0].startingLocationLat
+          : +RIDER_DATA[0].alighting_lat_lng.split(",")[0],
+        lng: routeType
+          ? RIDER_DATA[0].startingLocationLong
+          : +RIDER_DATA[0].alighting_lat_lng.split(",")[1],
       },
     ];
     for (let i = 0; i < RIDER_DATA.length; i++) {
@@ -118,8 +149,9 @@ const RiderInfoMap = ({ RIDER_DATA, driverPath }) => {
         //     icon = endPoint;
         // } else {
         icon = studentDummyImage;
-        myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${RIDER_DATA[i - 1]?.rider_name
-          }</h3></div>`;
+        myTitle = `<div id="infowindow-container" ><img src=${studentDropImage} id="dummy-student-image" /><h3>${
+          RIDER_DATA[i - 1]?.rider_name
+        }</h3></div>`;
         // }
       }
 
