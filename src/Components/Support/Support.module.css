@@ -1,0 +1,124 @@
+.support {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  /* width: 75%; */
+  margin-right: 10px;
+  transition-property: width;
+  transition-duration: 0.7s;
+}
+
+.support .mainHeader {
+  padding-left: 15px;
+  font-weight: bold;
+}
+
+.supportContainer {
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  justify-content: space-evenly;
+  height: calc(100vh - 135px);
+  /* width: calc(100vw - 20px ); */
+  /* width: auto; */
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.supportContainer img {
+  width: 300px;
+  height: 500px;
+  transition: transform 0.5s;
+}
+
+.supportContainer img:hover {
+  transform: scale(1.1);
+}
+
+.supportContainer form {
+  display: flex;
+  flex-direction: column;
+  background-color: #f3f6f9;
+  height: 390px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 90px;
+  border-radius: 10px;
+  width: max-content;
+  gap: 10px;
+}
+
+.supportContainer header {
+  font-weight: bold;
+  font-size: 22px;
+  padding-top: 15px;
+}
+
+.supportContainer p {
+  color: gray;
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+
+.supportContainer input {
+  width: 400px;
+  height: 30px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid rgb(204, 200, 200);
+  padding: 10px;
+  margin: 0 30px;
+}
+
+.supportContainer button {
+  color: white;
+  background-color: rgba(42, 149, 69, 255);
+  border: rgba(42, 149, 69, 255);
+  border-radius: 5px;
+  padding: 5px 25px;
+  margin-top: 15px;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.textarea {
+  resize: none;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgb(204, 200, 200);
+  background-color: transparent;
+  width: 400px;
+  height: 100px;
+  padding: 10px;
+}
+
+.error {
+  align-self: flex-start;
+  margin: -7px 40px;
+  color: red;
+  font-size: 11px;
+}
+
+@media only screen and (max-width: 400px) {
+  .emailImage {
+    display: none;
+  }
+
+  .supportContainer input {
+    width: 320px;
+  }
+
+  .textarea {
+    width: 320px;
+  }
+
+  .supportContainer {
+    width: fit-content;
+  }
+
+  .support .mainHeader {
+    padding-top: 15px;
+  }
+}

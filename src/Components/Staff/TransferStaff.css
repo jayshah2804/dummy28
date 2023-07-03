@@ -1,0 +1,84 @@
+.transferStaff-container {
+    position: absolute;
+    top: calc(50% - 65px);
+    left: 50%;
+    box-shadow: 0 0 20px rgba(33, 33, 33, .3);
+    transform: translate(-50%, -50%);
+    background-color: white;
+    height: auto;
+    width: auto;
+    border-radius: 10px;
+    z-index: 2;
+}
+
+.transferStaff-container header {
+    padding: 10px;
+    background-color: rgba(34, 137, 203, 255);
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.transferStaff-container .sub-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.transferStaff-container .sub-container main p {
+    padding-bottom: 10px;
+}
+
+.transferStaff-container .sub-container main select {
+    margin-left: 10px;
+    border: none;
+    border-bottom: 1px solid black;
+    width: 250px;
+}
+
+.sub-container main select option {
+    font-size: 16px;
+}
+
+.background {
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+}
+
+.transferStaff-container .sub-container main select:focus {
+    outline: none;
+}
+
+.transferStaff-container .sub-container footer {
+    align-self: flex-end;
+}
+
+.transferStaff-container .sub-container footer button {
+    margin-top: 10px;
+    padding: 6px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    background-color: rgba(42, 149, 69, 255);
+    border: 1px solid rgba(42, 149, 69, 255);
+}
+
+.transferStaff-container .sub-container footer button:hover {
+    background-color: green;
+}
+
+.transferStaff-container .error {
+    color: red;
+    font-size: 14.5px;
+}

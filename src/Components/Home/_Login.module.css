@@ -1,0 +1,85 @@
+body {
+    height: 100vh;
+    /* width: 100%; */
+}
+
+.loginContainer {
+    height: 100vh;
+    /* width: 100%; */
+    background-image: url("../../Assets/login_background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.logo {
+    margin-top: 35px;
+    object-fit: contain;
+    width: 170px;
+    height: 150px;
+    margin-left: -25px;
+}
+
+.text {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 19px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    border: none;
+    border-bottom: 1px solid gray;
+    background: transparent;
+    margin-top: 30px;
+    width: 320px;
+    height: 30px;
+    font-size: 17px;
+}
+
+.errorMessage {
+    color: rgb(226, 44, 29);
+    font-size: 13px;
+}
+
+.forgotPassword {
+    text-align: end;
+    color: grey;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.forgotPassword:hover {
+    text-decoration: underline black;
+    cursor: pointer;
+    color: rgb(59, 57, 57);
+}
+
+.input:focus {
+    outline: none;
+}
+
+.loginButton {
+    border-radius: 20px;
+    width: max-content;
+    padding: 11px 28px;
+    cursor: pointer;
+    border: 1px solid gray;
+    color: gray;
+    margin: 25px auto;
+    background: transparent;
+}
+
+.loginButton:hover {
+    background-color: rgba(42, 149, 69, 255);
+    border: 1px solid rgba(42, 149, 69, 255);
+    color: white;
+}

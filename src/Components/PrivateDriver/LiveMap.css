@@ -1,0 +1,253 @@
+.backdrop {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  right: 0px;
+  top: 0px;
+  z-index: 9;
+  background-color: rgb(88, 88, 88, 0.5);
+}
+
+.driverContainer {
+  cursor: pointer;
+}
+
+.driverContainer:hover {
+  background-color: rgb(212, 201, 201);
+}
+
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 95%;
+  padding: 15px;
+  justify-content: space-between;
+  transition-property: width;
+  transition-duration: 0.7s;
+  /* flex: 1 3; */
+}
+
+.driverlist {
+  background-color: white;
+  /* margin: 15px; */
+  padding: 15px;
+  border-radius: 10px;
+  height: calc(100vh-80px);
+  overflow-y: auto;
+  width: 20%;
+}
+
+.driverPhoto {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+}
+
+.ontrip {
+  position: absolute;
+  top: 3%;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(34, 137, 203, 255);
+  align-self: center;
+}
+
+.online {
+  position: absolute;
+  top: 3%;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(42, 149, 69, 255);
+  align-self: center;
+}
+
+.bookButton {
+  border-radius: 5px;
+  padding: 2px 4px;
+  background-color: rgb(49, 153, 49);
+  border: 1px solid rgb(49, 153, 49);
+  cursor: pointer;
+  color: white;
+  font-size: 12px;
+}
+
+.bookButton:hover {
+  background-color: green;
+}
+
+.onTripButtton {
+  border-radius: 5px;
+  padding: 2px 4px;
+  background-color: rgba(34, 137, 203, 255);
+  border: 1px solid rgba(34, 137, 203, 255);
+  cursor: pointer;
+  color: white;
+  font-size: 12px;
+}
+
+.onTripButtton:hover {
+  background-color: rgba(34, 137, 203, 255);
+}
+
+.driverDetails {
+  position: relative;
+}
+
+.driverDetails .drivername {
+  font-size: 14px;
+}
+
+.driverDetails .carnumber {
+  font-size: 10.5px;
+  color: grey;
+}
+
+.privateDriverMap-container {
+  position: relative;
+  width: 78%;
+  height: 100%;
+}
+
+#live-map {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  min-height: 300px;
+}
+
+.currentDriver {
+  background-color: rgb(228, 222, 222);
+}
+
+.driverlist .filter-buttons {
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+}
+
+.search {
+  width: 100%;
+  height: 30px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding-left: 6px;
+  margin-top: 10px;
+}
+
+.search:focus {
+  outline: none;
+}
+
+.driverlist .filter-buttons button {
+  color: white;
+  border-radius: 5px;
+  width: 75px;
+  padding: 5px;
+  cursor: pointer;
+  margin: 10px 0;
+  /* display: flex;
+    flex-direction: column;
+    align-items: center; */
+}
+
+.driverlist .filter-buttons button:hover {
+  /* transform: scale(1.02); */
+}
+
+.driverlist .filter-buttons button:nth-child(1) {
+  background-color: rgba(245, 174, 48, 255);
+  border: rgba(245, 174, 48, 255);
+}
+
+.driverlist .filter-buttons button:nth-child(2) {
+  background-color: rgba(42, 149, 69, 255);
+  border: rgba(42, 149, 69, 255);
+}
+
+.driverlist .filter-buttons button:nth-child(3) {
+  background-color: rgba(34, 137, 203, 255);
+  border: rgba(34, 137, 203, 255);
+}
+
+.mapText {
+  position: absolute;
+  top: 0px;
+  /* height: 40px; */
+  height: 40px;
+  background-color: white;
+  width: 100%;
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 10px 20px;
+  font-weight: bold;
+  opacity: 1.8;
+}
+
+/* .adminName {
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.adminText {
+  font-size: 14px;
+  color: gray;
+} */
+
+.newCorpButton {
+  /* background-color: rgba(34, 137, 203, 255); */
+  background-color: white;
+  color: rgba(34, 137, 203, 255);
+  border: 1px solid rgba(34, 137, 203, 255);
+  border-radius: 5px;
+  padding: 0px 25px;
+  cursor: pointer;
+  height: 30px;
+  align-self: center;
+}
+
+.newCorpButton:hover {
+  background-color: rgba(34, 137, 203, 255);
+  color: white
+}
+
+.riderInfoContainer {
+  position: absolute;
+  background-color: white;
+  width: 200px;
+  height: 70px;
+  top: 50px;
+  left: 10px;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 5px;
+  padding-left: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 0px 20px rgba(33, 33, 33, .3);
+  border: 1px solid rgba(34, 137, 203, 255);
+}
+
+@media only screen and (max-width: 768px) {
+  .main-container {
+    display: block;
+  }
+  .driverlist {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .privateDriverMap-container {
+    width: 100%;
+  }
+}

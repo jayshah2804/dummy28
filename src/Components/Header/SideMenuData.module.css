@@ -1,0 +1,40 @@
+.mainMenu {
+    display: inline-block;
+    /* margin-top: 18px; */
+    cursor: pointer;
+    padding-left: 20px;
+    margin-right: 7px;
+    width: 100%;
+}
+
+.mainMenuContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 85%;
+}
+
+.mainMenuContainer:hover {
+    /* text-decoration: underline; */
+    /* text-decoration-color: black; */
+    /* text-underline-offset: 3px; */
+    color: rgb(57, 57, 252);
+    font-weight: bold;
+    cursor: pointer;
+    /* color: rgba(34, 137, 203, 255); */
+}
+
+.dropIcons {
+    display: inline-block;
+}
+
+.subMenu {
+    color: gray;
+    padding-left: 40px;
+    margin-top: 10px;
+}
+
+.subMenu:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}

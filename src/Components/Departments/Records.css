@@ -1,0 +1,23 @@
+.department-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.department-data img {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.department-data img:nth-child(3) {
+    width: 25px;
+    height: 25px;
+    padding-top: 2px;
+}
+
+.department-data img:hover {
+    transform: scale(1.1);
+}
+

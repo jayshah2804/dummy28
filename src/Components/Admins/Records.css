@@ -1,0 +1,76 @@
+.admin-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    min-width: 600px;
+    min-height: 200px;
+    box-shadow: 0 0 20px rgba(33, 33, 33, 0.4);
+    border-radius: 10px;
+    height: auto;
+}
+
+.admin-container header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: rgba(34, 137, 203, 255);
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.admin-container header .close {
+    cursor: pointer;
+}
+
+.admin-container main > p {
+    color: rgb(82, 80, 80);
+    margin: 10px;
+    margin-left: 15px;
+    font-weight: bold;
+    /* margin-top: 10px; */
+    /* padding: 10px; */
+}
+
+.admin-container main:nth-child(1){
+    margin-top: 20px;
+}
+
+.admin-container .department-list {
+    padding: 15px;
+}
+
+.admin-container .department-list div {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.admin-container .department-list input {
+    margin-right: 5px;
+}
+
+.admin-container .department-list label {
+    margin-right: 15px;
+}
+
+.admin-container footer {
+    align-self: flex-end;
+    justify-self: flex-end;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.admin-container footer button {
+    background-color: rgba(42, 149, 69, 255);
+    color: white;
+    padding: 7px 20px;
+    border: 1px solid rgba(42, 149, 69, 255);
+    border-radius: 5px;
+}
+
+.admin-container footer button:hover {
+    cursor: pointer;
+    background-color: green;
+}

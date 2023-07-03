@@ -1,0 +1,13 @@
+.not-live {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgb(226, 44, 29);
+}
+
+.live {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(42, 149, 69, 255);
+}

@@ -1,0 +1,120 @@
+.booking-main {
+    margin: 2%;
+    width: 96%;
+    height: 95%;
+    background-color: white;
+    border-radius: 10px;
+    position: relative;
+}
+
+.booking-sub {
+    /* background-color: beige; */
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2%;
+}
+
+.selectedServiceType {
+    box-shadow: 0 0 20px rgba(33, 33, 33, .3);
+    background-color: red;
+}
+
+.booking-main .backArrow {
+    position: absolute;
+    top: 32px;
+    left: -35px;
+    height: 22px;
+    width: 22px;
+    cursor: pointer;
+}
+
+.standard-basic {
+    display: block;
+    width: 100%;
+    height: 50px;
+    margin: 5px;
+}
+
+.schedule_filter_buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.basic,
+.comfort,
+.comfort-plus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    border-right: 1px solid rgb(226, 226, 226);
+    border-spacing: 40px;
+    cursor: pointer;
+}
+
+.basic:hover,
+.comfort:hover,
+.comfort-plus:hover {
+    transform: scale(1.1);
+}
+
+.comfort-plus {
+    border: none;
+}
+
+.basic-sub,
+.comfort-sub,
+.comfort-plus-sub {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20%;
+}
+
+.cab-type {
+    font-weight: bold;
+}
+
+.available-cab-details img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.basic img {
+    /* width: 75px; */
+}
+
+.comfort img {
+    width: 115px;
+}
+
+.cab-names {
+    margin-top: 5px;
+    color: rgba(34, 137, 203, 255);
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.cab-details {
+    font-size: 10px;
+    color: gray;
+    text-align: center;
+}
+
+.cab-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    color: rgba(34, 137, 203, 255);
+    font-weight: bold;
+    font-size: 17px;
+}

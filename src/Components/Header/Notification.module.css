@@ -1,0 +1,150 @@
+.notificationdataContainer::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+/* Track */
+.notificationdataContainer::-webkit-scrollbar-track {
+    /* background: #f1f1f1;  */
+    /* border-radius: 30px; */
+}
+
+/* Handle */
+.notificationdataContainer::-webkit-scrollbar-thumb {
+    background: rgb(177, 175, 175);
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+.notificationdataContainer::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.notificationPanel {
+    position: absolute;
+    right: 35px;
+    top: 70px;
+    width: 370px;
+    height: auto;
+    border: 1px solid white;
+    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: white;
+    margin-right: 10px;
+    z-index: 99;
+    box-shadow: 0 0 20px rgba(33, 33, 33, .3);
+    font-size: 17px;
+    padding-bottom: 15px;
+}
+
+.notificationPanel::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid rgb(226, 44, 29);
+    top: -5px;
+    right: 25px;
+}
+
+.notificationPanel .topBorder {
+    margin-top: -1px;
+    height: 5px;
+    background-color: red;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.notificationPanel .header {
+    padding: 10px 15px;
+    font-size: 17px;
+}
+
+.notificationdataContainer {
+    height: auto;
+    min-height: 100px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+}
+
+.notificationPanel .data {
+    display: flex;
+    /* justify-content: space-between; */
+    gap: 15px;
+    align-items: center;
+    padding: 15px;
+    padding-bottom: 0;
+}
+
+.notificationPanel .title {
+    font-size: 13.5px;
+}
+
+.notificationPanel .status {
+    font-size: 12px;
+    color: rgba(245, 174, 48, 255);
+}
+
+.backdrop {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    right: 0px;
+    top: 0px;
+    z-index: 9;
+    cursor: default;
+}
+
+.notificationPanel .time {
+    font-size: 12px;
+    color: gray;
+}
+
+.notificationIcon {
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.notificationCount {
+    /* content: attr(data-after-content); */
+    font-size: 11px;
+    position: absolute;
+    top: 22px;
+    right: 30%;
+    background-color: rgb(226, 44, 29); 
+    border-radius: 14px;
+    width: 17px;
+    height: 14px;
+    color: white;
+    text-align: center;
+}
+
+/* .notificationIcon::after {} */
+
+.content {
+    font-size: 15px;
+    color: grey;
+    position: absolute;
+    top: 53%;
+    left: 30%;
+    /* transform: translate(-50%, -50%); */
+}
+
+@media only screen and (max-width: 768px) {
+    .notificationPanel {
+        right: 20px;
+        width: 250px;
+    }
+
+    .notificationCount {
+        right: 25%;
+    }
+}

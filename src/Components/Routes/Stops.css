@@ -1,0 +1,193 @@
+.main-stop-container {
+    margin-top: 35px;
+    margin-left: 2%;
+    width: 22%;
+    display: flex;
+    flex-direction: column;
+    /* gap: 10%; */
+    /* margin-right: 5%; */
+    /* gap: 100px; */
+    /* height: 400px; */
+    /* background-color: whitesmoke; */
+    /* height: calc(100vh-100px); */
+    /* overflow-y: scroll; */
+    /* overflow-x: hidden; */
+}
+
+.timing-details input {
+    background-color: transparent;
+    border: none;
+    width: 60px;
+    padding-left: 2px;
+    margin-left: 7px;
+    margin-top: 5px;
+}
+
+.timing-details input:focus {
+    outline: none;
+    border-bottom: 1px solid gray;
+    width: 100px;
+}
+
+.main-stop-container .timing-details span {
+    font-size: 15px;
+}
+
+.main-stop-container .timing-details {
+    color: gray;
+}
+
+.main-stop-container .timing-details .drop {
+    border-left: 1px solid grey;
+    padding-left: 5px;
+}
+
+.main-stop-container .timing-details label {
+    color: black;
+}
+
+.main-stop-subcontainer {
+    /* margin-top: 30px; */
+    /* margin-left: 50px; */
+    width: 50%;
+    text-overflow: clip;
+    /* overflow-y: auto; */
+    /* height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden; */
+}
+
+.main-stop-container li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    width: 200px;
+    align-self: flex-end;
+}
+
+.main-stop-container li p {
+    font-size: 15px;
+}
+
+.main-stop-container .stopNames-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.timing-details .save {
+    border: 1px solid rgba(42, 149, 69, 255);
+    background-color: rgba(42, 149, 69, 255);
+    border-radius: 5px;
+    color: white;
+    padding: 7px 21px;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 10px;
+    margin-right: 2%;
+}
+
+.timing-details .save:hover {
+    background-color: green;
+}
+
+.main-stop-container .stopNames-container .connectedPoint {
+    display: inline-block;
+    height: 30px;
+    width: 13px;
+    align-self: flex-end;
+    margin-left: -15px;
+}
+
+.main-stop-subcontainer .stopNames {
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.main-stop-subcontainer .stopNames:hover {
+    border: 1px solid black;
+}
+
+.my {
+    cursor: move;
+    border: 2px solid blue !important;
+}
+
+.main-stop-subcontainer .cross {
+    cursor: pointer;
+    display: inline-block;
+    /* display: none; */
+    visibility: hidden;
+    align-self: center;
+    border: 1px solid black;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    margin-top: 8px;
+    padding-left: 4px;
+    padding-right: 10px;
+}
+
+.myClassName {
+    visibility: visible !important;
+}
+
+.main-stop-container .threedots {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    align-self: center;
+}
+
+.main-stop-container .student-info {
+    display: flex;
+    margin-left: -23px;
+    gap: 5px;
+}
+
+.main-stop-container .studenNames-contaner {
+    /* background-color: gray; */
+    width: 200px;
+}
+
+.main-stop-container .studenNames-contaner em {
+    width: auto;
+    font-size: 13px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.myStudentClass {
+    visibility: visible !important;
+    font-weight: bold !important;
+}
+
+.main-stop-container .studenNames-contaner em:hover {
+    font-weight: bold;
+}
+
+.main-stop-container .studenNames-contaner span {
+    /* margin-left: 10px; */
+    margin-left: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    padding-right: 5px;
+    /* display: none; */
+    visibility: hidden;
+}
+
+#main-stopsInfo-map {
+    margin-top: 20px;
+    position: relative;
+    height: auto;
+    min-height: 350px;
+    width: 78%;
+    border-radius: 10px;
+}

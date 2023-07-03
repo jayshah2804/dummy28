@@ -1,0 +1,43 @@
+.loading {
+  font-size: 30px;
+  padding: 0;
+  height: 20px;
+  position: relative;
+}
+
+.driverMain {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dataTableMain {
+  width: 100%;
+  text-align: center;
+  z-index: 100;
+}
+
+.loading:after {
+  position: absolute;
+  top: -10px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+  animation: ellipsis steps(4, end) 900ms infinite;
+  content: "\2026";
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1.25em;
+  }
+}
