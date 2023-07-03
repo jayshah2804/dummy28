@@ -105,6 +105,7 @@ const StopInfo = (props) => {
       myStopNumberInfo = {};
       stop_number = 0;
       // debugger;
+      let myArr = [];
       for (i; i < detailsLength; i++) {
         // for (let i = 0; i < details?.length - 1; i++) {
         editedStopDetails.push({
@@ -122,13 +123,15 @@ const StopInfo = (props) => {
         //   lat: details[i].StopLatitude,
         //   lng: details[i].StopLongitude
         // })
-        editedwayPoints.push({
-          location: {
-            lat: details[i].StopLatitude,
-            lng: details[i].StopLongitude,
-          },
-          stopover: true,
-        });
+        if (!myArr.includes(details[i].StopLatitude + details[i].StopLongitude))
+          editedwayPoints.push({
+            location: {
+              lat: details[i].StopLatitude,
+              lng: details[i].StopLongitude,
+            },
+            stopover: true,
+          });
+        myArr.push(details[i].StopLatitude + details[i].StopLongitude);
 
         editedFilteredData.push({
           stop: details[i].StopName,
@@ -586,7 +589,7 @@ const StopInfo = (props) => {
       }
 
       // console.log(e.target.parentElement.id);
-      if (!alreadyRouteCreateFlag) {
+      if (!alreadyRouteCreateFlag && isChecked) {
         if (previewRouteFlag) {
           dst.pop();
           waypts.pop();
@@ -642,7 +645,6 @@ const StopInfo = (props) => {
     const assignButtonClickHandler = (e) => {
       if (previewRouteFlag) {
         dst.pop();
-        // dst.push(waypts.pop().location);
         waypts.pop();
         previewRouteFlag = false;
       }
@@ -752,7 +754,6 @@ const StopInfo = (props) => {
         })
         infoWindow.open(
           setTimeout(() => {
-            //comment
             // document.getElementById("infowindow-assign").addEventListener("click", assignButtonClickHandler);
             document.getElementById("infoWindowAssignButton").addEventListener("click", (e) => saveAssignButtonClickHandler(e, "riderCheckBoxList"));
             // document.getElementById("select-all-riders").addEventListener("click", (e) => selectAllRidersClickHandler(e))
@@ -925,7 +926,6 @@ const StopInfo = (props) => {
           if (currentpos < droppedpos) {
             if (previewRouteFlag) {
               dst.pop();
-              // dst.push(waypts.pop().location);
               waypts.pop();
               previewRouteFlag = false;
             }
@@ -960,7 +960,6 @@ const StopInfo = (props) => {
           } else {
             if (previewRouteFlag) {
               dst.pop();
-              // dst.push(waypts.pop().location);
               waypts.pop();
               previewRouteFlag = false;
             }
