@@ -131,7 +131,7 @@ const LiveMap = (props) => {
               },
               myTitle: `${driverDetails[i].FullName}`,
             });
-            onlineDriversMarker[i].addListener("mouseover", () => {
+            onlineDriversMarker[i].addListener("click", () => {
               infoWindow.close();
               infoWindow.setContent(onlineDriversMarker[i].myTitle);
               infoWindow.open(onlineDriversMarker[i].getMap(), onlineDriversMarker[i]);

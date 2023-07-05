@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
+
 import "./StopInfo.css";
+import useHttp from "../../../Hooks/use-http";
 
 import startPoint from "../../../Assets/Pin_icon_green50.png";
 import studentDummyImage from "../../../Assets/new_student_marker.png";
 import connectionPoint from "../../../Assets/start_location.png";
 import threedots from "../../../Assets/route_3dots.png";
 import endPoint from "../../../Assets/place_outline.png";
-import useHttp from "../../../Hooks/use-http";
 import loadingGif from "../../../Assets/loading-gif.gif";
 import tickMark from "../../../Assets/Tickmark.png";
 import Message from "../../../Modal/Message";
@@ -48,6 +50,7 @@ const polyline2 = {
 };
 
 let staffUIds = new Set();
+let markers = [];
 
 const StopInfo = (props) => {
   const [filteredData, setFilteredData] = useState([]);
@@ -208,7 +211,7 @@ const StopInfo = (props) => {
           });
         }
       }
-      // debugger;
+      debugger;
       STOP_DETAILS.push({
         stop: studentData[0].stop,
         lat: studentData[0].location.lat,
@@ -438,19 +441,16 @@ const StopInfo = (props) => {
       document.getElementById("stops-map"),
       {
         zoom: 11,
-        // center: { lat: 22.9929777, lng: 72.5013096 },
-        // center: {
-        //   lat: filteredData.length > 0 ? filteredData[Math.round(filteredData.length / 2) - 1]?.location
-        //     .lat : 22.9929777,
-        //   lng: filteredData.length > 0 ? filteredData[Math.round(filteredData.length / 2) - 1]?.location
-        //     .lng : 72.5013096
-        // },
         center: {
-          lat: filteredData[Math.round(filteredData.length / 2) - 1]?.location
-            .lat,
-          lng: filteredData[Math.round(filteredData.length / 2) - 1]?.location
-            .lng,
+          lat: filteredData[0]?.location.lat,
+          lng: filteredData[0]?.location.lng,
         },
+        // center: {
+        //   lat: filteredData[Math.round(filteredData.length / 2) - 1]?.location
+        //     .lat,
+        //   lng: filteredData[Math.round(filteredData.length / 2) - 1]?.location
+        //     .lng,
+        // },
         disableDefaultUI: true,
         fullscreenControl: true,
         zoomControl: true,
@@ -705,12 +705,13 @@ const StopInfo = (props) => {
       setIsRender((prev) => !prev);
       // }
     };
-
+    debugger;
     filteredData.forEach((position, i) => {
       // console.log(filteredData[i]);
       if (i === 0) {
         icon = startPoint;
         myTitle = `<div><h3>${position.name.toString()}</h3></div>`;
+        markers = [];
       } else {
         // console.log(position.stop.split(",")[0], position.status);
         icon = studentDummyImage;
@@ -743,6 +744,11 @@ const StopInfo = (props) => {
         icon,
         optimized: false,
       });
+      if (i !== 0) {
+        for (let k = 0; k < position.name.length; k++) {
+          markers.push(marker);
+        }
+      }
 
       marker.addListener("click", () => {
         infoWindow.setContent(marker.myTitle);
@@ -762,6 +768,18 @@ const StopInfo = (props) => {
         );
       });
     });
+
+    // var options = {
+    //   maxZoom: 4,
+    //   styles: [{
+    //     url: 'https://littleimages.blob.core.windows.net/corporate/INDIA/8DB35DE7-8572-4BB8-BF7C-7D06603A92C9',
+    //     width: 53,
+    //     height: 53,
+    //     textColor: '#fff',
+    //   }]
+    // };
+
+    new MarkerClusterer({ markers, map });
   }
 
   window.myInitMap = myInitMap;
@@ -788,20 +806,23 @@ const StopInfo = (props) => {
 
   if (myFlag && filteredData.length > 0) {
     let arr = [];
+    let latLngArr = [];
     for (let i = 0; i < filteredData.length; i++) {
-      if (arr.includes(filteredData[i].stop)) {
-        let index = arr.indexOf(filteredData[i].stop);
+      if (arr.includes(filteredData[i].stop) || latLngArr.includes(filteredData[i].location.lat.toFixed(5) + "" + filteredData[i].location.lng.toFixed(5))) {
+        let index = arr.indexOf(filteredData[i].stop) === -1 ? latLngArr.indexOf(filteredData[i].location.lat.toFixed(5) + "" + filteredData[i].location.lng.toFixed(5)) : arr.indexOf(filteredData[i].stop);
         filteredData[index].name.push(filteredData[i].name.toString());
         filteredData[index].mNumber.push(filteredData[i].mNumber.toString());
         filteredData[index].uId.push(filteredData[i]?.uId?.toString());
-        filteredData[index].dptName.push(filteredData[i]?.dptName);
+        filteredData[index].dptName.push(filteredData[i]?.dptName?.toString());
         filteredData.splice(i, 1);
         i--;
       }
       // console.log(filteredData);
       // console.log(filteredData[i],i);
-      else
+      else {
         arr.push(filteredData[i].stop);
+        latLngArr.push(filteredData[i].location.lat.toFixed(5) + "" + filteredData[i].location.lng.toFixed(5));
+      }
     }
     // STOP_DETAILS = [];
     arr = [];

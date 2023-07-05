@@ -138,7 +138,7 @@ function App() {
               <Route path="/drivers">
                 <DriverList />
               </Route>
-              <Route path="/schedule-booking/new booking">
+              {/* <Route path="/schedule-booking/new booking">
                 <Booking />
               </Route>
               <Route path="/schedule-booking/trips">
@@ -149,7 +149,7 @@ function App() {
               </Route>
               <Route path="/schedule-booking/previous bookings/details" exact >
                 <BookingDetails />
-              </Route>
+              </Route> */}
             </div>
           </div>
           {/* <ChatBot /> */}
