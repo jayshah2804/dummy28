@@ -158,7 +158,7 @@ const Main = (props) => {
               {"Welcome " + sessionStorage.getItem("adminName")}
             </p>
             <p className={classes.adminText}>
-              You can check all data of your Organization in Dashboard!
+              You can check all data of your Organization in Dashboard
             </p>
           </div>
           {sessionStorage.getItem("userType") === "AccountManager" ? (
