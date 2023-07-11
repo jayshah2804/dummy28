@@ -834,7 +834,7 @@ const StopInfo = (props) => {
         STOP_DETAILS[index].riders.push(STOP_DETAILS[i].riders.toString());
         STOP_DETAILS[index].mNumber.push(STOP_DETAILS[i].mNumber.toString());
         STOP_DETAILS[index].uId.push(STOP_DETAILS[i]?.uId?.toString());
-        STOP_DETAILS[index].dptName.push(STOP_DETAILS[i]?.dptName);
+        STOP_DETAILS[index].dptName.push(STOP_DETAILS[i]?.dptName.toString());
         STOP_DETAILS.splice(i, 1);
         flightPlanCoordinates.splice(i, 1);
         i--;
