@@ -56,7 +56,7 @@ const Modal = (props) => {
         let totalKm = 0;
         let totalTrips = 0;
         for (let i = 0; i < data?.ReportDetails?.length; i++) {
-          totalKm += +(data.ReportDetails[i].TripDistance ?? data.ReportDetails[i].TripKm);
+          totalKm += +(data.ReportDetails[i].TripDistance ?? data.ReportDetails[i].TripDistance);
           totalTrips += data.ReportDetails[i]?.Totaltrip ? data.ReportDetails[i]?.Totaltrip : 0;
         }
         if (!(selectedDriverData.name || selectedRiderData.name)) {
@@ -114,7 +114,8 @@ const Modal = (props) => {
         },
         body: {
           emailID: sessionStorage.getItem("user"),
-          userType: "corporate",
+          roleID: sessionStorage.getItem("roleId"),
+          corporateID: ""
         },
       },
       authenticateUser

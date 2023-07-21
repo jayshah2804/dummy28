@@ -54,9 +54,9 @@ const DriverData = (props) => {
           "Content-Type": "application/json",
         },
         body: {
-          // emailID: "nihal@little.global",
           emailID: sessionStorage.getItem("user"),
-          userType: "corporate",
+          roleID: sessionStorage.getItem("roleId"),
+          corporateID: ""
         },
       },
       authenticateUser
