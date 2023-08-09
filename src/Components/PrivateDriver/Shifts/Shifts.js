@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
-import Records from "./Records";
 import ReactPaginate from "react-paginate";
-// import "./Trips.css";
-import { CSVLink } from "react-csv";
-import { useLocation, useParams } from "react-router-dom";
-import useHttp from "../../../Hooks/use-http";
+import { useLocation, useParams, useHistory } from "react-router-dom";
 import { useEffect } from "react";
-// import generatePDF from "../../GeneratePDF/generatePdf";
+import Button from '@mui/material/Button';
+
+import Records from "./Records";
+import useHttp from "../../../Hooks/use-http";
 import Modal from "../../../GeneratePDF/Modal";
 
 const TRIP_DATA = [
@@ -58,6 +57,7 @@ function Shifts(props) {
     const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
     const startDateRef = useRef();
     const endDateRef = useRef();
+    const history = useHistory();
 
     const authenticateUser = (data) => {
         // console.log(data);
@@ -196,7 +196,10 @@ function Shifts(props) {
 
     return (
         <div className="trips-details" id="trip-table">
-            <div className="title">Private Driver Shifts</div>
+            <div className="title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} >
+                <p>Private Driver Shifts</p>
+                <Button onClick={() => history.push("/privatedrive/shift-creation")} variant="contained" size="small" sx={{ boxShadow: "none", marginRight: "10px", fontFamily: "Montserrat" }} >Add New Shift</Button>
+            </div>
             <div className="table-container">
                 <div className="header">
                     <div onClick={filterButtonClickHandler} className="filter-buttons">
@@ -276,7 +279,7 @@ function Shifts(props) {
                 <Modal
                     setIsExportButtonClicked={setIsExportButtonClicked}
                     isPrivateDriver="1"
-                    isShift = "1"
+                    isShift="1"
                     type="shifts"
                 />
             )}

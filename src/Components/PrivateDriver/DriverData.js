@@ -56,7 +56,9 @@ const DriverData = (props) => {
         body: {
           emailID: sessionStorage.getItem("user"),
           roleID: sessionStorage.getItem("roleId"),
-          corporateID: ""
+          corporateID: sessionStorage.getItem("roleId") === "1" ? "" : sessionStorage.getItem("corpId"),
+          isRider: "1",
+          isDriver: "1"
         },
       },
       authenticateUser

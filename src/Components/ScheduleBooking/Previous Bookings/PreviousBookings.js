@@ -1,10 +1,12 @@
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import ReactPaginate from "react-paginate";
+import Button from '@mui/material/Button';
 
 import Records from "./Records";
 import useHttp from "../../../Hooks/use-http";
 import Modal from "../../../GeneratePDF/Modal";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const SHIFT_TITLE = [
   "Booking Id",
@@ -13,6 +15,7 @@ const SHIFT_TITLE = [
   "Drop Date",
   "Booking Type",
   "Vehicle Type",
+  "Trip Cost",
   "Status",
 ];
 
@@ -34,6 +37,7 @@ function PreviousBookings(props) {
   const [isExportButtonClicked, setIsExportButtonClicked] = useState(false);
   const startDateRef = useRef();
   const endDateRef = useRef();
+  const history = useHistory();
 
   const authenticateUser = (data) => {
     let booking_list = [];
@@ -54,6 +58,8 @@ function PreviousBookings(props) {
           vehicleType: data.RequestBookingDetails[i].VehicleType,
           status: data.RequestBookingDetails[i].Status,
           driverName: data.RequestBookingDetails[i].DriverName,
+          driverCarModel: data.RequestBookingDetails[i].carModel,
+          driverCarNumber: data.RequestBookingDetails[i].carNumber,
           cancelNotes: data.RequestBookingDetails[i].CancelNotes,
           bookingType: data.RequestBookingDetails[i].Justification,
           corporateName: data.RequestBookingDetails[i].CorporateName,
@@ -173,7 +179,10 @@ function PreviousBookings(props) {
 
   return (
     <div className="trips-details" id="trip-table">
-      <div className="title">Schedule Bookings</div>
+      <div className="title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} >
+        <p>Schedule Booking</p>
+        <Button onClick={() => history.push("/schedule-booking/new booking")} variant="contained" size="small" sx={{ boxShadow: "none", marginRight: "10px", fontFamily: "Montserrat" }} >Add New Booking</Button>
+      </div>
       <div className="table-container">
         <div className="header">
           <div onClick={filterButtonClickHandler} className="filter-buttons">

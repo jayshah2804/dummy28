@@ -39,6 +39,10 @@ const Accordian = (props) => {
   const [isActive, setIsActive] = useState(false);
   const [riderData, setRiderData] = useState([]);
 
+  // useEffect(() => {
+  //   prev_active_status = false;
+  // }, []);
+
   const authenticateUser = (data) => {
     // console.log(data.TripdetailList);
     driverPath = data.Triplatlong;
@@ -71,9 +75,6 @@ const Accordian = (props) => {
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
-    // console.log(rider_dataFlag);
-    // if (rider_dataFlag > 1) {
-    // console.log("here");
     if (
       (currentId !== previous_id ||
         (currentId === previous_id && !prev_active_status)) &&
@@ -99,6 +100,7 @@ const Accordian = (props) => {
   }, [sendRequest, isActive]);
 
   const tableRowClickHandler = (targetId) => {
+    debugger;
     if (parent_prev_id !== targetId && !prev_active_status)
       props.formyRender(parent_prev_id);
     setIsActive((prev) => !prev);
@@ -137,7 +139,7 @@ const Accordian = (props) => {
         <td>{props.total_trip_time} </td>
         <td>{props.trip_status} </td>
         <td className={classes.totalTrip}>
-          <span style={{width: "30%"}}>{props.total_trip_km}{" "}</span>
+          <span style={{ width: "30%" }}>{props.total_trip_km}{" "}</span>
           {isActive ? (
             <MdArrowDropDown className={classes.toggleIcon} />
           ) : (

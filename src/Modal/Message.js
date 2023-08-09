@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import "./Message.css";
 import TickmarkImage from "../Assets/Tickmark.png";
 import ErrorImage from "../Assets/Error.png";
 
 const Message = (props) => {
+    const history = useHistory();
     useEffect(() => {
         if (props.flag) document.getElementsByClassName("container-success-msg")[0].style.top = "0";
         document.body.style.overflow = "hidden";
@@ -19,7 +21,7 @@ const Message = (props) => {
                 </div>
                 <hr />
                 <div className='footer' style={{ marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0" }} >
-                    <button className={props.type.toLowerCase() === "success" ? "" : "error"} onClick={() => window.location.reload()}>OK</button>
+                    <button className={props.type.toLowerCase() === "success" ? "" : "error"} onClick={() => props.url ? history.push(props.url) : window.location.reload()}>OK</button>
                 </div>
             </div>
         </div>

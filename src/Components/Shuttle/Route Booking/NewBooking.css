@@ -1,0 +1,21 @@
+.selectDatesClick {
+    margin: 0 20px;
+    color: rgb(73, 73, 73);
+    cursor: pointer;
+    padding: 5px 0;
+    margin-top: 15px;
+    border-bottom: 1px solid gray;
+    width: 250px;
+}
+
+.selectDatesClick:hover {
+    color: blue;
+}
+
+.singleRouteBookingDate {
+    background-color: rgb(216, 214, 214);
+    border-radius: 10px;
+    margin: 0 5px;
+    padding: 7px;
+    font-size: 12px;
+}

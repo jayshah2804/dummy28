@@ -115,7 +115,9 @@ const Modal = (props) => {
         body: {
           emailID: sessionStorage.getItem("user"),
           roleID: sessionStorage.getItem("roleId"),
-          corporateID: ""
+          corporateID: sessionStorage.getItem("roleId") === "1" ? "" : sessionStorage.getItem("corpId"),
+          isDriver: "1",
+          isRider: "1"
         },
       },
       authenticateUser

@@ -9,15 +9,17 @@ import Select from '@mui/material/Select';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { MdOutlineArrowBack } from "react-icons/md";
-import { BiRupee } from "react-icons/bi";
-import { MdNavigateNext } from "react-icons/md";
 import Button from '@mui/material/Button';
+import Autocomplete from '@mui/material/Autocomplete';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import BasicCar from "../../../Assets/basic_car.png";
 import ComfortCar from "../../../Assets/comfort_car.png";
 import ComfortPlusCar from "../../../Assets/comfort_plus_car.png";
+
 import useHttp from '../../../Hooks/use-http';
 import Message from '../../../Modal/Message';
-import loadingGif from "../../../Assets/loading-gif.gif";
 
 let today = new Date();
 const yyyy = today.getFullYear();
@@ -67,6 +69,8 @@ let errorFileds = {
     rentalPackageError: ""
 }
 let isError = false;
+let corporatesData = [];
+let selectedCorporateDetails = [];
 const NewBooking = () => {
     const pickupInputRef = useRef();
     const dropInputRef = useRef();
@@ -80,11 +84,29 @@ const NewBooking = () => {
     const [packageType, setPackageType] = useState();
     const [isConfirmRide, setIsConfirmRide] = useState(false);
     const [formError, setFormError] = useState(errorFileds);
-    const [isBookingSuccess, setIsBookingSuccess] = useState(false)
+    const [isBookingSuccess, setIsBookingSuccess] = useState(false);
+
+    const coroprateLists = (data) => {
+        let tempArr = [];
+        data.CorporateList?.forEach((cp, i) => {
+            tempArr[i] = {};
+            tempArr[i].cpName = cp.CorporateName;
+            tempArr[i].cpId = cp.CorporateID;
+            tempArr[i].adminDptId = cp.DepartmentID?.split(",")[(cp.DepartmentName.toLowerCase().split(",").includesWithIndex("admin"))];
+        })
+        corporatesData = tempArr;
+    }
+
+    const corporateNameClickHandler = (e, corporateDetails) => {
+        if (corporateDetails) {
+            selectedCorporateDetails = corporateDetails;
+        } else
+            selectedCorporateDetails = [];
+    }
 
     useEffect(() => {
         debugger;
-        if (page === 1) {
+        if (page === 1 && !autocomplete[0]?.getPlace()?.geometry?.location?.lat()) {
             const script = document.createElement("script");
             script.src =
                 "https://maps.googleapis.com/maps/api/js?key=AIzaSyDHdkmGjsfNqasFs6m9CooShFZsqWHcdUs&callback=scheduleInitMap&libraries=places&v=weekly";
@@ -108,14 +130,48 @@ const NewBooking = () => {
         }
     }, [page]);
 
+    const { isLoading, sendRequest } = useHttp();
+
+    useEffect(() => {
+        sendRequest(
+            {
+                url: "/api/v1/Corporate/GetAllDepartmentByCorporate",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: {
+                    emailID: sessionStorage.getItem("user"),
+                },
+            },
+            coroprateLists
+        );
+    }, [sendRequest]);
+
     const rideStatus = (data) => {
         if (data.Message.toLowerCase() === "success") {
+            autocomplete = [];
+            guestDetails.name = "";
+            guestDetails.number = "";
+            bookingDetails = {
+                pickup: "",
+                drop: "",
+                date: "",
+                time: "",
+                package: "",
+                pickupLat: "",
+                pickupLng: "",
+                dropLat: "",
+                dropLng: ""
+            };
+            // pickupInputRef.current.value = "";
+            // dropInputRef.current.value = "";
+            // guestNameInputRef.current.value = "";
+            // guestNumberInputRef.current.value = "";
             setIsBookingSuccess("success");
         } else setIsBookingSuccess("error");
         setIsConfirmRide(false);
     }
-
-    const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
         if (isConfirmRide) {
@@ -150,7 +206,7 @@ const NewBooking = () => {
                         bookingID: "",
                         bookingType: "VISITORS",
                         city: "Ahmedabad",
-                        corporateID: sessionStorage.getItem("adminDepartmentID"),
+                        corporateID: sessionStorage.getItem("roleId") === "2" ? sessionStorage.getItem("adminDepartmentID") : selectedCorporateDetails.adminDptId,
                         country: "India",
                         currency: "INR",
                         dropoffAddress: bookingDetails.drop ? bookingDetails.drop : bookingDetails.pickup,
@@ -162,9 +218,9 @@ const NewBooking = () => {
                         localAmount: "0.00",
                         mobileNumber: "91" + guestDetails.number + "-01",
                         otpTollChargeTrip: "0",
-                        otpOnEndTrip: "0",
+                        otpOnEndTrip: "1",
                         otpOnParkingTrip: "0",
-                        otpOnStartTrip: "0",
+                        otpOnStartTrip: "1",
                         pickupAddress: bookingDetails.pickup,
                         pickupDateTime: myTripDate + " " + convertedTime,
                         pickupLatitude: bookingDetails.pickupLat,
@@ -173,7 +229,7 @@ const NewBooking = () => {
                         vehicleType: cabBookingClicked,
                         walletUniqueID: sessionStorage.getItem("adminDepartmentID"),
                         sendSms: "1",
-                        sendEMail: "0",
+                        sendEMail: "1",
                         justification: confirmedServiceTypeId === "btn1" ? "Airport Transfer" : (confirmedServiceTypeId === "btn2" ? "Out Station" : ("Rental " + bookingDetails.package))
                     },
                 },
@@ -291,6 +347,16 @@ const NewBooking = () => {
                 <div className='booking-sub'>
                     {page === 0 && (
                         <div style={{ padding: "5% 15%", display: "flex", flexDirection: "column", gap: "15px" }}>
+                            <Autocomplete
+                                disablePortal
+                                id="combo-box-demo"
+                                options={corporatesData}
+                                getOptionLabel={(data) => data.cpName}
+                                renderInput={(params) => <TextField {...params} variant="standard" placeholder='Search Corporate Name' label="Corporate Name" />}
+                                onChange={(e, newValue) => corporateNameClickHandler(e, newValue)}
+                                defaultValue={sessionStorage.getItem("roleId") === "2" ? { cpName: sessionStorage.getItem("cpName") } : { cpName: selectedCorporateDetails.cpName ?? "" }}
+                                disabled={sessionStorage.getItem("roleId") === "2" ? true : false}
+                            />
                             <TextField className="standard-basic" defaultValue={guestDetails.name} error={formError.guestNameError} helperText={formError.guestNameError} onBlur={(e) => guestDetails.name = e.target.value} onChange={(e) => { if (e.target.value) { isError = false; setFormError(prev => ({ ...prev, guestNameError: "" })) } }} label="Guest Name" variant="standard" inputRef={guestNameInputRef} autoComplete='off' />
                             <TextField className="standard-basic" defaultValue={guestDetails.number} error={formError.guestNumberError} helperText={formError.guestNumberError} onBlur={(e) => guestDetails.number = e.target.value} onChange={(e) => { if (e.target.value) { isError = false; setFormError(prev => ({ ...prev, guestNumberError: "" })) } }} label="Guest Mobile Number" variant="standard" inputRef={guestNumberInputRef} autoComplete='off' />
                             <Button style={{ marginTop: "40px" }} variant="contained" onClick={guestDetailsNextButtonClickHandler} disabled={false} >Next</Button>
@@ -419,8 +485,15 @@ const NewBooking = () => {
                     }
                 </div>
             </div >
-            {isLoading && <img src={loadingGif} className="loading-gif" />}
-            {isBookingSuccess && <Message type={isBookingSuccess} message="Your booking has been successful" />}
+            {isLoading &&
+                <Backdrop
+                    sx={{ color: 'rgba(34, 137, 203, 255)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={isLoading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            }
+            {isBookingSuccess && <Message type={isBookingSuccess} message="Your booking has been successful" url="/schedule-booking/bookings" />}
         </React.Fragment>
     )
 }

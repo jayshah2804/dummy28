@@ -26,15 +26,16 @@ const Login = ({ login }) => {
     // localStorage.setItem("privateDriverFlag", false);
     // alert("hrllo");
     // console.log(data);
-    if (!data.table1) setIsApiError(data + " Please try again later");
+    if (!data.Message) setIsApiError(data + " Please try again later");
     else {
-      sessionStorage.setItem("userType", data.table1[0].userType);
+      sessionStorage.setItem("userType", data.UserType);
       sessionStorage.setItem("user", emailInputRef.current.value);
-      sessionStorage.setItem("adminName", data.table1[0].username);
-      sessionStorage.setItem("roleId", data.table1[0].roleID);
-      sessionStorage.setItem("adminDepartmentID", data.table1[0].adminDepartmentID);
+      sessionStorage.setItem("adminName", data.Username);
+      sessionStorage.setItem("roleId", data.RoleID);
+      sessionStorage.setItem("adminDepartmentID", data.AdminDepartmentID);
+      sessionStorage.setItem("enabledModule", data.EnabledModule);
       setIsCall(false);
-      data.table1[0].message === "Success"
+      data.Message === "Success"
         ? login(true)
         : setIsApiError("Please enter valid email or password");
     }

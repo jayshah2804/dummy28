@@ -67,7 +67,7 @@ const Accordian = (props) => {
                 <td>
                     <div className={classes.twoEntries}>
                         <span>{props.guestName}</span>
-                        <span>{props.guestMobile}</span>
+                        <span>{props.guestMobile?.slice(2)}</span>
                     </div>
                 </td>
                 <td>
@@ -84,6 +84,7 @@ const Accordian = (props) => {
                 </td>
                 <td>{props.bookingType} </td>
                 <td>{props.vehicleType.charAt(0) + props.vehicleType.substring(1).toLowerCase()} </td>
+                <td width="2%" >100</td>
                 <td>
                     <div className={classes.totalTrip}>
                         <span className={classes[props.status ? props.status.toLowerCase() : "pending"]} >{props.status ? (props.status.charAt(0) + props.status.substring(1).toLowerCase()) : "Pending"}{" "}</span>
@@ -113,17 +114,29 @@ const Accordian = (props) => {
                                         <td>{props.dropLocation} </td>
                                         <td>
                                             <div className={classes.twoEntriesRow}>
-                                                <span>{props.driverName}</span>
+                                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                                    {props.status !== null &&
+                                                        <React.Fragment>
+                                                            < span > {props.driverName}</span>
+                                                            <p>{props.driverCarModel + " (" + props.driverCarNumber + ")"}</p>
+                                                        </React.Fragment>
+                                                    }
+                                                </div>
                                                 {(sessionStorage.getItem("roleId") == "1" && props.status?.toLowerCase() !== "cancelled") ?
-                                                    <img src={editImage} className={classes.icon} onClick={() => props.setEditDriverBookingId(props.bookingId)} /> :
+                                                    (
+                                                        <React.Fragment>
+                                                            {
+                                                                (props.status === null || props.status?.toLowerCase() === "accepted") &&
+                                                                < img src={editImage} className={classes.icon} onClick={() => props.setEditDriverBookingId(props.bookingId)} />
+                                                            }
+                                                        </React.Fragment>
+                                                    ) :
                                                     <React.Fragment>
-                                                        {!props.driverName && <span>-</span>}
+                                                        {!props.driverName && <span>Yet to Assign</span>}
                                                     </React.Fragment>
                                                 }
                                             </div>
                                         </td>
-                                        {/* {console.log(((new Date(props.pickupDate) > new Date()) && (!props.status || props.status.toLowerCase() === "accepted")) ? "false" : "true")} */}
-                                        {/* {console.log((new Date(props.pick) > new Date()), (!props.status || props.status.toLowerCase() === "accepted"))} */}
                                         <td>{props.status?.toLowerCase() === "cancelled" ? ("Cancelled due to " + props.cancelNotes) : <button className={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "accepted" || props.status.toLowerCase() === "pending")) ? classes.cancelBooking : classes.disable} disabled={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "pending" || props.status.toLowerCase() === "accepted")) ? false : true} onClick={() => props.setBookingCancellationId(props.bookingId)}>Cancel Booking</button>}</td>
                                     </tr>
                                 </tbody>
@@ -131,8 +144,9 @@ const Accordian = (props) => {
                         </div>
                     </React.Fragment>
                 </td>
-            )}
-        </React.Fragment>
+            )
+            }
+        </React.Fragment >
     );
 };
 

@@ -107,7 +107,7 @@ const Records = (props) => {
                                 <th>Corporate Name</th>
                             }
                             {props.headers.map((data) => (
-                                <th scope="col">{data}</th>
+                                <th style={{ width: "auto" }} scope="col">{data}</th>
                             ))}
                         </tr>
                     </thead>
@@ -128,6 +128,8 @@ const Records = (props) => {
                                 pickupLocation={item.pickupLocation}
                                 dropLocation={item.dropLocation}
                                 driverName={item.driverName}
+                                driverCarNumber={item.driverCarNumber}
+                                driverCarModel={item.driverCarModel}
                                 bookingDate={item.bookingDate}
                                 cancelNotes={item.cancelNotes}
                                 setBookingCancellationId={setBookingCancellationId}
@@ -144,7 +146,7 @@ const Records = (props) => {
                         <thead>
                             <tr>
                                 {props.headers.map((data) => (
-                                    <th>{data}</th>
+                                    <th style={{ width: "auto" }} >{data}</th>
                                 ))}
                                 <th>Actions</th>
                             </tr>

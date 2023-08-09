@@ -150,6 +150,7 @@ const LiveMap = (props) => {
       }
     } else {
       if (data.Livetripdetails) {
+        console.log(onTripDriverEmail, data.Livetripdetails[0].EmailID);
         if (!driverFlag) {
           if (
             flightPlanCoordinates[flightPlanCoordinates.length - 1]?.lat !==
@@ -460,7 +461,6 @@ const LiveMap = (props) => {
 
   function myInitMap() {
     map = new window.google.maps.Map(document.getElementById("live-map"), {
-      // mapId: "8e0a97af9386fef",
       center: { lat: 23.0225, lng: 72.5714 },
       zoom: 12,
       disableDefaultUI: true,

@@ -26,6 +26,10 @@ import Booking from "./Components/ScheduleBooking/New Booking/NewBooking";
 import PreviousBookings from "./Components/ScheduleBooking/Previous Bookings/PreviousBookings";
 import ScheduleTrips from "./Components/ScheduleBooking/Trips/ScheduleTrips";
 import BookingDetails from "./Components/ScheduleBooking/BookingDetails";
+import EditDriver from "./Components/PrivateDriver/Drivers/EditDriver";
+import ShuttleDrivers from "./Components/Shuttle/Drivers/EditDriver";
+import Bookings from "./Components/Shuttle/Route Booking/Bookings";
+import NewBooking from "./Components/Shuttle/Route Booking/NewBooking";
 
 let flag = true;
 let prevURL = "";
@@ -87,7 +91,7 @@ function App() {
               property={isSideMenuOpen}
             />
             <div className="paths">
-              <Route path="/trips">
+              <Route path="/shuttle/trips">
                 <Trips />
               </Route>
               <Route path="/dashboard">
@@ -108,6 +112,12 @@ function App() {
               <Route path="/privatedrive/livemap">
                 <DriverData />
               </Route>
+              <Route path="/privatedrive/drivers">
+                <EditDriver />
+              </Route>
+              <Route path="/shuttle/drivers">
+                <ShuttleDrivers />
+              </Route>
               <Route path="/privatedrive/shift-creation">
                 <ShiftCreation />
               </Route>
@@ -117,7 +127,7 @@ function App() {
               <Route path="/edit">
                 <AddDepartment />
               </Route>
-              <Route path="/staff">
+              <Route path="/staffs">
                 <Staff />
               </Route>
               <Route path="/admins">
@@ -132,24 +142,30 @@ function App() {
               <Route path="/routes/:routeId">
                 <Stops />
               </Route>
-              <Route path="/documents-upload">
+              <Route path="/documents">
                 <DocumentsUpload />
               </Route>
               <Route path="/drivers">
                 <DriverList />
               </Route>
-              {/* <Route path="/schedule-booking/new booking">
+              <Route path="/schedule-booking/new booking">
                 <Booking />
               </Route>
               <Route path="/schedule-booking/trips">
                 <ScheduleTrips />
               </Route>
-              <Route path="/schedule-booking/previous bookings" exact>
+              <Route path="/schedule-booking/bookings" exact>
                 <PreviousBookings />
               </Route>
               <Route path="/schedule-booking/previous bookings/details" exact >
                 <BookingDetails />
-              </Route> */}
+              </Route>
+              <Route path="/shuttle/bookings">
+                <Bookings />
+              </Route>
+              <Route path="/shuttle/new-booking">
+                <NewBooking />
+              </Route>
             </div>
           </div>
           {/* <ChatBot /> */}

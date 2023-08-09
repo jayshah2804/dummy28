@@ -7,7 +7,8 @@ tr {
     border: 1px solid orange;
     border-radius: 10px;
     width: 47%;
-    padding: 7px 7px;
+    padding: 7px 0;
+    text-align: center;
 }
 
 .cancelled {
@@ -15,7 +16,8 @@ tr {
     border: 1px solid rgb(226, 44, 29);
     border-radius: 10px;
     width: 47%;
-    padding: 7px 7px;
+    padding: 7px 0;
+    text-align: center;
 }
 
 .started,
@@ -24,7 +26,8 @@ tr {
     border: 1px solid gray;
     border-radius: 10px;
     width: 47%;
-    padding: 7px 7px;
+    padding: 7px 0;
+    text-align: center;
 }
 
 .ended {
@@ -32,7 +35,8 @@ tr {
     border: 1px solid rgba(42, 149, 69, 255);
     border-radius: 10px;
     width: 47%;
-    padding: 7px 7px;
+    padding: 7px 0;
+    text-align: center;
 }
 
 .accepted {
@@ -40,7 +44,8 @@ tr {
     border: 1px solid rgba(34, 137, 203, 255);
     border-radius: 10px;
     width: 47%;
-    padding: 7px 7px;
+    padding: 7px 0;
+    text-align: center;
 }
 
 .cancelBooking {

@@ -205,7 +205,7 @@ const Main = (props) => {
             <div
               className={classes.text}
               title="Click to see Monthly Trip details"
-              onClick={() => history.push("/trips")}
+              onClick={() => history.push("/shuttle/trips")}
             >
               <p>Trips</p>
               {isApiError && (
@@ -222,7 +222,7 @@ const Main = (props) => {
             <div
               className={classes.text}
               title="Click to see Monthly Usage details"
-              onClick={() => history.push("/staff")}
+              onClick={() => history.push("/staffs")}
             >
               <p>Riders</p>
               {isApiError && (
