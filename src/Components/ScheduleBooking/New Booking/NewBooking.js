@@ -40,7 +40,7 @@ Date.prototype.addMinutes = function (m) {
 
 const formattedOvermorrow = dd + '/' + mm + '/' + yyyy;
 const Dates = ["Today", "Tomorrow", formattedOvermorrow];
-const packageList = ["1hrs 10km", "2hrs 20km", "3hrs 30km", "4hrs 40km", "5hrs 50km", "6hrs 60km", "7hrs 70km", "8hrs 80km", "9hrs 90km", "10hrs 100km"];
+const packageList = ["8hrs 80km", "12hrs 120km"];
 const times = [];
 let guestDetails = {
     name: "",
@@ -228,8 +228,8 @@ const NewBooking = () => {
                         routeJSON: "[{}]",
                         vehicleType: cabBookingClicked,
                         walletUniqueID: sessionStorage.getItem("adminDepartmentID"),
-                        sendSms: "1",
-                        sendEMail: "1",
+                        sendSms: "0",
+                        sendEMail: "0",
                         justification: confirmedServiceTypeId === "btn1" ? "Airport Transfer" : (confirmedServiceTypeId === "btn2" ? "Out Station" : ("Rental " + bookingDetails.package))
                     },
                 },

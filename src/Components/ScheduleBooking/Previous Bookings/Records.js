@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import Loading from "../../../Loading/Loading";
 import Accordian from "./Accordian";
-import { useReactToPrint } from "react-to-print";
-import "./Records.css";
 import useHttp from "../../../Hooks/use-http";
 import Message from '../../../Modal/Message';
-import loadingGif from "../../../Assets/loading-gif.gif";
 import EditDriver from "./EditDriver";
+import "./Records.css";
 
 let bookingData = {
-    driverEmail: "",
-    amount: "",
-    bookingId: ""
+    driverName: "",
+    driverCarModel: "",
+    companyCost: "",
+    driverCost: "",
+    isDisableDriverField: false,
+    modalHeader: ""
 }
-
 const Records = (props) => {
     const [bookingCancellationId, setBookingCancellationId] = useState();
     const [isBookingCancelClicked, setIsBookingCancelClicked] = useState(false);
@@ -33,6 +36,7 @@ const Records = (props) => {
     }
 
     const assignDriverResponse = (data) => {
+        bookingData = {};
         setEditDriverRequestStatus(data.Message.toLowerCase());
         setIsSaveDriverClicked(false);
     }
@@ -71,24 +75,38 @@ const Records = (props) => {
                     },
                     body: {
                         emailID: sessionStorage.getItem("user"),
-                        amount: bookingData.amount,
+                        amount: "0.00",
                         roleID: sessionStorage.getItem("roleId"),
                         status: "ACCEPTED",
                         bookingID: bookingData.bookingId,
                         driverEmailID: bookingData.driverEmail,
-                        sendSms: "1"
+                        sendSms: "0",
+                        companyCost: bookingData.companyCost,
+                        driverCost: bookingData.driverCost
                     },
                 },
                 assignDriverResponse
             );
     }, [sendRequest, isSaveEditDriverClicked]);
 
-    const editDriverFun = (selectedDriverEmail, amount) => {
+    const editDriverFun = (selectedDriverEmail, companyCost, driverCost) => {
         bookingData.driverEmail = selectedDriverEmail;
-        bookingData.amount = amount;
-        bookingData.bookingId = editDriverBookingId;
+        bookingData.companyCost = companyCost;
+        bookingData.driverCost = driverCost;
         setEditDriverBookingId("");
         setIsSaveDriverClicked(true);
+    }
+
+    const bookingDataHandler = (data) => {
+        bookingData.driverName = data.driverName ?? "";
+        bookingData.driverCarModel = data.driverCarModel ?? "";
+        bookingData.driverEmail = data.driverEmail ?? "";
+        bookingData.isDisableDriverField = data.isDisableDriverField ?? "";
+        bookingData.companyCost = data.companyCost ?? "";
+        bookingData.driverCost = data.driverCost ?? "";
+        bookingData.modalHeader = data.modalHeader ?? "";
+        bookingData.bookingId = data.bookingId;
+        setEditDriverBookingId(data.bookingId);
     }
 
     const func = (val) => {
@@ -137,6 +155,10 @@ const Records = (props) => {
                                 bookingType={item.bookingType}
                                 coprorateId={item.coprorateId}
                                 corporateName={item.corporateName}
+                                driverCost={item.driverCost}
+                                companyCost={item.companyCost}
+                                bookingDataHandler={bookingDataHandler}
+                                driverEmailId={item.driverEmailId}
                             />
                         ))}
                     </tbody>
@@ -160,7 +182,7 @@ const Records = (props) => {
             {editDriverBookingId &&
                 <React.Fragment>
                     <div className="overlay"></div>
-                    <EditDriver setEditDriverBookingId={setEditDriverBookingId} bookingId={editDriverBookingId} editDriverFun={editDriverFun} />
+                    <EditDriver bookingData={bookingData} setEditDriverBookingId={setEditDriverBookingId} editDriverFun={editDriverFun} />
                 </React.Fragment>
             }
             {bookingCancellationId &&
@@ -180,7 +202,14 @@ const Records = (props) => {
                     </div>
                 </React.Fragment>
             }
-            {isLoading && <img src={loadingGif} className="loading-gif" />}
+            {isLoading &&
+                <Backdrop
+                    sx={{ color: 'rgba(34, 137, 203, 255)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={isLoading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            }
             {bookingRequestCancalStatus && <Message type={bookingRequestCancalStatus} message="Your booking has been cancelled successfully" />}
             {editDriverRequestStatus && <Message type={editDriverRequestStatus} message="Data is saved successfully" />}
         </React.Fragment>

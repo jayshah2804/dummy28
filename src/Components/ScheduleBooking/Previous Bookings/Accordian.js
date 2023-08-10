@@ -84,7 +84,25 @@ const Accordian = (props) => {
                 </td>
                 <td>{props.bookingType} </td>
                 <td>{props.vehicleType.charAt(0) + props.vehicleType.substring(1).toLowerCase()} </td>
-                <td width="2%" >100</td>
+                <td width="2%">
+                    <div style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }} >
+                        < span > {props.companyCost ?? "-"}</span>
+                        {sessionStorage.getItem("roleId") === "1" &&
+                            < img src={editImage} className={classes.icon} onClick={() => {
+                                props.bookingDataHandler({
+                                    modalHeader: "Add Company Cost",
+                                    driverCost: props.driverCost,
+                                    companyCost: props.companyCost,
+                                    driverName: props.driverName,
+                                    driverCarModel: props.driverCarModel,
+                                    driverEmail: props.driverEmailId,
+                                    bookingId: props.bookingId,
+                                    isDisableDriverField: (props.status?.toLowerCase() === "accepted" || props.status === null) ? false : true
+                                });
+                            }} />
+                        }
+                    </div>
+                </td>
                 <td>
                     <div className={classes.totalTrip}>
                         <span className={classes[props.status ? props.status.toLowerCase() : "pending"]} >{props.status ? (props.status.charAt(0) + props.status.substring(1).toLowerCase()) : "Pending"}{" "}</span>
@@ -96,55 +114,85 @@ const Accordian = (props) => {
                     </div>
                 </td>
             </tr>
-            {isActive && (
-                <td colSpan={sessionStorage.getItem("roleId") == 1 ? 9 : 8}>
-                    <React.Fragment>
-                        <div className={classes.rideTableContainer}>
-                            <table className={classes.riderTable}>
-                                <tr>
-                                    {RIDER_TITLE.map((data) => (
-                                        <th>{data}</th>
-                                    ))}
-                                </tr>
-                                <tbody>
-                                    <tr id="myHandler">
-                                        {/* <td>{props.bookingId} </td> */}
-                                        <td>{props.bookingDate} </td>
-                                        <td>{props.pickupLocation} </td>
-                                        <td>{props.dropLocation} </td>
-                                        <td>
-                                            <div className={classes.twoEntriesRow}>
-                                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                                                    {props.status !== null &&
-                                                        <React.Fragment>
-                                                            < span > {props.driverName}</span>
-                                                            <p>{props.driverCarModel + " (" + props.driverCarNumber + ")"}</p>
-                                                        </React.Fragment>
+            {
+                isActive && (
+                    <td colSpan={sessionStorage.getItem("roleId") == 1 ? 9 : 8}>
+                        <React.Fragment>
+                            <div className={classes.rideTableContainer}>
+                                <table className={classes.riderTable}>
+                                    <tr>
+                                        {RIDER_TITLE.map((data, index) => {
+                                            if (index === RIDER_TITLE.length - 2 && sessionStorage.getItem("roleId") === "1")
+                                                return (
+                                                    <React.Fragment>
+                                                        <th>{data}</th>
+                                                        <th>Driver Cost</th>
+                                                    </React.Fragment>
+                                                )
+                                            return <th>{data}</th>
+                                        }
+                                        )}
+                                    </tr>
+                                    <tbody>
+                                        <tr id="myHandler">
+                                            {/* <td>{props.bookingId} </td> */}
+                                            <td>{props.bookingDate} </td>
+                                            <td>{props.pickupLocation} </td>
+                                            <td>{props.dropLocation} </td>
+                                            <td>
+                                                <div className={classes.twoEntriesRow}>
+                                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                                        {props.driverName ?
+                                                            <React.Fragment>
+                                                                <span> {props.driverName}</span>
+                                                                <p>{props.driverCarModel + " (" + props.driverCarNumber + ")"}</p>
+                                                            </React.Fragment> :
+                                                            <span>Yet to Assign</span>
+                                                        }
+                                                    </div>
+                                                    {(sessionStorage.getItem("roleId") === "1" && (props.status?.toLowerCase() === "accepted" || props.status === null)) &&
+                                                        < img src={editImage} className={classes.icon} onClick={() => {
+                                                            props.bookingDataHandler({
+                                                                modalHeader: "Assign Driver",
+                                                                driverCost: props.driverCost,
+                                                                companyCost: props.companyCost,
+                                                                driverName: props.driverName,
+                                                                driverCarModel: props.driverCarModel,
+                                                                driverEmail: props.driverEmailId,
+                                                                bookingId: props.bookingId,
+                                                                isDisableDriverField: (props.status?.toLowerCase() === "accepted" || props.status === null) ? false : true
+                                                            });
+                                                        }} />
                                                     }
                                                 </div>
-                                                {(sessionStorage.getItem("roleId") == "1" && props.status?.toLowerCase() !== "cancelled") ?
-                                                    (
-                                                        <React.Fragment>
-                                                            {
-                                                                (props.status === null || props.status?.toLowerCase() === "accepted") &&
-                                                                < img src={editImage} className={classes.icon} onClick={() => props.setEditDriverBookingId(props.bookingId)} />
-                                                            }
-                                                        </React.Fragment>
-                                                    ) :
-                                                    <React.Fragment>
-                                                        {!props.driverName && <span>Yet to Assign</span>}
-                                                    </React.Fragment>
-                                                }
-                                            </div>
-                                        </td>
-                                        <td>{props.status?.toLowerCase() === "cancelled" ? ("Cancelled due to " + props.cancelNotes) : <button className={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "accepted" || props.status.toLowerCase() === "pending")) ? classes.cancelBooking : classes.disable} disabled={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "pending" || props.status.toLowerCase() === "accepted")) ? false : true} onClick={() => props.setBookingCancellationId(props.bookingId)}>Cancel Booking</button>}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </React.Fragment>
-                </td>
-            )
+                                            </td>
+                                            {sessionStorage.getItem("roleId") === "1" &&
+                                                <td>
+                                                    <div style={{display: "flex", gap: "5px", alignItems: "center", justifyContent: "center"}} >
+                                                        <span>{props.driverCost}</span>
+                                                        <img src={editImage} className={classes.icon} onClick={() => {
+                                                            props.bookingDataHandler({
+                                                                modalHeader: "Add Driver Cost",
+                                                                driverCost: props.driverCost,
+                                                                companyCost: props.companyCost,
+                                                                driverName: props.driverName,
+                                                                driverCarModel: props.driverCarModel,
+                                                                driverEmail: props.driverEmailId,
+                                                                bookingId: props.bookingId,
+                                                                isDisableDriverField: (props.status?.toLowerCase() === "accepted" || props.status === null) ? false : true
+                                                            });
+                                                        }} />
+                                                    </div>
+                                                </td>
+                                            }
+                                            <td>{props.status?.toLowerCase() === "cancelled" ? ("Cancelled due to " + props.cancelNotes) : <button className={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "accepted" || props.status.toLowerCase() === "pending")) ? classes.cancelBooking : classes.disable} disabled={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "pending" || props.status.toLowerCase() === "accepted")) ? false : true} onClick={() => props.setBookingCancellationId(props.bookingId)}>Cancel Booking</button>}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </React.Fragment>
+                    </td>
+                )
             }
         </React.Fragment >
     );

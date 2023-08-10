@@ -63,7 +63,10 @@ function PreviousBookings(props) {
           cancelNotes: data.RequestBookingDetails[i].CancelNotes,
           bookingType: data.RequestBookingDetails[i].Justification,
           corporateName: data.RequestBookingDetails[i].CorporateName,
-          coprorateId: data.RequestBookingDetails[i].AdminDepartmentID
+          coprorateId: data.RequestBookingDetails[i].AdminDepartmentID,
+          driverCost: data.RequestBookingDetails[i].DriverCost,
+          driverEmailId: data.RequestBookingDetails[i].DriverEmailId,
+          companyCost: data.RequestBookingDetails[i].CompanyCost
         });
       }
     }
