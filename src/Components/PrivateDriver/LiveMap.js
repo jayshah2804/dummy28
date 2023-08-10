@@ -198,11 +198,11 @@ const LiveMap = (props) => {
         // flightPlanCoordinates = [];
       }
 
-      if (!(data?.LivetripStatus?.toLowerCase() === "ended")) {
+      if (!(data?.LivetripStatus?.toLowerCase() === "ended" || data?.LivetripStatus?.toLowerCase() === "arrived")) {
         if (startPointMarker) startPointMarker.setMap(null);
         if (endPointMarker) endPointMarker.setMap(null);
         startPointMarker = new window.google.maps.Marker({
-          position: data.Livetrip[0].ActualPickupName
+          position: data.Livetrip[0]?.ActualPickupName
             ? {
               lat: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[0],
               lng: +data?.Livetrip[0]?.ActualPickupAddress.split(",")[1],

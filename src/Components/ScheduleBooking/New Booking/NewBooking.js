@@ -206,7 +206,7 @@ const NewBooking = () => {
                         bookingID: "",
                         bookingType: "VISITORS",
                         city: "Ahmedabad",
-                        corporateID: sessionStorage.getItem("roleId") === "2" ? sessionStorage.getItem("adminDepartmentID") : selectedCorporateDetails.adminDptId,
+                        corporateID: sessionStorage.getItem("roleId") === "2" ? sessionStorage.getItem("corpId") : selectedCorporateDetails.cpId,
                         country: "India",
                         currency: "INR",
                         dropoffAddress: bookingDetails.drop ? bookingDetails.drop : bookingDetails.pickup,
@@ -227,7 +227,7 @@ const NewBooking = () => {
                         pickupLongitude: bookingDetails.pickupLng,
                         routeJSON: "[{}]",
                         vehicleType: cabBookingClicked,
-                        walletUniqueID: sessionStorage.getItem("adminDepartmentID"),
+                        walletUniqueID: sessionStorage.getItem("corpId"),
                         sendSms: "1",
                         sendEMail: "1",
                         justification: confirmedServiceTypeId === "btn1" ? "Airport Transfer" : (confirmedServiceTypeId === "btn2" ? "Out Station" : ("Rental " + bookingDetails.package))

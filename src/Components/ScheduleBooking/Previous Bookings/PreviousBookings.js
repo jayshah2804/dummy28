@@ -89,7 +89,7 @@ function PreviousBookings(props) {
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            corporateID: sessionStorage.getItem("adminDepartmentID"),
+            corporateID: sessionStorage.getItem("corpId"),
             startDate: startDate,
             endDate: endDate,
             roleID: sessionStorage.getItem("roleId")

@@ -19,7 +19,7 @@ const EditDriver = () => {
     const [filteredCorporates, setFilteredCorporates] = useState([]);
     const [cpPrivateDriverData, setCpPrivateDriverData] = useState([]);
     const [isDataLoading, setIsDataLoading] = useState(false);
-    const [isApiCall, setIsApiCall] = useState(false);
+    const [isApiCall, setIsApiCall] = useState(true);
 
     const corporateNameClickHandler = (e, corporateDetails) => {
         if (corporateDetails) {
@@ -52,23 +52,23 @@ const EditDriver = () => {
     const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
-        // if (isApiCall) {
-        sendRequest(
-            {
-                url: "/api/v1/ShuttleTrips/GetShuttleDriverList",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+        if (isApiCall) {
+            sendRequest(
+                {
+                    url: "/api/v1/ShuttleTrips/GetShuttleDriverList",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: {
+                        emailID: sessionStorage.getItem("user"),
+                        roleID: sessionStorage.getItem("roleId"),
+                        corporateID: selectedCorporateDetails?.cpId ? selectedCorporateDetails?.cpId : ""
+                    },
                 },
-                body: {
-                    emailID: sessionStorage.getItem("user"),
-                    roleID: sessionStorage.getItem("roleId"),
-                    corporateID: selectedCorporateDetails?.cpId ? selectedCorporateDetails?.cpId : ""
-                },
-            },
-            privateDriverData
-        );
-        // }
+                privateDriverData
+            );
+        }
     }, [sendRequest, isApiCall]);
 
     useEffect(() => {
