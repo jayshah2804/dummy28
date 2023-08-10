@@ -80,7 +80,7 @@ const Records = (props) => {
                         status: "ACCEPTED",
                         bookingID: bookingData.bookingId,
                         driverEmailID: bookingData.driverEmail,
-                        sendSms: "0",
+                        sendSms: "1",
                         companyCost: bookingData.companyCost,
                         driverCost: bookingData.driverCost
                     },

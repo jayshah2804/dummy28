@@ -228,8 +228,8 @@ const NewBooking = () => {
                         routeJSON: "[{}]",
                         vehicleType: cabBookingClicked,
                         walletUniqueID: sessionStorage.getItem("adminDepartmentID"),
-                        sendSms: "0",
-                        sendEMail: "0",
+                        sendSms: "1",
+                        sendEMail: "1",
                         justification: confirmedServiceTypeId === "btn1" ? "Airport Transfer" : (confirmedServiceTypeId === "btn2" ? "Out Station" : ("Rental " + bookingDetails.package))
                     },
                 },
