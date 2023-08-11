@@ -40,9 +40,16 @@
 }
 
 .schedule_filter_buttons {
-    display: flex;
-    justify-content: space-between;
+    /* display: flex;
+    justify-content: space-around;
     align-items: center;
+    color: gray; */
+}
+
+.schedule_filter_buttons .activeType {
+    /* font-weight: bold;
+    padding-bottom: 5px;
+    border-bottom: 3px solid rgba(42, 149, 69, 255); */
 }
 
 .basic,

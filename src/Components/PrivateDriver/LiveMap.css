@@ -46,24 +46,37 @@
 
 .ontrip {
   position: absolute;
-  top: 3%;
   right: 0;
+  bottom: 10%;
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background-color: rgba(34, 137, 203, 255);
   align-self: center;
+  animation: ripple 1.2s infinite ease-in-out;
 }
 
 .online {
   position: absolute;
-  top: 3%;
   right: 0;
+  bottom: 10%;
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background-color: rgba(42, 149, 69, 255);
   align-self: center;
+}
+
+@keyframes ripple {
+  0% {
+    transform: 'scale(.8)';
+    opacity: 1;
+  }
+
+  100% {
+    transform: 'scale(2.4)';
+    opacity: 0;
+  }
 }
 
 .bookButton {
@@ -243,10 +256,12 @@
   .main-container {
     display: block;
   }
+
   .driverlist {
     width: 100%;
     margin-bottom: 20px;
   }
+
   .privateDriverMap-container {
     width: 100%;
   }

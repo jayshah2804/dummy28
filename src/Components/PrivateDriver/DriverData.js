@@ -28,7 +28,7 @@ const DriverData = (props) => {
         driverEmail: data.PrivetDriverlist[i].DriverEmailID,
         carNumber: data.PrivetDriverlist[i].CarNumber,
         driverImage: data.PrivetDriverlist[i].DriverImage,
-        vehicleType: data.PrivetDriverlist[i].VehicleType,
+        vehicleType: data.PrivetDriverlist[i].VehicleTypes?.toLowerCase().includes("basic") ? "BASIC" : (data.PrivetDriverlist[i].VehicleTypes.toLowerCase().includes("+") ? "COMFORT+" : "COMFORT"),
         carModel: data.PrivetDriverlist[i].CarModel,
         carColor: data.PrivetDriverlist[i].Color,
         status:
@@ -40,6 +40,7 @@ const DriverData = (props) => {
       });
     }
     driver_data = structuredClone(collectedDriverData);
+    debugger;
     setDriverData(collectedDriverData);
   };
 

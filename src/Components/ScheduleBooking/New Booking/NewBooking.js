@@ -13,6 +13,9 @@ import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import BasicCar from "../../../Assets/basic_car.png";
 import ComfortCar from "../../../Assets/comfort_car.png";
@@ -46,7 +49,6 @@ let guestDetails = {
     name: "",
     number: ""
 }
-let confirmedServiceTypeId = "btn1";
 let bookingDetails = {
     pickup: "",
     drop: "",
@@ -79,12 +81,12 @@ const NewBooking = () => {
     const [page, setPage] = useState(0);
     const guestNameInputRef = useRef();
     const guestNumberInputRef = useRef();
-    const [selectedServiceTypeId, setSelectedServiceTypeId] = useState("btn1");
     const [cabBookingClicked, setCabBookingClicked] = useState(false);
     const [packageType, setPackageType] = useState();
     const [isConfirmRide, setIsConfirmRide] = useState(false);
     const [formError, setFormError] = useState(errorFileds);
     const [isBookingSuccess, setIsBookingSuccess] = useState(false);
+    const [servicesTabbarValue, setServicesTabbarValue] = useState(0);
 
     const coroprateLists = (data) => {
         let tempArr = [];
@@ -123,12 +125,12 @@ const NewBooking = () => {
     }
     window.scheduleInitMap = initMap;
 
-    useEffect(() => {
-        if (page === 1 && !pickupInputRef.current.value) {
-            document.getElementById("btn1").style.boxShadow = "0 10px 10px rgba(33, 33, 33, .3)";
-            document.getElementById("btn1").style.transform = "scale(1.05)";
-        }
-    }, [page]);
+    // useEffect(() => {
+    //     if (page === 1 && !pickupInputRef.current.value) {
+    //         document.getElementById("btn1").style.boxShadow = "0 10px 10px rgba(33, 33, 33, .3)";
+    //         document.getElementById("btn1").style.transform = "scale(1.05)";
+    //     }
+    // }, [page]);
 
     const { isLoading, sendRequest } = useHttp();
 
@@ -230,7 +232,7 @@ const NewBooking = () => {
                         walletUniqueID: sessionStorage.getItem("corpId"),
                         sendSms: "1",
                         sendEMail: "1",
-                        justification: confirmedServiceTypeId === "btn1" ? "Airport Transfer" : (confirmedServiceTypeId === "btn2" ? "Out Station" : ("Rental " + bookingDetails.package))
+                        justification: servicesTabbarValue == "0" ? "City Ride" : (servicesTabbarValue == "1" ? "Out Station" : ("Rental " + bookingDetails.package))
                     },
                 },
                 rideStatus
@@ -238,29 +240,16 @@ const NewBooking = () => {
         }
     }, [isConfirmRide, sendRequest]);
 
-    const scheduleFilterBUttonClickHandler = (id, cameFromBack = false) => {
-        if (id) {
-            if (!cameFromBack) {
-                document.getElementById(selectedServiceTypeId).style.boxShadow = null;
-                document.getElementById(selectedServiceTypeId).style.transform = null;
-            }
-            document.getElementById(id).style.boxShadow = "0 10px 10px rgba(33, 33, 33, .3)";
-            document.getElementById(id).style.transform = "scale(1.05)";
-            setSelectedServiceTypeId(id);
-            confirmedServiceTypeId = id;
-        }
-    }
-
     const cabBookingHandlerClicked = (cabType) => {
-        if ((!(bookingDetails.pickup.toLowerCase().includes("airport") || bookingDetails.drop.toLowerCase().includes("airport")) && confirmedServiceTypeId === "btn1")) {
-            isError = true;
-            setFormError(prev => ({ ...prev, pickupLocationError: "Pickup/drop location must be Airport" }));
-        }
+        // if ((!(bookingDetails.pickup.toLowerCase().includes("airport") || bookingDetails.drop.toLowerCase().includes("airport")) && confirmedServiceTypeId === "btn1")) {
+        //     isError = true;
+        //     setFormError(prev => ({ ...prev, pickupLocationError: "Pickup/drop location must be Airport" }));
+        // }
         if (!bookingDetails.pickup) {
             isError = true;
             setFormError(prev => ({ ...prev, pickupLocationError: "Please enter valid location" }));
         }
-        if (!bookingDetails.drop && confirmedServiceTypeId !== "btn3") {
+        if (!bookingDetails.drop && servicesTabbarValue != "2") {
             isError = true;
             setFormError(prev => ({ ...prev, dropLocationEror: "Please enter valid location" }));
         }
@@ -272,7 +261,7 @@ const NewBooking = () => {
             isError = true;
             setFormError(prev => ({ ...prev, pickupTimeError: "Please select valid time" }));
         }
-        if (!bookingDetails.package && confirmedServiceTypeId === "btn3") {
+        if (!bookingDetails.package && servicesTabbarValue == "2") {
             isError = true;
             setFormError(prev => ({ ...prev, rentalPackageError: "Please select valid package" }));
         }
@@ -341,6 +330,13 @@ const NewBooking = () => {
         setPackageType(e.target.value);
     }
 
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+
     return (
         <React.Fragment>
             <div className='booking-main'>
@@ -366,7 +362,6 @@ const NewBooking = () => {
                     {page !== 0 &&
                         <MdOutlineArrowBack className='backArrow' onClick={() => {
                             isError = false;
-                            if (page === 2) setTimeout(() => (scheduleFilterBUttonClickHandler(confirmedServiceTypeId, true)), 1000);
                             setPage(prev => prev - 1);
                         }
                         } />
@@ -374,16 +369,14 @@ const NewBooking = () => {
                     {page === 1 &&
                         (
                             <div style={{ height: "100%", width: "100%" }}>
-                                <div className='schedule_filter_buttons' onClick={(e) => scheduleFilterBUttonClickHandler(e.target?.id)} >
-                                    <Button variant='contained' id="btn1" style={{ backgroundColor: "rgba(34, 137, 203, 255)", width: "180px" }} >Airport Transfer</Button>
-                                    <Button variant='contained' id="btn2" style={{ backgroundColor: "rgba(42, 149, 69, 255)", width: "180px" }} >OutStation</Button>
-                                    <Button variant='contained' id="btn3" style={{ backgroundColor: "rgba(245, 174, 48, 255)", width: "180px" }} >Rental</Button>
-                                </div>
+                                <Tabs variant='fullWidth' style={{ cursor: "pointer" }} centered value={servicesTabbarValue} onChange={(e, newValue) => setServicesTabbarValue(newValue)} aria-label="basic tabs example">
+                                    <Tab label="City Ride" />
+                                    <Tab label="Outstation" />
+                                    <Tab label="Rentals" />
+                                </Tabs>
                                 <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginTop: "10px" }} >
                                     <TextField id="pac-input1" defaultValue={bookingDetails.pickup} error={formError.pickupLocationError} helperText={formError.pickupLocationError} onBlur={(e) => bookingDetails.pickup = e.target.value} onChange={(e) => { if (e.target.value) { isError = false; setFormError(prev => ({ ...prev, pickupLocationError: "" })) } }} className="standard-basic" label="Pickup Location" variant="standard" inputRef={pickupInputRef} autoComplete='off' />
-                                    {/* {selectedServiceTypeId !== "btn3" && */}
-                                    <TextField id="pac-input2" style={{ display: selectedServiceTypeId === "btn3" ? "none" : "" }} defaultValue={bookingDetails.drop} error={formError.dropLocationEror} helperText={formError.dropLocationEror} onBlur={(e) => bookingDetails.drop = e.target.value} onChange={(e) => { if (e.target.value) { isError = false; setFormError(prev => ({ ...prev, dropLocationEror: "" })) } }} className="standard-basic" label="Drop Location" variant="standard" inputRef={dropInputRef} autoComplete='off' />
-                                    {/* } */}
+                                    <TextField id="pac-input2" style={{ display: servicesTabbarValue == "2" ? "none" : "" }} defaultValue={bookingDetails.drop} error={formError.dropLocationEror} helperText={formError.dropLocationEror} onBlur={(e) => bookingDetails.drop = e.target.value} onChange={(e) => { if (e.target.value) { isError = false; setFormError(prev => ({ ...prev, dropLocationEror: "" })) } }} className="standard-basic" label="Drop Location" variant="standard" inputRef={dropInputRef} autoComplete='off' />
                                     <React.Fragment>
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} >
                                             <FormControl variant="standard" sx={{ m: 1, minWidth: 120, margin: "0", width: "40%" }} error={formError.pickupDateError} >
@@ -416,7 +409,7 @@ const NewBooking = () => {
                                             </FormControl>
                                         </div>
                                     </React.Fragment>
-                                    {selectedServiceTypeId === "btn3" &&
+                                    {servicesTabbarValue == "2" &&
                                         <FormControl variant="standard" sx={{ m: 1, minWidth: 120, margin: "0" }} error={formError.rentalPackageError} >
                                             <InputLabel id="package-select-standard-label">Select Package</InputLabel>
                                             <Select
@@ -476,8 +469,8 @@ const NewBooking = () => {
                                     <h5>Pickup</h5>
                                     <p style={{ color: "rgb(130,130,130)", fontSize: "10.5px", marginTop: "2px" }} >{bookingDetails.pickup}</p>
                                     <br />
-                                    <h5>{selectedServiceTypeId === "btn3" ? "Package" : "Drop"}</h5>
-                                    <p style={{ color: "rgb(130,130,130)", fontSize: "10.5px", marginTop: "2px" }} >{selectedServiceTypeId === "btn3" ? packageType : bookingDetails.drop}</p>
+                                    <h5>{servicesTabbarValue == "2" ? "Package" : "Drop"}</h5>
+                                    <p style={{ color: "rgb(130,130,130)", fontSize: "10.5px", marginTop: "2px" }} >{servicesTabbarValue == "2" ? packageType : bookingDetails.drop}</p>
                                 </div>
                             </div>
                             <Button style={{ marginTop: "40px" }} variant="contained" onClick={() => setIsConfirmRide(true)} >Confirm & Book</Button>

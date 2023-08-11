@@ -103,7 +103,7 @@ const DriverBooking = (props) => {
           },
           skipDrivers: [],
           vehicle: {
-            type: "BASIC",
+            type: props.bookedDriver[0].carType,
             details: {
               itemCarried: "goods",
               size: "2",
@@ -267,7 +267,7 @@ const DriverBooking = (props) => {
       !error.riderName &&
       (riderInputSearchRef.current.value.toLowerCase() === "guest"
         ? guestNameInputRef.current.value &&
-          guestMoNumberInputRef.current.value.toString().length === 10
+        guestMoNumberInputRef.current.value.toString().length === 10
         : 1)
     ) {
       if (riderInputSearchRef.current.value.toLowerCase() === "guest") {
@@ -452,7 +452,7 @@ const DriverBooking = (props) => {
       if (
         !document.getElementById("addStopDiv").children[i].style.display ||
         document.getElementById("addStopDiv").children[i].style.display ===
-          "none"
+        "none"
       ) {
         document.getElementById("addStopDiv").children[i].style.display =
           "flex";
@@ -532,7 +532,7 @@ const DriverBooking = (props) => {
           .insertBefore(
             document.getElementById("addStopDiv").children[i],
             document.getElementById("addStopDiv").children[
-              document.getElementById("addStopDiv").children
+            document.getElementById("addStopDiv").children
             ]
           );
         document
@@ -540,7 +540,7 @@ const DriverBooking = (props) => {
           .insertBefore(
             document.getElementById("addStopIconDiv").children[i],
             document.getElementById("addStopIconDiv").children[
-              document.getElementById("addStopIconDiv").children
+            document.getElementById("addStopIconDiv").children
             ]
           );
         dropOffs.splice(i, 1);
