@@ -168,37 +168,39 @@ const Accordian = (props) => {
                                                 </div>
                                             </td>
                                             {sessionStorage.getItem("roleId") === "1" &&
-                                                <td>
-                                                    <div style={{ display: "flex", gap: "5px", alignItems: "center", justifyContent: "center" }} >
-                                                        <span>{props.driverCost}</span>
-                                                        <img src={editImage} className={classes.icon} onClick={() => {
-                                                            props.bookingDataHandler({
-                                                                modalHeader: "Add Driver Cost",
-                                                                driverCost: props.driverCost,
-                                                                companyCost: props.companyCost,
-                                                                driverName: props.driverName,
-                                                                driverCarModel: props.driverCarModel,
-                                                                driverEmail: props.driverEmailId,
-                                                                bookingId: props.bookingId,
-                                                                isDisableDriverField: (props.status?.toLowerCase() === "accepted" || props.status === null) ? false : true
-                                                            });
-                                                        }} />
-                                                    </div>
-                                                </td>
-                                            }
-                                            <td>
-                                                {props.tripOtp.isOtpEnabled !== true ?
-                                                    <span>Otp was not Enabled</span> :
-                                                    <React.Fragment>
-                                                        {((props.status?.toLowerCase() === "arrived" || props.status?.toLowerCase() === "started") && props.tripOtp.isOtpEnabled === true) ?
-                                                            < div className={classes.twoEntries}>
-                                                                <span>Start Otp: {props.tripOtp.startOtp}</span>
-                                                                <span>End Otp: {props.tripOtp.endOtp}</span>
-                                                            </div> : <span>-</span>
+                                                <React.Fragment>
+                                                    <td>
+                                                        <div style={{ display: "flex", gap: "5px", alignItems: "center", justifyContent: "center" }} >
+                                                            <span>{props.driverCost}</span>
+                                                            <img src={editImage} className={classes.icon} onClick={() => {
+                                                                props.bookingDataHandler({
+                                                                    modalHeader: "Add Driver Cost",
+                                                                    driverCost: props.driverCost,
+                                                                    companyCost: props.companyCost,
+                                                                    driverName: props.driverName,
+                                                                    driverCarModel: props.driverCarModel,
+                                                                    driverEmail: props.driverEmailId,
+                                                                    bookingId: props.bookingId,
+                                                                    isDisableDriverField: (props.status?.toLowerCase() === "accepted" || props.status === null) ? false : true
+                                                                });
+                                                            }} />
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {props.tripOtp.isOtpEnabled !== true ?
+                                                            <span>Otp was not Enabled</span> :
+                                                            <React.Fragment>
+                                                                {((props.status?.toLowerCase() === "arrived" || props.status?.toLowerCase() === "started") && props.tripOtp.isOtpEnabled === true) ?
+                                                                    < div className={classes.twoEntries}>
+                                                                        <span>Start Otp: {props.tripOtp.startOtp}</span>
+                                                                        <span>End Otp: {props.tripOtp.endOtp}</span>
+                                                                    </div> : <span>-</span>
+                                                                }
+                                                            </React.Fragment>
                                                         }
-                                                    </React.Fragment>
-                                                }
-                                            </td>
+                                                    </td>
+                                                </React.Fragment>
+                                            }
                                             <td>{props.status?.toLowerCase() === "cancelled" ? ("Cancelled due to " + props.cancelNotes) : <button className={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "accepted" || props.status.toLowerCase() === "pending")) ? classes.cancelBooking : classes.disable} disabled={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "pending" || props.status.toLowerCase() === "accepted")) ? false : true} onClick={() => props.setBookingCancellationId(props.bookingId)}>Cancel Booking</button>}</td>
                                         </tr>
                                     </tbody>
