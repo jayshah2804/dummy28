@@ -66,7 +66,12 @@ function PreviousBookings(props) {
           coprorateId: data.RequestBookingDetails[i].AdminDepartmentID,
           driverCost: data.RequestBookingDetails[i].DriverCost,
           driverEmailId: data.RequestBookingDetails[i].DriverEmailId,
-          companyCost: data.RequestBookingDetails[i].CompanyCost
+          companyCost: data.RequestBookingDetails[i].CompanyCost,
+          tripOtp: {
+            isOtpEnabled: data.RequestBookingDetails[i].isOTPEnabled,
+            startOtp: data.RequestBookingDetails[i].StartTripOTP,
+            endOtp: data.RequestBookingDetails[i].EndTripOTP
+          }
         });
       }
     }
@@ -134,23 +139,25 @@ function PreviousBookings(props) {
   if (currentPage === nPages) toRecords = filteredData.length;
 
   const filterButtonClickHandler = (e) => {
-    startDateRef.current.value = "";
-    endDateRef.current.value = "";
-    document.getElementById(e.target.id)?.classList.add("selected");
-    document.getElementById(prev_id)?.classList.remove("selected");
-    prev_id = e.target.id;
+    if (prev_id !== e.target.id) {
+      startDateRef.current.value = "";
+      endDateRef.current.value = "";
+      document.getElementById(e.target.id)?.classList.add("selected");
+      document.getElementById(prev_id)?.classList.remove("selected");
+      prev_id = e.target.id;
 
-    setCurrentPage(1);
-    setIsDataFiltered(true);
-    myClick = true;
+      setCurrentPage(1);
+      setIsDataFiltered(true);
+      myClick = true;
 
-    if (e.target.innerText === "Today") {
-      startDate = new Date()
-        .getFullYear()
-        .toString()
-        .concat("-", +new Date().getMonth() + 1, "-", new Date().getDate());
-      endDate = today;
-    };
+      if (e.target.innerText === "Today") {
+        startDate = new Date()
+          .getFullYear()
+          .toString()
+          .concat("-", +new Date().getMonth() + 1, "-", new Date().getDate());
+        endDate = today;
+      };
+    }
   }
 
   const dateChangeHandler = () => {

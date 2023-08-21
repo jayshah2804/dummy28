@@ -52,6 +52,13 @@
     border-bottom: 3px solid rgba(42, 149, 69, 255); */
 }
 
+.booking-sub .tripOtpText {
+    color: gray;
+    font-size: 11px;
+    margin-top: -24px;
+    margin-left: 30px;
+}
+
 .basic,
 .comfort,
 .comfort-plus {

@@ -102,7 +102,7 @@ function ScheduleTrips(props) {
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            corporateID: sessionStorage.getItem("adminDepartmentID"),
+            corporateID: sessionStorage.getItem("corpId"),
             fromDate: startDate,
             toDate: endDate,
             roleID: sessionStorage.getItem("roleId")

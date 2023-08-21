@@ -159,6 +159,7 @@ const Records = (props) => {
                                 companyCost={item.companyCost}
                                 bookingDataHandler={bookingDataHandler}
                                 driverEmailId={item.driverEmailId}
+                                tripOtp={item.tripOtp}
                             />
                         ))}
                     </tbody>

@@ -186,7 +186,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Private Driver List
+          Shuttle Driver List
         </Typography>
       )}
 
@@ -408,7 +408,7 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
       </Dialog>
 
       <Dialog open={isAddDriverClicked && !isLoading}>
-        <DialogTitle>Add Private Driver</DialogTitle>
+        <DialogTitle>Add Shuttle Driver</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please select a driver that you want to add in {selectedCorporateDetails.cpName}

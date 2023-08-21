@@ -127,6 +127,7 @@ const Accordian = (props) => {
                                                     <React.Fragment>
                                                         <th>{data}</th>
                                                         <th>Driver Cost</th>
+                                                        <th>Trip OTP</th>
                                                     </React.Fragment>
                                                 )
                                             return <th>{data}</th>
@@ -168,7 +169,7 @@ const Accordian = (props) => {
                                             </td>
                                             {sessionStorage.getItem("roleId") === "1" &&
                                                 <td>
-                                                    <div style={{display: "flex", gap: "5px", alignItems: "center", justifyContent: "center"}} >
+                                                    <div style={{ display: "flex", gap: "5px", alignItems: "center", justifyContent: "center" }} >
                                                         <span>{props.driverCost}</span>
                                                         <img src={editImage} className={classes.icon} onClick={() => {
                                                             props.bookingDataHandler({
@@ -185,6 +186,19 @@ const Accordian = (props) => {
                                                     </div>
                                                 </td>
                                             }
+                                            <td>
+                                                {props.tripOtp.isOtpEnabled !== true ?
+                                                    <span>Otp was not Enabled</span> :
+                                                    <React.Fragment>
+                                                        {((props.status?.toLowerCase() === "arrived" || props.status?.toLowerCase() === "started") && props.tripOtp.isOtpEnabled === true) ?
+                                                            < div className={classes.twoEntries}>
+                                                                <span>Start Otp: {props.tripOtp.startOtp}</span>
+                                                                <span>End Otp: {props.tripOtp.endOtp}</span>
+                                                            </div> : <span>-</span>
+                                                        }
+                                                    </React.Fragment>
+                                                }
+                                            </td>
                                             <td>{props.status?.toLowerCase() === "cancelled" ? ("Cancelled due to " + props.cancelNotes) : <button className={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "accepted" || props.status.toLowerCase() === "pending")) ? classes.cancelBooking : classes.disable} disabled={((new Date(props.pickupDate + " " + props.pickupTime) > new Date()) && (!props.status || props.status.toLowerCase() === "pending" || props.status.toLowerCase() === "accepted")) ? false : true} onClick={() => props.setBookingCancellationId(props.bookingId)}>Cancel Booking</button>}</td>
                                         </tr>
                                     </tbody>

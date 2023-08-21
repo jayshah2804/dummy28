@@ -63,7 +63,7 @@ const EditDriver = () => {
                     body: {
                         emailID: sessionStorage.getItem("user"),
                         roleID: sessionStorage.getItem("roleId"),
-                        corporateID: selectedCorporateDetails?.adminDptId ? selectedCorporateDetails?.adminDptId : "",
+                        corporateID: selectedCorporateDetails?.cpId ? selectedCorporateDetails?.cpId : "",
                         isDriver: "1",
                         isRider: "0"
                     },

@@ -16,6 +16,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 import BasicCar from "../../../Assets/basic_car.png";
 import ComfortCar from "../../../Assets/comfort_car.png";
@@ -87,6 +89,7 @@ const NewBooking = () => {
     const [formError, setFormError] = useState(errorFileds);
     const [isBookingSuccess, setIsBookingSuccess] = useState(false);
     const [servicesTabbarValue, setServicesTabbarValue] = useState(0);
+    const [isOTPEnabled, setIsOtpEnabled] = useState(true);
 
     const coroprateLists = (data) => {
         let tempArr = [];
@@ -220,9 +223,9 @@ const NewBooking = () => {
                         localAmount: "0.00",
                         mobileNumber: "91" + guestDetails.number + "-01",
                         otpTollChargeTrip: "0",
-                        otpOnEndTrip: "1",
+                        otpOnEndTrip: isOTPEnabled ? "1" : "0",
                         otpOnParkingTrip: "0",
-                        otpOnStartTrip: "1",
+                        otpOnStartTrip: isOTPEnabled ? "1" : "0",
                         pickupAddress: bookingDetails.pickup,
                         pickupDateTime: myTripDate + " " + convertedTime,
                         pickupLatitude: bookingDetails.pickupLat,
@@ -339,7 +342,7 @@ const NewBooking = () => {
 
     return (
         <React.Fragment>
-            <div className='booking-main'>
+            <div className='booking-main' style={{ fontFamily: 'Montserrat' }}>
                 <div className='booking-sub'>
                     {page === 0 && (
                         <div style={{ padding: "5% 15%", display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -355,7 +358,9 @@ const NewBooking = () => {
                             />
                             <TextField className="standard-basic" defaultValue={guestDetails.name} error={formError.guestNameError} helperText={formError.guestNameError} onBlur={(e) => guestDetails.name = e.target.value} onChange={(e) => { if (e.target.value) { isError = false; setFormError(prev => ({ ...prev, guestNameError: "" })) } }} label="Guest Name" variant="standard" inputRef={guestNameInputRef} autoComplete='off' />
                             <TextField className="standard-basic" defaultValue={guestDetails.number} error={formError.guestNumberError} helperText={formError.guestNumberError} onBlur={(e) => guestDetails.number = e.target.value} onChange={(e) => { if (e.target.value) { isError = false; setFormError(prev => ({ ...prev, guestNumberError: "" })) } }} label="Guest Mobile Number" variant="standard" inputRef={guestNumberInputRef} autoComplete='off' />
-                            <Button style={{ marginTop: "40px" }} variant="contained" onClick={guestDetailsNextButtonClickHandler} disabled={false} >Next</Button>
+                            <FormControlLabel sx={{ color: "gray" }} onChange={() => setIsOtpEnabled(prev => !prev)} control={<Checkbox defaultChecked />} label="Enable OTP Authentication for Trip" />
+                            <p className='tripOtpText' style={{ visibility: isOTPEnabled ? "visible" : "hidden" }} >* OTP will be sent to Guest Mobile Number</p>
+                            <Button style={{ marginTop: "30px" }} variant="contained" onClick={guestDetailsNextButtonClickHandler} disabled={false} >Next</Button>
                         </div>
                     )
                     }
