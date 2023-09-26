@@ -245,7 +245,7 @@ const Main = (props) => {
               )}
             </div>
           </div>
-          <div style={{height: "70%", margin: "-15px"}}>
+          <div style={{ height: "70%", margin: "-15px" }}>
             <DriversData />
           </div>
         </div>

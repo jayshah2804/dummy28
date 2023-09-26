@@ -545,7 +545,7 @@ const LiveTracking = (props) => {
             <div className="driver-filter">
               <TextField id="outlined-basic" size="small" inputRef={searchInputRef} label="Search Driver" variant="standard" onChange={driverSearchHandler} />
               <FormControl size="small" className="driverType" >
-                <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                {/* <InputLabel id="demo-simple-select-label">Type</InputLabel> */}
                 <Select
                   labelId="demo-simple-select-label"
                   variant="standard"
