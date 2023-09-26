@@ -28,8 +28,9 @@ import Message from '../../../Modal/Message';
 
 let today = new Date();
 const yyyy = today.getFullYear();
-let mm = today.getMonth() + 1;
-let dd = today.getDate() + 2;
+// let mm = today.getMonth() + 1;
+let dd = new Date(today.getFullYear(), today.getMonth(), today.getDate() +2).getDate();
+let mm = new Date(today.getFullYear(), today.getMonth(), today.getDate() +2).getMonth();
 
 if (dd < 10) dd = '0' + dd;
 if (mm < 10) mm = '0' + mm;

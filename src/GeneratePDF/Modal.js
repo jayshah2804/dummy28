@@ -1,4 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import Button from '@mui/material/Button';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import CloseIcon from '@mui/icons-material/Close';
 
 import useHttp from "../Hooks/use-http";
 import generatePDF from "./generatePdf";
@@ -6,49 +16,31 @@ import "./Modal.css";
 
 let drivers = [];
 let riders = [];
-let selectedDriverData = {
-  name: "",
-  email: "",
-};
-let selectedRiderData = {
-  name: "",
-  number: "",
-};
 let reportURLs = {
   trips: "Report/ShuttleTripReport",
   shifts: "DriverShift/DriverShiftDetailsReport",
   bookingRequests: "ScheduleBooking/GetBookingRequestDetailsReport",
   scheduleTrips: "ScheduleBooking/ScheduleTripReport"
 }
+let driverAndRiderURLs = {
+  shuttle: "ShuttleTrips/GetShuttleDriverList",
+  schedule: "DriverList/GetPrivateDriverList",
+  private: "DriverList/GetPrivateDriverList",
+}
+let date = new Date();
 const Modal = (props) => {
-  const [searchedRiderData, setSearchedRiderData] = useState([]);
-  const [searchedDriverData, setSearchedDriverData] = useState([]);
+  const [selectedRiderData, setSelectedRiderData] = useState([]);
+  const [selectedDriverData, setSelectedDriverData] = useState([]);
   const [isGeneratePdfClicked, setIsGeneratePdfClicked] = useState(false);
+  const [corporatesData, setCorporatesData] = useState([]);
   const [generatePdfError, setGeneratePdfError] = useState(false);
-  const startDateRef = useRef();
-  const endDateRef = useRef();
-  const riderInputSearchRef = useRef();
-  const driverInputSearchRef = useRef();
-
-  useEffect(() => {
-    let date = new Date();
-    startDateRef.current.defaultValue =
-      date.getFullYear() +
-      "-" +
-      (+date.getMonth() + 1 > 9
-        ? +date.getMonth() + 1
-        : "0" + (+date.getMonth() + 1)) +
-      "-" +
-      "01";
-    endDateRef.current.defaultValue =
-      date.getFullYear() +
-      "-" +
-      (+date.getMonth() + 1 > 9
-        ? +date.getMonth() + 1
-        : "0" + (+date.getMonth() + 1)) +
-      "-" +
-      (date.getDate() > 9 ? date.getDate() : "0" + date.getDate());
-  }, []);
+  const [selectedCoroparte, setSelectedCorporate] = useState({});
+  const [modules, setModules] = useState([]);
+  const [driverAndRiderData, setDriverAndRiderData] = useState({});
+  const [selectedModule, setSelectedModule] = useState();
+  const [startDateValue, setStartDateValue] = useState(dayjs(new Date(date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + "01")));
+  const [endDateValue, setEndDateValue] = useState(dayjs(new Date()));
+  const [isError, setIsError] = useState(false);
 
   const authenticateUser = (data) => {
     if (isGeneratePdfClicked) {
@@ -65,11 +57,11 @@ const Modal = (props) => {
           }
         }
         generatePDF(
-          startDateRef.current.value,
-          endDateRef.current.value,
+          new Date(startDateValue).getFullYear() + "/" + (+new Date(startDateValue).getMonth() + 1) + "/" + new Date(startDateValue).getDate(),
+          new Date(endDateValue).getFullYear() + "/" + (+new Date(endDateValue).getMonth() + 1) + "/" + new Date(endDateValue).getDate(),
           data.ReportDetails,
-          selectedRiderData.name,
-          selectedDriverData.name,
+          selectedRiderData.name ?? "",
+          selectedDriverData.name ?? "",
           totalTrips ? totalTrips : data.ReportDetails?.length,
           totalKm.toFixed(2),
           JSON.parse(data.CorporateLogo)[0].Image,
@@ -102,55 +94,97 @@ const Modal = (props) => {
     }
   };
 
+  const getCorporateList = (data) => {
+    setCorporatesData(data.CorporateList);
+    console.log(data.CorporateList);
+  }
+
+  const getDriverAndRiderData = (data) => {
+    let obj = {
+      driverList: data.PrivetDriverlist,
+      riderList: data.RidersList
+    }
+    setDriverAndRiderData(obj);
+    console.log(data);
+  }
+
   const { isLoading, sendRequest } = useHttp();
 
   useEffect(() => {
-    sendRequest(
-      {
-        url: "/api/v1/DriverList/GetPrivateDriverList",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          emailID: sessionStorage.getItem("user"),
-          roleID: sessionStorage.getItem("roleId"),
-          corporateID: sessionStorage.getItem("roleId") === "1" ? "" : sessionStorage.getItem("corpId"),
-          isDriver: "1",
-          isRider: "1"
-        },
-      },
-      authenticateUser
-    );
-  }, [sendRequest]);
-
-  useEffect(() => {
-    function formatToMMDDYYYYfromYYYYMMDD(inputDate) {
-      var date = new Date(inputDate);
-      return (
-        date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear()
-      );
-    }
-    if (isGeneratePdfClicked) {
-      let startDate = startDateRef.current.value
-        ? formatToMMDDYYYYfromYYYYMMDD(startDateRef.current.value)
-        : "";
-      let endDate = endDateRef.current.value
-        ? formatToMMDDYYYYfromYYYYMMDD(endDateRef.current.value)
-        : "";
+    if (selectedModule)
       sendRequest(
         {
-          url: "/api/v1/" + reportURLs[props.type],
+          url: "/api/v1/" + driverAndRiderURLs[selectedModule],
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            driverEmailID: selectedDriverData.email,
-            riderMobileNumber: selectedRiderData.number,
-            corporateID: props.type === "trips" ? sessionStorage.getItem("corpId") : sessionStorage.getItem("adminDepartmentID"),
-            isPrivateTrip: props.isPrivateDriver ? "1" : "0",
+            roleID: sessionStorage.getItem("roleId"),
+            corporateID: sessionStorage.getItem("roleId") === "1" ? selectedCoroparte.CorporateID : sessionStorage.getItem("corpId"),
+            isRider: "1",
+            isDriver: "1"
+          },
+        },
+        getDriverAndRiderData
+      );
+  }, [selectedModule]);
+
+  useEffect(() => {
+    let modules = "";
+    if (sessionStorage.getItem("roleId") === "1")
+      modules = selectedCoroparte?.EnabledModule?.split(",");
+    else
+      modules = sessionStorage.getItem("enabledModule").split(",");
+    setModules(modules);
+  }, [selectedCoroparte]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("roleId") === "1")
+      sendRequest(
+        {
+          url: "/api/v1/Corporate/GetAllDepartmentByCorporate",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            emailID: sessionStorage.getItem("user")
+          },
+        },
+        getCorporateList
+      );
+    else selectedCoroparte.CorporateID = sessionStorage.getItem("corpId");
+  }, [sendRequest]);
+
+  useEffect(() => {
+    function formatToMMDDYYYYfromYYYYMMDD(inputDate) {
+      var date = new Date(inputDate);
+      return (
+        (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear()
+      );
+    }
+    if (isGeneratePdfClicked) {
+      let startDate = startDateValue
+        ? formatToMMDDYYYYfromYYYYMMDD(startDateValue)
+        : "";
+      let endDate = endDateValue
+        ? formatToMMDDYYYYfromYYYYMMDD(endDateValue)
+        : "";
+      sendRequest(
+        {
+          url: "/api/v1/" + (selectedModule === "schedule" ? reportURLs["scheduleTrips"] : reportURLs[props.type]),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            emailID: sessionStorage.getItem("user"),
+            driverEmailID: selectedDriverData.email ?? "",
+            riderMobileNumber: selectedRiderData.number ?? "",
+            corporateID: props.type === "trips" ? selectedCoroparte.CorporateID : sessionStorage.getItem("adminDepartmentID"),
+            isPrivateTrip: selectedModule === "private" ? "1" : "0",
             startDate: startDate,
             endDate: endDate,
           },
@@ -160,52 +194,18 @@ const Modal = (props) => {
     }
   }, [isGeneratePdfClicked]);
 
-  const riderSearchHandler = () => {
-    if (riderInputSearchRef.current.value) {
-      setSearchedRiderData(
-        riders.filter((rider) =>
-          rider.name
-            .toLowerCase()
-            .includes(riderInputSearchRef.current.value.toLowerCase())
-        )
-      );
-    } else {
-      selectedRiderData.name = "";
-      selectedRiderData.number = "";
-      setSearchedRiderData([]);
-    }
-  };
-
-  const driverSearchHandler = () => {
-    if (driverInputSearchRef.current.value) {
-      setSearchedDriverData(
-        drivers.filter((driver) =>
-          driver.name
-            .toLowerCase()
-            .includes(driverInputSearchRef.current.value.toLowerCase())
-        )
-      );
-    } else {
-      selectedDriverData.name = "";
-      selectedDriverData.email = "";
-      setSearchedDriverData([]);
-    }
-  };
-
   const generatePdfClickHandler = () => {
-    setIsGeneratePdfClicked(true);
+    if (!selectedModule) setIsError(true);
+    else
+      setIsGeneratePdfClicked(true);
   };
 
   return (
-    <div className="generatePdf-container">
+    <div className="generatePdf-container" style={{ zIndex: "999" }}>
       <header>
         <span>Report</span>
-        <span
-          style={{ cursor: "pointer" }}
-          onClick={() => props.setIsExportButtonClicked(false)}
-        >
-          X
-        </span>
+        <CloseIcon style={{ cursor: "pointer" }}
+          onClick={() => props.setIsExportButtonClicked(false)} />
       </header>
       <div id="cpAddress" style={{ fontSize: "0px" }}>
         201- 208, Venus Atlantis, Landmark, 100 Feet Anand Nagar Rd, Prahlad
@@ -214,7 +214,8 @@ const Modal = (props) => {
       <div className="generatePdf-subContainer">
         <main>
           {isLoading && isGeneratePdfClicked && (
-            <React.Fragment>
+            // {true && (
+            < React.Fragment >
               <div class="wrapper">
                 <div class="progressbar">
                 </div>
@@ -233,78 +234,111 @@ const Modal = (props) => {
               </div>
             </React.Fragment>
           )}
+          <Backdrop
+            sx={{ color: 'rgba(34, 137, 203, 255)', backgroundColor: "transparent", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={isLoading && !isGeneratePdfClicked}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
           {generatePdfError && (
             <div className="pdfGenerateError">
               No Records Available for Selected Fields
             </div>
           )}
-          <label htmlFor="startDate">Start Date: </label>
-          <input type="date" ref={startDateRef} id="startDate" />
-          <br />
-          <label htmlFor="startDate">End Date: </label>
-          <input type="date" ref={endDateRef} id="endDate" />
-          <br />
-          {(props.isShift != "1" && props.type !== "scheduleTrips" && props.type !== "bookingRequests") &&
-            <div style={{ position: "relative" }}>
-              <label htmlFor="searchRider">Rider: </label>
-              <input
-                type="text"
-                id="searchRider"
-                onChange={riderSearchHandler}
-                ref={riderInputSearchRef}
+          <Autocomplete
+            id="tags-standard"
+            options={corporatesData}
+            getOptionLabel={(cp) => cp?.CorporateName}
+            disabled={sessionStorage.getItem("roleId") === "1" ? false : true}
+            defaultValue={sessionStorage.getItem("roleId") !== "1" ? { CorporateName: sessionStorage.getItem("cpName") } : { CorporateName: "" }}
+            onChange={(e, newValue) => newValue && setSelectedCorporate(newValue)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="Corporate*"
+                placeholder="Search Corporate"
               />
-              {searchedRiderData && (
-                <div className="searchedRiders">
-                  {searchedRiderData.map((rider) => (
-                    <p
-                      onClick={(e) => {
-                        riderInputSearchRef.current.value = e.target.innerText;
-                        selectedRiderData.name = rider.name;
-                        selectedRiderData.number = rider.number;
-                        setSearchedRiderData([]);
-                      }}
-                    >
-                      {rider.name + " ( " + rider.number + " )"}
-                    </p>
-                  ))}
-                </div>
-              )}
+            )}
+          />
+          <Autocomplete
+            id="tags-standard"
+            options={modules ?? []}
+            getOptionLabel={(data) => data}
+            onChange={(e, newValue) => {
+              setIsError(false);
+              setSelectedModule(newValue.toLowerCase());
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={isError}
+                helperText={isError && "This field is required"}
+                variant="standard"
+                label="Trip Type*"
+                placeholder="Search Trip Type"
+              />
+            )}
+          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div style={{ display: "flex", gap: "10px" }} >
+              <DatePicker
+                label="Start Date*"
+                value={startDateValue}
+                slotProps={{ textField: { variant: "standard", readOnly: true, inputProps: { sx: { padding: "2px", fontSize: "14px" } } } }}
+                onChange={(newValue) => {
+                  setStartDateValue(newValue)
+                }}
+              />
+              <DatePicker
+                label="End Date*"
+                value={endDateValue}
+                slotProps={{ textField: { variant: "standard", readOnly: true, inputProps: { sx: { padding: "2px", fontSize: "14px" } } } }}
+                onChange={(newValue) => {
+                  setEndDateValue(newValue)
+                }}
+              />
             </div>
+          </LocalizationProvider>
+          {(props.isShift != "1" && props.type !== "scheduleTrips" && props.type !== "bookingRequests") &&
+            <Autocomplete
+              id="tags-standard"
+              options={driverAndRiderData.driverList ?? []}
+              getOptionLabel={(data) => data.DriverName}
+              onChange={(e, newValue) => setSelectedDriverData(newValue)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Driver Name"
+                  placeholder="Search Driver"
+                />
+              )}
+            />
           }
           {!(props.type === "scheduleTrips" || props.type === "bookingRequests") &&
-            <React.Fragment>
-              <label htmlFor="searchDriver">Driver: </label>
-              <input
-                type="text"
-                id="searchDriver"
-                onChange={driverSearchHandler}
-                ref={driverInputSearchRef}
-              />
-              {searchedDriverData && (
-                <div className="searchedRiders">
-                  {searchedDriverData.map((driver) => (
-                    <p
-                      onClick={(e) => {
-                        driverInputSearchRef.current.value = e.target.innerText;
-                        selectedDriverData.name = driver.name;
-                        selectedDriverData.email = driver.email;
-                        setSearchedDriverData([]);
-                      }}
-                    >
-                      {driver.name}
-                    </p>
-                  ))}
-                </div>
+            <Autocomplete
+              id="tags-standard"
+              options={driverAndRiderData?.riderList ?? []}
+              getOptionLabel={(data) => data?.OfficialName}
+              onChange={(e, newValue) => setSelectedRiderData(newValue)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Staff Name"
+                  placeholder="Search Staff"
+                />
               )}
-            </React.Fragment>
+            />
           }
           <br />
         </main>
         <footer>
-          <button onClick={generatePdfClickHandler}>Generate Pdf</button>
+          <Button variant="contained" color="success" onClick={generatePdfClickHandler}>Generate Pdf</Button>
         </footer>
       </div>
-    </div>
+    </div >
   );
 };
 

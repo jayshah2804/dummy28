@@ -1119,9 +1119,8 @@ const StopInfo = (props) => {
                     />
                   )}
                   <div className="studenNames-contaner">
-                    {data?.riders?.map((name, index) => (
+                    {index !== 0 && data?.riders?.map((name, index) => (
                       <React.Fragment>
-                        {console.log(data)}
                         {staffUIds.has(data?.uId[index]) &&
                           <div
                             className="tempMyStudents"

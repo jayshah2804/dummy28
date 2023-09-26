@@ -513,7 +513,10 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
                             padding="none"
                             align='left'
                           >
-                            {row.DriverName}
+                            <div style={{display: "flex", gap:"10px", alignItems: "center"}}>
+                              <img src={row.DriverImage} style={{borderRadius: "50%", objectFit: "cover", width: "45px", height: "45px"}} />
+                              <p>{row.DriverName}</p>
+                            </div>
                           </TableCell>
                           <TableCell sx={{ fontFamily: "Montserrat" }} align="left">{row.Color + " " + row.CarModel + " (" + row.CarNumber + ")"}</TableCell>
                           <TableCell sx={{ fontFamily: "Montserrat" }} align="left">{row.IsOnline === true ? "Online" : "Offline"}</TableCell>

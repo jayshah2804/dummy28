@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import QRCode from "react-qr-code";
 
 import DataTable from './DataTable'
 import './EditDriver.css';
@@ -102,6 +103,14 @@ const EditDriver = () => {
                 defaultValue={sessionStorage.getItem("roleId") === "2" ? { cpName: sessionStorage.getItem("cpName") } : { cpName: "" }}
                 disabled={sessionStorage.getItem("roleId") === "2" ? true : false}
             />
+            {/* <div style={{ background: 'white', padding: '16px' }}>
+                <QRCode
+                    size={50}
+                    style={{ height: "50%", maxWidth: "100%", width: "20%" }}
+                    value="31847"
+                    viewBox={`0 0 100 100`}
+                />
+            </div> */}
             <DataTable privateDrivers={cpPrivateDriverData ?? []} setIsApiCall={setIsApiCall} dataLoading={isLoading} selectedCorporateDetails={selectedCorporateDetails} />
         </div>
     )

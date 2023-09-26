@@ -1,4 +1,6 @@
-/* .backdrop {
+@import url('https://fonts.googleapis.com/css?family=Poppins:wght@300;500&display=swap');
+
+.backdrop {
   position: absolute;
   height: 100vh;
   width: 100vw;
@@ -19,116 +21,174 @@
 .main-container {
   display: flex;
   width: 100%;
-  height: 95%;
+  /* height: calc(100vh - 65px); */
   padding: 15px;
   justify-content: space-between;
   transition-property: width;
   transition-duration: 0.7s;
+  height: 100%;
 }
 
 .driverlist {
   background-color: white;
-  padding: 15px;
   border-radius: 10px;
-  height: calc(100vh-80px);
-  overflow-y: auto;
+  width: 23%;
+  height: 100%;
+  /* height: calc(100vh - 95px); */
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.driverlist .header {
+  margin: 15px;
+  margin-bottom: 0;
+}
+
+.driverlist .header .driver-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 2%;
+}
+
+.driverlist .header .driverType {
   width: 20%;
 }
 
 .driverPhoto {
   border-radius: 50%;
-  height: 40px;
-  width: 40px;
+  height: 44px;
+  width: 44px;
   object-fit: cover;
 }
 
-.ontrip {
-  position: absolute;
-  right: 0;
-  bottom: 10%;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: rgba(34, 137, 203, 255);
-  align-self: center;
-  animation: ripple 1.2s infinite ease-in-out;
-}
-
+.ontrip,
 .online {
   position: absolute;
   right: 0;
-  bottom: 10%;
-  width: 10px;
-  height: 10px;
+  bottom: 3%;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background-color: rgba(42, 149, 69, 255);
   align-self: center;
+  border: 2px solid white;
 }
 
-@keyframes ripple {
-  0% {
-    transform: 'scale(.8)';
-    opacity: 1;
-  }
-
-  100% {
-    transform: 'scale(2.4)';
-    opacity: 0;
-  }
+.offline {
+  position: absolute;
+  right: 0;
+  bottom: 3%;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: rgb(170, 170, 170);
+  align-self: center;
+  border: 2px solid white;
 }
 
 .bookButton {
   border-radius: 5px;
   padding: 2px 4px;
-  background-color: rgb(49, 153, 49);
-  border: 1px solid rgb(49, 153, 49);
+  background-color: #444444;
+  border: 1px solid #444444;
   cursor: pointer;
   color: white;
+  text-transform: uppercase;
+  min-width: 55px;
   font-size: 12px;
-}
-
-.bookButton:hover {
-  background-color: green;
+  height: 25px;
+  font-family: 'Poppins';
+  font-weight: 500;
 }
 
 .onTripButtton {
   border-radius: 5px;
   padding: 2px 4px;
-  background-color: rgba(34, 137, 203, 255);
-  border: 1px solid rgba(34, 137, 203, 255);
+  background-color: white;
+  border: 1px solid #444444;
   cursor: pointer;
-  color: white;
+  color: #444444;
   font-size: 12px;
-}
-
-.onTripButtton:hover {
-  background-color: rgba(34, 137, 203, 255);
+  min-width: 55px;
+  height: 25px;
+  font-family: 'Poppins';
+  font-weight: 500;
 }
 
 .driverDetails {
   position: relative;
+  height: 85%;
+  overflow: auto;
 }
+
+.driverDetails .driverSingleData {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgb(212, 212, 212);
+}
+
 
 .driverDetails .drivername {
   font-size: 14px;
+  font-family: 'Poppins';
+  font-weight: 700;
+  color: #5A6872;
 }
 
 .driverDetails .carnumber {
-  font-size: 10.5px;
+  font-size: 14px;
   color: grey;
+  font-family: 'Poppins';
+  font-weight: 300;
+  color: #5A6872;
+}
+
+.tripType {
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 0 2px;
+  border: 1px solid black;
+  border-radius: 5px;
+  min-width: 58px;
+  text-align: center;
+  font-family: 'Poppins';
+  font-weight: 700;
+}
+
+.shuttle {
+  color: orange;
+  border: 1px solid orange;
+}
+
+.private {
+  color: rgba(42, 149, 69, 255);
+  border: 1px solid rgba(42, 149, 69, 255);
+}
+
+.schedule {
+  color: rgba(34, 137, 203, 255);
+  border: 1px solid rgba(34, 137, 203, 255);
 }
 
 .privateDriverMap-container {
   position: relative;
-  width: 78%;
+  width: 75%;
+  /* height: calc(100vh - 95px); */
   height: 100%;
 }
 
 #live-map {
   position: relative;
-  height: 100%;
+  height: calc(100% - 40px);
   width: 100%;
-  border-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   margin-bottom: 10px;
   min-height: 300px;
 }
@@ -181,8 +241,8 @@
 }
 
 .mapText {
-  position: absolute;
   top: 0px;
+  /* height: 10%; */
   height: 40px;
   background-color: white;
   width: 100%;
@@ -242,4 +302,4 @@
   .privateDriverMap-container {
     width: 100%;
   }
-} */
+}

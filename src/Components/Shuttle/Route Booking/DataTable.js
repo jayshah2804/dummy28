@@ -21,6 +21,7 @@ import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -32,12 +33,32 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { visuallyHidden } from '@mui/utils';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 
 import useHttp from '../../../Hooks/use-http';
+import BookedRidersData from './BookedRidersData';
 
-let selectedDriversEmailId = [];
+let selectedDriverEmailId = "";
+let changedDateTime = {
+  date: "",
+  time: ""
+}
+let dateTimeChangeFlag = 0;
+let routeId = "";
+let lineId = "";
 let opeationType = "";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -77,25 +98,62 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: 'Route Id',
+    width: '12%'
   },
   {
     id: 'RouteName',
     numeric: true,
     disablePadding: false,
     label: 'Route Name',
+    width: '17%'
+  },
+  {
+    id: 'RouteType',
+    numeric: true,
+    disablePadding: false,
+    label: 'Route Type',
+    width: '10%'
   },
   {
     id: 'ShuttleStartTime',
     numeric: true,
     disablePadding: false,
     label: 'Date & Time',
+    width: '18%'
   },
   {
     id: 'DriverEMailID',
     numeric: true,
     disablePadding: false,
     label: 'Assigned Driver',
+    width: '16%'
   },
+  {
+    id: 'TripStatus',
+    numeric: true,
+    disablePadding: false,
+    label: 'Trip Status',
+    width: '10%'
+  },
+  // {
+  //   id: 'DriverEMailID',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'Occupied | Total Seats',
+  // },
+  // {
+  //   id: 'FirstStopName',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'Route Location',
+  //   width: '23%'
+  // },
+  // {
+  //   id: 'DriverEMailID',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'End Location',
+  // },
 ];
 
 function EnhancedTableHead(props) {
@@ -108,26 +166,15 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="none" style={{ width: "2.5%" }} >
-          {props.selectedCorporateDetails?.cpName &&
-            <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                'aria-label': 'select all desserts',
-              }}
-            />
-          }
+        <TableCell padding="none" style={{ width: "5%" }} >
         </TableCell>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, i) => (
           <TableCell
             key={headCell.id}
             align={'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ fontWeight: "bold" }}
+            sx={{ fontWeight: "bold", width: headCell.width, padding: "5px 0" }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -144,7 +191,7 @@ function EnhancedTableHead(props) {
           </TableCell>
         ))}
       </TableRow>
-    </TableHead>
+    </TableHead >
   );
 }
 
@@ -163,13 +210,15 @@ function EnhancedTableToolbar(props) {
   return (
     <Toolbar
       sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(selected.length > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
+        // pl: { sm: 2 },
+        // pr: { xs: 1, sm: 1 },
+        // ...(selected.length > 0 && {
+        //   bgcolor: (theme) =>
+        //     alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+        // }),
+        minHeight: "50px"
       }}
+      variant='dense'
     >
       {selected.length > 0 ? (
         <Typography
@@ -187,26 +236,54 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Booking List
         </Typography>
       )}
 
-      {selected.length > 0 && (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon onClick={() => props.setIsDeleteDialogOpen(true)} />
-          </IconButton>
-        </Tooltip>
-      )
+      {selected.length > 0 ? (
+        <React.Fragment>
+          <Tooltip title="Edit">
+            <IconButton>
+              <EditIcon onClick={() => props.setIsEditIconClicked(true)} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Cancel">
+            <IconButton>
+              <CancelIcon onClick={() => props.setIsCancelBookingDialogOpen(true)} />
+            </IconButton>
+          </Tooltip>
+        </React.Fragment>
+      ) :
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div style={{ display: "flex", gap: "30px" }} >
+            <DatePicker
+              label="Start Date"
+              value={props.startDateValue}
+              slotProps={{ textField: { variant: "standard", readOnly: true, inputProps: { sx: { padding: "2px", fontSize: "14px" } } } }}
+              onChange={(newValue) => {
+                props.setIsRefreshBookingList(true);
+                props.setStartDateValue(newValue)
+              }}
+            />
+            <DatePicker
+              label="End Date"
+              value={props.endDateValue}
+              slotProps={{ textField: { variant: "standard", readOnly: true, inputProps: { sx: { padding: "2px", fontSize: "14px" } } } }}
+              onChange={(newValue) => {
+                props.setIsRefreshBookingList(true);
+                props.setEndDateValue(newValue)
+              }}
+            />
+          </div>
+        </LocalizationProvider>
       }
-      {/* ) : (
+      {/* : (
         <Tooltip title="Filter list">
           <IconButton>
-            <FilterListIcon />
+            <FilterListIcon onClick={() => props.setIsFilterIconClicked(prev => !prev)} />
           </IconButton>
         </Tooltip>
       )} */}
-    </Toolbar>
+    </Toolbar >
   );
 }
 
@@ -214,34 +291,43 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EditDriver({ privateDrivers, selectedCorporateDetails, dataLoading, setIsApiCall }) {
+export default function EditDriver({ privateDrivers, selectedCorporateDetails, dataLoading, setIsRefreshBookingList, driversList, setStartDateValue, setEndDateValue, startDateValue, endDateValue }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('DriverName');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isAddDeletePrivateDrivesClicked, setIsAddDeletePrivateDriversClicked] = useState(false);
-  const [isAddEditPrivateDriverOperationSuccess, setIsAddEditPrivateDriverOperationSuccess] = useState(false);
+  const [isCancelBookingDialogOpen, setIsCancelBookingDialogOpen] = useState(false);
+  const [isEditRouteBookingClicked, setIsEditRouteBookingClicked] = useState(false);
+  const [isEditRouteBookingResponse, setIsEditRouteBookingResponse] = useState(false);
   const [isAddDriverClicked, setIsAddDriverClicked] = useState(false);
   const [allDriversList, setAllDriversList] = useState([]);
+  const [isFillterIconClicked, setIsFilterIconClicked] = useState(false);
+  const [isEditIconClicked, setIsEditIconClicked] = useState(false);
+  const [expandedPanel, setExpandedPanel] = useState("");
+  const [isTimeEdited, setIsTimeEdited] = useState(false);
+  const [isConfirmCancelBookingClicked, setIsConfirmCancelBookingClicked] = useState(false);
+  const [isCancelBookingResponse, setIsCancelBookingResponse] = useState(false);
 
   const { isLoading, sendRequest } = useHttp();
 
-  const addDeletePrivateDriverResponse = (data) => {
-    // console.log(data);
-    setIsAddEditPrivateDriverOperationSuccess(data.Message.toLowerCase() === "success" ? true : "Error");
-    if (data.Message.toLowerCase() === "success") setIsApiCall(true);
-    setIsAddDeletePrivateDriversClicked(false);
-    setSelected([]);
-    selectedDriversEmailId = "";
-  }
+  // const driverSelectHandler = (e, driverData) => {
+  //   selectedDriversEmailId = driverData.reduce((acc, curr) => {
+  //     acc.push(curr.DriverEmailID);
+  //     return acc;
+  //   }, []);
+  // }
 
-  const driverSelectHandler = (e, driverData) => {
-    selectedDriversEmailId = driverData.reduce((acc, curr) => {
-      acc.push(curr.DriverEmailID);
-      return acc;
-    }, []);
+  const editRouteBookingResponse = (data) => {
+    if (data.Message.toLowerCase() === "success") {
+      setIsRefreshBookingList(true);
+      setIsEditRouteBookingResponse({ status: "success", message: "Booking Edited Successfully" });
+      selectedDriverEmailId = "";
+      setSelected([]);
+    }
+    else setIsEditRouteBookingResponse({ status: "error", message: data.SystemMessage });
+    setIsEditRouteBookingClicked(false);
+    debugger;
   }
 
   const driverListDetails = (data) => {
@@ -257,52 +343,104 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
       );
     }
   }
+
+  const bookingCancelBookingResponse = (data) => {
+    if (data.Message.toLowerCase() === "success") {
+      setIsRefreshBookingList(true);
+      setIsCancelBookingResponse({ status: "success", message: "Booking Cancelled Successfully" });
+      selectedDriverEmailId = "";
+      setSelected([]);
+    }
+    else setIsCancelBookingResponse({ status: "error", message: data.SystemMessage });
+    setIsConfirmCancelBookingClicked(false);
+  }
+
+  const bookingTimeChangeHandler = (val, currentRouteId, currentlineId) => {
+    dateTimeChangeFlag = 2;
+    console.log(dateTimeChangeFlag, "accept");
+    selectedDriverEmailId = "";
+    changedDateTime = {};
+    changedDateTime.date = `${val.$d.getFullYear()}/${val.$d.getMonth() + 1}/${val.$d.getDate()}`;
+    changedDateTime.time = `${val.$d.getHours()}:${val.$d.getMinutes()}:${val.$d.getSeconds()}`;
+    routeId = currentRouteId;
+    lineId = currentlineId;
+    setIsTimeEdited(true);
+    // setIsEditRouteBookingClicked(true);
+  }
   // console.log(allDriversList);
   React.useEffect(() => {
-    if (isAddDriverClicked) {
-      // setIsDeleteDialogOpen(false);
+    let editbookings = "";
+    if (selectedDriverEmailId) {
+      if (selected.length > 0)
+        editbookings = selected?.reduce((acc, cur) => {
+          acc.push({
+            RouteID: cur.split(" ")[0],
+            LineID: cur.split(" ")[1],
+            DriverEmailID: selectedDriverEmailId,
+            ShuttleTime: ""
+          });
+          return acc;
+        }, []);
+      else {
+        editbookings = [{
+          RouteID: routeId,
+          LineID: lineId,
+          DriverEmailID: selectedDriverEmailId,
+          ShuttleTime: ""
+        }];
+      }
+    } else {
+      editbookings = [{
+        RouteID: routeId,
+        LineID: lineId,
+        DriverEmailID: "",
+        ShuttleTime: changedDateTime.date + " " + changedDateTime.time
+      }];
+    }
+    if (isEditRouteBookingClicked) {
       sendRequest(
         {
-          url: "/api/v1/DriverList/GetDriverList",
+          url: "/api/v1/ShuttleBooking/EditRouteBooking",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            roleID: sessionStorage.getItem("roleId"),
-            corporateID: "",
+            editbookings: JSON.stringify(editbookings)
           },
         },
-        driverListDetails
+        editRouteBookingResponse
       );
     }
-  }, [sendRequest, isAddDriverClicked]);
+  }, [sendRequest, isEditRouteBookingClicked]);
 
   React.useEffect(() => {
-    if (isAddDeletePrivateDrivesClicked) {
-      opeationType = isDeleteDialogOpen ? "delete" : "add";
-      setIsDeleteDialogOpen(false);
-      setIsAddDriverClicked(false);
+    if (isConfirmCancelBookingClicked) {
+      let cancelledbookings = selected.reduce((acc, cur) => {
+        acc.push({
+          RouteID: cur.split(" ")[0],
+          LineID: cur.split(" ")[1]
+        });
+        return acc;
+      }, []);
       sendRequest(
         {
-          url: "/api/v1/DriverList/AddEditPrivateDriver",
+          url: "/api/v1/ShuttleBooking/CancelledRouteBooking",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            roleID: sessionStorage.getItem("roleId"),
-            corporateID: selectedCorporateDetails.adminDptId,
-            isAdd: isDeleteDialogOpen ? 0 : 1,
-            driverEmailID: isDeleteDialogOpen ? selected.join(",") : selectedDriversEmailId.join(","),
+            cancelledbookings: JSON.stringify(cancelledbookings),
+            riderTripID: "",
           },
         },
-        addDeletePrivateDriverResponse
+        bookingCancelBookingResponse
       );
     }
-  }, [sendRequest, isAddDeletePrivateDrivesClicked]);
+  }, [sendRequest, isConfirmCancelBookingClicked]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -324,7 +462,7 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
   });
 
   const handleClick = (event, name) => {
-    debugger;
+    // debugger;
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -369,11 +507,12 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
   );
 
   return (
+    // backgroundColor: "rgba(42, 149, 69, 255)"
     <React.Fragment>
-      {isAddEditPrivateDriverOperationSuccess &&
-        <Snackbar open={true} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} onClose={() => setIsAddEditPrivateDriverOperationSuccess(false)} >
-          <Alert onClose={() => setIsAddEditPrivateDriverOperationSuccess(false)} severity={isAddEditPrivateDriverOperationSuccess === true ? "success" : "error"} sx={{ width: '100%', backgroundColor: "rgba(42, 149, 69, 255)" }}>
-            {isAddEditPrivateDriverOperationSuccess === true ? `Drivers has been ${opeationType === "add" ? "added" : "removed"} successfully` : "Some Error occured"}
+      {(isEditRouteBookingResponse || isCancelBookingResponse) &&
+        <Snackbar open={true} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} onClose={() => isEditRouteBookingResponse ? setIsEditRouteBookingResponse(false) : setIsCancelBookingResponse(false)} >
+          <Alert onClose={() => isEditRouteBookingResponse ? setIsEditRouteBookingResponse(false) : setIsCancelBookingResponse(false)} severity={isEditRouteBookingResponse ? isEditRouteBookingResponse.status : isCancelBookingResponse.status} sx={{ width: '100%' }}>
+            {isEditRouteBookingResponse?.status ? isEditRouteBookingResponse.message : isCancelBookingResponse.message}
           </Alert>
         </Snackbar>
       }
@@ -381,53 +520,27 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
         <Backdrop
           sx={{ color: 'rgba(34, 137, 203, 255)', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={isLoading}
-        // onClick={handleClose}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
       }
       <Dialog
-        open={isDeleteDialogOpen}
+        open={isEditIconClicked}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Alert"}
+          Alert
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            You are going to remove the selected drivers from the {selectedCorporateDetails.cpName}. Are you sure you want to remove them?
+            Please select a driver that you want to add for booking
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
-          <Button onClick={() => setIsAddDeletePrivateDriversClicked(true)} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={isAddDriverClicked && !isLoading}>
-        <DialogTitle>Add Private Driver</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please select a driver that you want to add in {selectedCorporateDetails.cpName}
-          </DialogContentText>
-          {/* <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          /> */}
           <Autocomplete
-            multiple
             id="tags-standard"
-            options={allDriversList}
-            getOptionLabel={(driver) => driver.DriverName + " - " + driver.Model + "(" + driver.Number + ")"}
-            onChange={(e, newValue) => driverSelectHandler(e, newValue)}
+            options={driversList}
+            getOptionLabel={(driver) => driver.driverName + " (" + driver.driverCarModel + ")"}
+            onChange={(e, newValue) => selectedDriverEmailId = newValue.driverEmailId}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -439,18 +552,58 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
           />
         </DialogContent>
         <DialogActions>
+          <Button onClick={() => setIsEditIconClicked(false)}>Cancel</Button>
           <Button onClick={() => {
-            selectedDriversEmailId = "";
-            setIsAddDriverClicked(false);
+            changedDateTime = "";
+            setIsEditIconClicked(false);
+            setIsEditRouteBookingClicked(true);
+          }} autoFocus>
+            Save Changes
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={isTimeEdited}>
+        <DialogTitle>Alert</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to change the timing?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {
+            dateTimeChangeFlag = 0;
+            setIsTimeEdited(false);
           }
           }>Cancel</Button>
-          <Button onClick={() => setIsAddDeletePrivateDriversClicked(true)}>Save Changes</Button>
+          <Button onClick={() => {
+            setIsTimeEdited(false);
+            dateTimeChangeFlag = 0;
+            setIsEditRouteBookingClicked(true);
+          }}>Yes</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={isCancelBookingDialogOpen}>
+        <DialogTitle>Alert</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to cancel the bookings for the selected dates?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {
+            setIsCancelBookingDialogOpen(false);
+          }
+          }>Cancel</Button>
+          <Button onClick={() => {
+            setIsConfirmCancelBookingClicked(true);
+            setIsCancelBookingDialogOpen(false);
+          }}>Yes</Button>
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          <EnhancedTableToolbar selected={selected} setIsAddDriverClicked={setIsAddDriverClicked} setIsDeleteDialogOpen={setIsDeleteDialogOpen} selectedCorporateDetails={selectedCorporateDetails} />
+      <Box sx={{ width: '97%', margin: "1.5%", borderRadius: "10px" }}>
+        <Paper sx={{ width: '100%', mb: 2, borderRadius: "10px" }}>
+          <EnhancedTableToolbar setIsRefreshBookingList={setIsRefreshBookingList} setStartDateValue={setStartDateValue} setEndDateValue={setEndDateValue} startDateValue={startDateValue} endDateValue={endDateValue} setIsEditIconClicked={setIsEditIconClicked} selected={selected} setIsFilterIconClicked={setIsFilterIconClicked} setIsAddDriverClicked={setIsAddDriverClicked} setIsCancelBookingDialogOpen={setIsCancelBookingDialogOpen} selectedCorporateDetails={selectedCorporateDetails} />
           <TableContainer>
             <Table
               sx={{ minWidth: 750, fontFamily: "Montserrat" }}
@@ -466,67 +619,116 @@ export default function EditDriver({ privateDrivers, selectedCorporateDetails, d
                 rowCount={privateDrivers.length}
                 selectedCorporateDetails={selectedCorporateDetails}
               />
-              {console.log(privateDrivers.length)}
               {dataLoading ? (
                 <TableBody>
-                  <TableRow>
-                    <TableCell colSpan={6} align='center' >
-                      <CircularProgress />
+                  <TableRow padding="none" >
+                    <TableCell colSpan={8} align='center' padding='none' >
+                      <CircularProgress size="2rem" />
                     </TableCell>
                   </TableRow>
                 </TableBody>
-                // <TableBody sx={{ position: "relative", height: "60px" }} >
-                //   <CircularProgress sx={{ position: "absolute", left: "50%", top: "10px" }} />
-                // </TableBody>
               ) :
                 (
                   <TableBody>
-                    {console.log(visibleRows)}
                     {visibleRows.map((row, index) => {
-                      const isItemSelected = isSelected(row.ShuttleStartTime + row.DriverEMailID);
+                      const isItemSelected = isSelected(row.RouteID + " " + row.LineID);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
-                        <TableRow
-                          hover
-                          onClick={(event) => {
-                            handleClick(event, row.ShuttleStartTime + row.DriverEMailID);
-                          }}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={index}
-                          selected={isItemSelected}
-                          sx={{ cursor: 'pointer' }}
-                        >
-                          <TableCell padding="none">
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                'aria-labelledby': labelId,
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell
-                            // component="th"
-                            sx={{ fontFamily: "Montserrat" }}
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                            align='left'
+                        <React.Fragment>
+                          <TableRow
+                            hover
+                            // role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={index}
+                            selected={isItemSelected}
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              if (!dateTimeChangeFlag) {
+                                console.log(dateTimeChangeFlag, "rowClick");
+                                setExpandedPanel(expandedPanel === (row.RouteID + " " + row.LineID) ? "" : (row.RouteID + " " + row.LineID))
+                              }
+                            }}
                           >
-                            {row.RouteID}
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: "Montserrat" }} align="left">{row.RouteName}</TableCell>
-                          <TableCell sx={{ fontFamily: "Montserrat" }} align="left">{row.ShuttleStartTime.replace("T", " ")}</TableCell>
-                          <TableCell sx={{ fontFamily: "Montserrat" }} align="left">{row.DriverName + " (" + row.Model + ")"}</TableCell>
-                        </TableRow>
+                            <TableCell padding="none" >
+                              <div style={{ display: "flex" }} >
+                                <div style={{ width: "50%" }} >
+                                  {expandedPanel === (row.RouteID + " " + row.LineID) ?
+                                    <ExpandLessIcon /> : <ExpandMoreIcon />
+                                  }
+                                </div>
+                                <div style={{ width: "50%" }}>
+                                  {row.tripStatusId < 4 &&
+                                    <Checkbox
+                                      onClick={(event) => {
+                                        event.stopPropagation();
+                                        handleClick(event, row.RouteID + " " + row.LineID);
+                                      }}
+                                      color="primary"
+                                      sx={{ padding: "0" }}
+                                      checked={isItemSelected}
+                                      inputProps={{
+                                        'aria-labelledby': labelId,
+                                      }}
+                                    />
+                                  }
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell
+                              // component="th"
+                              sx={{ fontFamily: "Montserrat" }}
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                              align='left'
+                            >
+                              {row.RouteID}
+                            </TableCell>
+                            <TableCell align="left" padding="none" >{row.RouteName}</TableCell>
+                            <TableCell align="left" padding="none" >{row.RouteType.toLowerCase() === "picking" ? "Pickup" : "Drop"}</TableCell>
+                            <TableCell align="left" padding="none" >
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DateTimePicker
+                                  slots={{ openPickerIcon: EditIcon }}
+                                  slotProps={{ textField: { variant: 'standard', readOnly: true, InputProps: { disableUnderline: true, sx: { fontSize: "0.875rem", button: { marginLeft: "-30px", display: +row.tripStatusId >= 4 && "none" }, svg: { color: "rgba(248, 94, 38,0.8)", fontSize: "22px", display: +row.tripStatusId >= 4 && "none" } } } } }}
+                                  value={dayjs(row.ShuttleStartTime)}
+                                  onOpen={() => dateTimeChangeFlag = 1}
+                                  onClose={() => dateTimeChangeFlag = (dateTimeChangeFlag === 2 ? 1 : 0)}
+                                  onAccept={(val) => bookingTimeChangeHandler(val, row.RouteID, row.LineID)}
+                                />
+                              </LocalizationProvider>
+                            </TableCell>
+                            {/* <TableCell sx={{ fontFamily: "Montserrat" }} align="left">{row.ShuttleStartTime.replace("T", " ")}</TableCell> */}
+                            <TableCell padding="none" align="left">
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }} >
+                                <span>{row.DriverName + " (" + row.Model + ")"}</span>
+                                {+row.tripStatusId < 4 &&
+                                  <EditIcon style={{ color: "rgba(248, 94, 38,0.8)", fontSize: "22px" }} onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsEditIconClicked(true);
+                                    routeId = row.RouteID;
+                                    lineId = row.LineID;
+                                  }} />
+                                }
+                              </div>
+                            </TableCell>
+                            <TableCell padding='none' >{row.TripStatus ?? "-"}</TableCell>
+                          </TableRow>
+                          {expandedPanel === (row.RouteID + " " + row.LineID) &&
+                            <TableRow>
+                              <TableCell colSpan={7} align='center' >
+                                <BookedRidersData routeId={row.RouteID} lineId={row.LineID} tripStatusId={row.tripStatusId} bookingCancelBookingResponse={bookingCancelBookingResponse} />
+                              </TableCell>
+                            </TableRow>
+                          }
+                        </React.Fragment>
                       );
                     })}
                     {visibleRows.length === 0 &&
                       <TableRow>
-                        <TableCell sx={{ fontFamily: "Montserrat" }} colSpan={6} align='center' >No Data Available</TableCell>
+                        <TableCell sx={{ fontFamily: "Montserrat" }} colSpan={7} align='center' >No Data Available</TableCell>
                       </TableRow>
                     }
                     {emptyRows > 0 && (

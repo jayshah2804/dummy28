@@ -10,49 +10,51 @@ import { useHistory } from "react-router-dom";
 
 import classes from "./SideMenuData.module.css";
 
-
 const SideMenuData = (props) => {
-  const [subMenuIsAvtive, setSubMenuIsActive] = useState(false);
+  const [expandedMenu, setExpandedMenu] = useState();
   const history = useHistory();
 
-  const redirectToPageHandler = (url) => {
+  const redirectToPageHandler = (url, index) => {
     if (url) {
       history.push(url);
       props.sideMenuClose(true);
-      setSubMenuIsActive(false);
     } else {
-      // props.sideMenuClose(false);
-      setSubMenuIsActive(prev => !prev);
+      if (expandedMenu === index) {
+        setExpandedMenu("");
+        return;
+      }
+      setExpandedMenu(index);
     }
   }
 
   return (
     <React.Fragment>
-      <div className={classes.menu} style={{ display: "flex", marginTop: "18px", alignItems: "center" }} >
-        <MdOutlineDashboard className={classes.frontIcons} />
-        <div className={classes.mainMenuContainer} >
-          <div className={classes.mainMenu} onClick={() => redirectToPageHandler(props.menu.url)}>
-            {props.menu.main}
-          </div>
-          {props.menu.sub && (
-            <div className={classes.dropIcons}>
-              {subMenuIsAvtive ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+      {props.menu.map((menu, index) => {
+        return (
+          <React.Fragment>
+            <div className={classes.menu} style={{ display: "flex", marginTop: "18px", alignItems: "center" }} >
+              {props.iconFlag && <MdOutlineDashboard className={classes.frontIcons} />}
+              <div className={classes.mainMenuContainer} onClick={() => redirectToPageHandler(menu.url, index)} >
+                <div className={classes.mainMenu}>
+                  {menu.main}
+                </div>
+                {menu.sub && (
+                  <div className={classes.dropIcons}>
+                    {(index === expandedMenu) ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
-      </div>
-      {
-        subMenuIsAvtive && (
-          <div>
-            {props.menu.sub &&
-              props.menu.sub.map((ele) => (
-                <p className={classes.subMenu} onClick={() => redirectToPageHandler(ele.url)} style={{ cursor: "pointer" }}>
-                  {ele.main}
-                </p>
-              ))}
-          </div>
-        )
-      }
+            {
+              (menu.sub && (index === expandedMenu)) && (
+                <div style={{ marginLeft: "30px" }} >
+                  <SideMenuData menu={menu.sub} sideMenuClose={props.sideMenuClose} />
+                </div>
+              )
+            }
+          </React.Fragment>
+        );
+      })}
     </React.Fragment>
   )
 };

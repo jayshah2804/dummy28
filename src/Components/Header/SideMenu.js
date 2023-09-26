@@ -11,166 +11,48 @@ let obj = {
   dashboard: "<AiOutlineBarChart />"
 }
 
-const MENU = [
-  {
-    main: "Dashboard",
-    url: "/dashboard",
-  },
-  {
-    main: "Departments",
-    url: "/departments"
-  },
-  {
-    main: "Staffs",
-    url: "/staffs"
-  },
-  {
-    main: "Shuttle",
-    sub: [
-      {
-        main: "Live Map",
-        url: "/dashboard"
-      },
-      {
-        main: "Routes",
-        url: "/routes"
-      },
-      {
-        main: "Bookings",
-        url: "/shuttle/bookings"
-      },
-      {
-        main: "Trips",
-        url: "/shuttle/trips"
-      },
-      {
-        main: "Drivers",
-        url: "/shuttle/drivers"
-      }
-    ]
-  },
-  {
-    main: "Private Driver",
-    sub: [
-      {
-        main: "Live Map",
-        url: "/privatedrive/livemap"
-      },
-      {
-        main: "Shifts",
-        url: "/privatedrive/shifts"
-      },
-      {
-        main: "Trips",
-        url: "/privatedrive/trips"
-      },
-      {
-        main: "Drivers",
-        url: "/privatedrive/drivers"
-      }
-    ]
-  },
-  {
-    main: "Schedule Booking",
-    sub: [
-      {
-        main: "Bookings",
-        url: "/schedule-booking/bookings"
-      },
-      {
-        main: "Trips",
-        url: "/schedule-booking/trips"
-      }
-    ]
-  },
-  {
-    main: "Documents",
-    url: "/documents"
-  },
-  {
-    main: "Query & Support",
-    url: "/support"
-  }
-]
-
 const SideMenu = (props) => {
   const [sideMenuData, setSideMenuData] = useState([]);
   const { sendRequest } = useHttp();
 
-  const authenticateUser = (data) => {
-    sessionStorage.setItem("type", data?.MenuList[0].CorporateType);
-    sessionStorage.setItem("document", data?.MenuList[0].IsDocument);
-    sessionStorage.setItem("cpName", data?.MenuList[0].CorporateName);
-    let sideMenu = [];
-    if (data.MenuList) {
-
-      sessionStorage.setItem("corpId", data.MenuList[0].CorporateID);
-      sideMenu.push({
-        main: "Dashboard",
-      });
-      sideMenu.push({
-        main: "Shuttle",
-        sub: ["Live Map", "Routes", "Bookings", "Trips"],
-      });
-      sideMenu.push({
-        main: "Private Driver",
-        sub: ["Live Map", "Shifts", "Trips"],
-      });
-      sessionStorage.getItem("userType") === "AccountManager" && sideMenu[sideMenu.length - 1].sub.push("Edit Drivers");
-      sideMenu.push(
-        {
-          main: "Schedule Booking",
-          sub: ["Bookings", "Trips"]
-        },
-        {
-          main: "Departments",
-        },
-        {
-          main: "All Staff",
-        },
-        {
-          main: "Query & Support",
-        }
-      );
-      {
-        sessionStorage.getItem("userType") !== "AccountManager" &&
-          sideMenu.splice(sideMenu.length - 1, 0, {
-            main: "Documents",
-          });
+  const menuList = (data) => {
+    let menu = data?.MainMenuList.reduce((acc, cur, index) => {
+      acc[index] = {
+        main: cur.Description
       }
-    }
-    prev_corp = "";
-    setSideMenuData(sideMenu);
-  };
+      let arr = [];
+      for (let i = 0; i < data.MenuList.length; i++) {
+        if (cur.MainModuleID === data.MenuList[i].MainModuleID)
+          arr.push({
+            main: data.MenuList[i].ModuleName,
+            url: data.MenuList[i].MenuURL
+          })
+      }
+      if (arr.length === 1) acc[index].url = arr[0].url;
+      else acc[index].sub = arr;
+      arr = [];
+      return acc;
+    }, []);
+    setSideMenuData(menu);
+  }
+
   useEffect(() => {
     // if (sideMenuFlag > 0) {
     sendRequest(
       {
-        url: "/api/v1/Menu/GetMenuList",
+        url: "/api/v1/Menu/GetUserMenuList",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: {
           emailID: sessionStorage.getItem("user"),
+          corporateID: sessionStorage.getItem("roleId") === "1" ? "" : sessionStorage.getItem("corpId")
         },
       },
-      authenticateUser
+      menuList
     );
-    // }
-    sideMenuFlag++;
   }, []);
-
-  const currentActiveMenuHandler = (data) => {
-    console.log(data);
-  };
-
-  // if (props.property) {
-  //   document.getElementById("mySidemenu").style.width = "300px";
-  //   flag = true;
-  // } else {
-  //   if (flag) document.getElementById("mySidemenu").style.width = "0px";
-  // }
 
   if (props.property) {
     if (window.screen.width < 450)
@@ -215,22 +97,7 @@ const SideMenu = (props) => {
             No Data Available
           </div>
         )}
-        {/* <SideMenuData
-          myActiveMenu={currentActiveMenuHandler}
-          sideMenuClose={props.sideMenuClose}
-          menu={MENU}
-        /> */}
-
-        {MENU.map((menu, index) => {
-          return (
-            <SideMenuData
-              key={index}
-              menu={menu}
-              myActiveMenu={currentActiveMenuHandler}
-              sideMenuClose={props.sideMenuClose}
-            />
-          );
-        })}
+        <SideMenuData menu={sideMenuData} iconFlag={true} sideMenuClose={props.sideMenuClose} />
       </div>
     </div>
   );

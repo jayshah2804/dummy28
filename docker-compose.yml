@@ -1,6 +1,7 @@
 version: '3'
 services:
   app: 
+    restart: unless-stopped
     container_name: corporate-portal-frontend-india
     image: corporate-portal-frontend-india
     build: 

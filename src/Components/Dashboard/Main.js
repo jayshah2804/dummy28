@@ -9,7 +9,8 @@ import useHttp from "../../Hooks/use-http";
 import Loading from "../../Loading/Loading";
 import little from "../../Assets/little.gif";
 import LiveTrip from "./LiveTrip";
-import DriverData from "../PrivateDriver/DriverData";
+// import DriverData from "../PrivateDriver/DriverData";
+import DriversData from "../Live Tracking/DriversData";
 // import studentDummyImage from "../../Assets/new_student_marker.png";
 
 const DUMMY_DATA = [
@@ -152,60 +153,30 @@ const Main = (props) => {
   return (
     <React.Fragment>
       <div className={classes.container} id="myContainer">
-        <header>
-          <div>
-            <p className={classes.adminName}>
-              {"Welcome " + sessionStorage.getItem("adminName")}
-            </p>
-            <p className={classes.adminText}>
-              You can check all data of your Organization in Dashboard
-            </p>
-          </div>
-          {sessionStorage.getItem("userType") === "AccountManager" ? (
-            <button
-              onClick={() => history.push("/new-registration")}
-              className={classes.newCorpButton}
-            >
-              Add New Corporate
-            </button>
-          ) : (
-            <div style={{ display: "flex", gap: "5px", alignSelf: "center" }}>
-              <p
-                style={{ cursor: "pointer", letterSpacing: "1px" }}
-                className={
-                  isSwitchedToPrivateDriver
-                    ? `${classes.privateDriverActiveText}`
-                    : `${classes.privateDriverInactiveText}`
-                }
-                onClick={() => document.getElementById("checkbox").click()}
-              >
-                Private Driver
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+          <header>
+            <div>
+              <p className={classes.adminName}>
+                {"Welcome " + sessionStorage.getItem("adminName")}
               </p>
-              <label class={classes.switch} for="checkbox">
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                  className={classes.first}
-                  onChange={(e) => {
-                    debugger;
-                    localStorage.setItem("privateDriverFlag", e.target.checked);
-                    e.target.checked
-                      ? setIsSwitchedToPrivateDriver(true)
-                      : setIsSwitchedToPrivateDriver(false);
-                  }}
-                />
-                <div class={`${classes.slider} ${classes.round}`}></div>
-              </label>
+              <p className={classes.adminText}>
+                You can check all data of your Organization in Dashboard
+              </p>
             </div>
-          )}
-        </header>
-        {isSwitchedToPrivateDriver && <DriverData toggle="true" />}
-        {!isSwitchedToPrivateDriver && (
+            {sessionStorage.getItem("userType") === "AccountManager" && (
+              <button
+                onClick={() => history.push("/new-registration")}
+                className={classes.newCorpButton}
+              >
+                Add New Corporate
+              </button>
+            )}
+          </header>
           <div className={classes.cards}>
             <div
               className={classes.text}
               title="Click to see Monthly Trip details"
-              onClick={() => history.push("/shuttle/trips")}
+              onClick={() => history.push("/trips")}
             >
               <p>Trips</p>
               {isApiError && (
@@ -274,13 +245,10 @@ const Main = (props) => {
               )}
             </div>
           </div>
-        )}
-        {!isSwitchedToPrivateDriver && (
-          <LiveTrip
-            driverList={isLoading ? [] : driverList}
-            isLoading={isLoading}
-          />
-        )}
+          <div style={{height: "70%", margin: "-15px"}}>
+            <DriversData />
+          </div>
+        </div>
       </div>
       {!sessionStorage.getItem("splashFlag") && (
         <div

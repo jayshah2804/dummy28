@@ -33,6 +33,10 @@ const Login = ({ login }) => {
       sessionStorage.setItem("adminName", data.Username);
       sessionStorage.setItem("roleId", data.RoleID);
       sessionStorage.setItem("adminDepartmentID", data.AdminDepartmentID);
+      sessionStorage.setItem("corpId", data.CorporateID);
+      sessionStorage.setItem("type", data.UserType);
+      sessionStorage.setItem("document", data.IsDocument);
+      sessionStorage.setItem("cpName", data.CorporateName);
       sessionStorage.setItem("enabledModule", data.EnabledModule);
       setIsCall(false);
       data.Message === "Success"

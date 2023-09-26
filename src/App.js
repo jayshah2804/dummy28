@@ -6,7 +6,8 @@ import Header from "./Components/Header/Header";
 import Dashboard from "./Components/Dashboard/Main";
 import Login from "./Components/Home/Login";
 import SideMenu from "./Components/Header/SideMenu";
-import Trips from "./Components/Trips/Trips";
+import ShuttleTrips from "./Components/Trips/Trips";
+import Trips from "./Components/CommonTrips/Trips";
 import Support from "./Components/Support/Support";
 import Routes from "./Components/Routes/Route";
 import Stops from "./Components/Routes/Stops";
@@ -30,6 +31,7 @@ import EditDriver from "./Components/PrivateDriver/Drivers/EditDriver";
 import ShuttleDrivers from "./Components/Shuttle/Drivers/EditDriver";
 import Bookings from "./Components/Shuttle/Route Booking/Bookings";
 import NewBooking from "./Components/Shuttle/Route Booking/NewBooking";
+import DriversData from "./Components/Live Tracking/DriversData";
 
 let flag = true;
 let prevURL = "";
@@ -69,7 +71,7 @@ function App() {
     setIsSideMenuOpen(false);
   };
   return (
-    <div>
+    <div style={{height: "100%"}}>
       <Switch>
         <Route path="/" exact>
           <Redirect to="/login" />
@@ -92,7 +94,7 @@ function App() {
             />
             <div className="paths">
               <Route path="/shuttle/trips">
-                <Trips />
+                <ShuttleTrips />
               </Route>
               <Route path="/dashboard">
                 <Dashboard setIsLoggedIn={setIsLoggedIn} />
@@ -105,6 +107,9 @@ function App() {
               </Route>
               <Route path="/departments" exact>
                 <Departments />
+              </Route>
+              <Route path='/live-tracking' exact>
+                <DriversData />
               </Route>
               <Route path="/departments/add-new" exact>
                 <AddDepartment />
@@ -132,6 +137,9 @@ function App() {
               </Route>
               <Route path="/admins">
                 <Admins />
+              </Route>
+              <Route path="/trips">
+                <Trips />
               </Route>
               <Route path="/support">
                 <Support />

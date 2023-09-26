@@ -263,18 +263,19 @@ const ShiftCreation = () => {
     }
 
     const corporateSelectHandler = (cpName, dptNames, dptIds) => {
+        debugger;
         corporateNameRef.current.value = cpName;
         if (dptNames.toLowerCase().includes("admin")) {
             let departmets = dptNames.toLowerCase().split(",");
             let indexOf = departmets.indexOf("admin department");
             selectedDepartment.name = departmets[indexOf];
-            selectedDepartment.dptId = dptIds[indexOf];
+            selectedDepartment.dptId = dptIds.split(",")[indexOf];
         }
         else {
             let departmets = dptNames.toLowerCase().split(",");
             let indexOf = departmets.indexOf("imitation department");
             selectedDepartment.name = departmets[indexOf];
-            selectedDepartment.dptId = dptIds[indexOf];
+            selectedDepartment.dptId = dptIds.split(",")[indexOf];
         }
         setFormError(prev => ({ ...prev, coprorateNameError: "" }));
         departmentNameRef.current.value = selectedDepartment.name;
