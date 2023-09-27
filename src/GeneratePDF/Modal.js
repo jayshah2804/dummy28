@@ -172,6 +172,7 @@ const Modal = (props) => {
       let endDate = endDateValue
         ? formatToMMDDYYYYfromYYYYMMDD(endDateValue)
         : "";
+      debugger;
       sendRequest(
         {
           url: "/api/v1/" + (selectedModule === "schedule" ? reportURLs["scheduleTrips"] : reportURLs[props.type]),
@@ -181,8 +182,8 @@ const Modal = (props) => {
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            driverEmailID: selectedDriverData.email ?? "",
-            riderMobileNumber: selectedRiderData.number ?? "",
+            driverEmailID: selectedDriverData.DriverEmailID ?? "",
+            riderMobileNumber: selectedRiderData.MobileNumber ?? "",
             corporateID: props.type === "trips" ? selectedCoroparte.CorporateID : sessionStorage.getItem("adminDepartmentID"),
             isPrivateTrip: selectedModule === "private" ? "1" : "0",
             startDate: startDate,
