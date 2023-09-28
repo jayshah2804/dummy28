@@ -12,6 +12,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import useHttp from "../../Hooks/use-http";
 import DriverBooking from "./PrivateDriverBooking";
@@ -55,6 +57,7 @@ const LiveTracking = (props) => {
   const [isTripEnded, setIsTripEnded] = useState(false);
   const [driverFilterType, setDriverFilterType] = useState("All");
   const [filteredDriverData, setFilteredDriverData] = useState([]);
+  const [servicesTabbarValue, setServicesTabbarValue] = useState(0);
   const searchInputRef = useRef();
   const history = useHistory();
 
@@ -543,9 +546,24 @@ const LiveTracking = (props) => {
           <div className="header">
             <h4>Driver List</h4>
             <div className="driver-filter">
-              <TextField id="outlined-basic" size="small" inputRef={searchInputRef} label="Search Driver" variant="standard" onChange={driverSearchHandler} />
-              <FormControl size="small" className="driverType" >
-                {/* <InputLabel id="demo-simple-select-label">Type</InputLabel> */}
+              <Tabs variant='fullWidth' sx={{ button: { padding: "0" } }} style={{ cursor: "pointer" }} centered value={servicesTabbarValue} onChange={(e, newValue) => {
+                if (newValue == "0")
+                  // setFilteredDriverData(props.driverData.filter(data => data.driverName.toLowerCase().includes(searchInputRef?.current?.value?.toLowerCase())));
+                  setFilteredDriverData(props.driverData);
+                else if (newValue == "2")
+                  setFilteredDriverData(props.driverData.filter((data) => data.isOnTrip == "1"));
+                else if (newValue == "1")
+                  setFilteredDriverData(props.driverData.filter((data) => data.isOnline == "1" && data.isOnTrip == "0"));
+                setDriverFilterType(newValue == "0" ? "All" : (newValue == "1" ? "Online" : "On Trip"));
+                setOnTripDriverEmail("");
+                setServicesTabbarValue(newValue);
+              }} aria-label="basic tabs example">
+                <Tab label="All" style={{ fontWeight: "bold" }} />
+                <Tab label="Online" style={{ fontWeight: "bold" }} />
+                <Tab label="On Trip" style={{ fontWeight: "bold" }} />
+              </Tabs>
+              {/* <TextField id="outlined-basic" size="small" inputRef={searchInputRef} label="Search Driver" variant="standard" onChange={driverSearchHandler} /> */}
+              {/* <FormControl size="small" className="driverType" >
                 <Select
                   labelId="demo-simple-select-label"
                   variant="standard"
@@ -556,10 +574,8 @@ const LiveTracking = (props) => {
                     if (e.target.value === "All")
                       setFilteredDriverData(props.driverData.filter(data => data.driverName.toLowerCase().includes(searchInputRef.current.value?.toLowerCase())));
                     else if (e.target.value === "On Trip")
-                      // setFilteredDriverData(props.driverData.filter((data) => data.isOnTrip == "1"));
                       setFilteredDriverData(filteredDriverData.filter((data) => data.isOnTrip == "1"));
                     else if (e.target.value === "Online")
-                      // setFilteredDriverData(props.driverData.filter((data) => data.isOnline == "1" && data.isOnTrip == "0"));
                       setFilteredDriverData(filteredDriverData.filter((data) => data.isOnline == "1" && data.isOnTrip == "0"));
                     setDriverFilterType(e.target.value);
                     setOnTripDriverEmail("");
@@ -569,7 +585,7 @@ const LiveTracking = (props) => {
                   <MenuItem value={"Online"}>Online</MenuItem>
                   <MenuItem value={"On Trip"}>On Trip</MenuItem>
                 </Select>
-              </FormControl >
+              </FormControl > */}
             </div>
           </div>
           <div className="driverDetails">
@@ -594,27 +610,30 @@ const LiveTracking = (props) => {
                   <div
                     style={{
                       display: "flex",
-                      gap: "5px",
+                      gap: "10px",
                       alignItems: "center",
                     }}
                   >
-                    <div style={{ position: "relative" }}>
+                    <div style={{ position: "relative", alignSelf: "center" }}>
                       <img className="driverPhoto" src={ele.driverImage} />
                       <p
                         className={
-                          ele?.isOnline == "1"
-                            ? "online"
-                            : "offline"
+                          ele?.isOnTrip == "1"
+                            ? "ontrip" : (ele.isOnline == "1" ? "online" : "offline")
+                          // : "offline"
                         }
                       ></p>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <span className="drivername">{ele.driverName}</span>
+                      <span className="carnumber">{ele.carNumber.replaceAll("-", "")}</span>
+                      {(ele.isOnTrip == "1" || (ele.isOnline == "1" && ele.isShiftStarted == "1")) &&
+                        <span style={{ fontSize: "12px", fontFamily: "Poppins", textTransform: "capitalize", color: "gray" }}>{ele.isOnTrip == "0" ? "private" : ele.tripType}</span>
+                      }
                       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                        <span className="carnumber">{ele.carNumber.replaceAll("-", "")}</span>
-                        {(ele.isOnTrip == "1" || (ele.isOnline == "1" && ele.isShiftStarted == "1")) &&
+                        {/* {(ele.isOnTrip == "1" || (ele.isOnline == "1" && ele.isShiftStarted == "1")) &&
                           <span className={ele.isOnTrip == "0" ? `tripType private` : `tripType ${ele.tripType?.toLowerCase()}`} >{ele.isOnTrip == "0" ? "private" : ele.tripType}</span>
-                        }
+                        } */}
                       </div>
                     </div>
                   </div>

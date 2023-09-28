@@ -107,18 +107,13 @@ const Main = (props) => {
     if (data === "Request failed!") {
       setIsApiError("No data available");
     } else {
-      driverList = data.Driverlist;
-      sessionStorage.setItem("driverList", JSON.stringify(driverList));
       let myData = {
-        riders: data.Rider,
-        routes: data.Route,
+        tripKm: data.TripKilometers,
         trips: data.Trip,
         activeTrips: data.ActiveTrip,
       };
-      // console.log(myData);
       setListData(myData);
     }
-    // setFilteredData(department_data)
   };
 
   const { isLoading, sendRequest } = useHttp();
@@ -153,26 +148,70 @@ const Main = (props) => {
   return (
     <React.Fragment>
       <div className={classes.container} id="myContainer">
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%", width: "100%" }}>
           <header>
             <div>
               <p className={classes.adminName}>
-                {"Welcome " + sessionStorage.getItem("adminName")}
+                {"Welcome " + sessionStorage.getItem("adminName")},
               </p>
               <p className={classes.adminText}>
                 You can check all data of your Organization in Dashboard
               </p>
             </div>
-            {sessionStorage.getItem("userType") === "AccountManager" && (
+            <div style={{ display: "flex", gap: "2%", width: "50%" }}>
+              <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "100%", display: "flex" }}>
+                <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
+                  <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(42, 149, 69, 255)" }}></span>
+                </div>
+                <div style={{ width: "85%", display: "flex", flexDirection: "column" }}>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px" }}>Current Month Trips</span>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px" }}>
+                    {isLoading ?
+                      <span style={{ color: "gray" }}>Loading...</span> :
+                      <span style={{ fontFamily: "Poppins" }}>{listData.trips}</span>
+                    }
+                  </span>
+                </div>
+              </div>
+              <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "100%", display: "flex" }}>
+                <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
+                  <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(245, 174, 48, 255)" }}></span>
+                </div>
+                <div style={{ width: "85%", display: "flex", flexDirection: "column" }}>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px" }}>Current Month Kilometers</span>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px" }}>
+                    {isLoading ?
+                      <span style={{ color: "gray" }}>Loading...</span> :
+                      <span style={{ fontFamily: "Poppins" }}>{listData.tripKm}</span>
+                    }
+                  </span>
+                </div>
+              </div>
+              <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "100%", display: "flex" }}>
+                <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
+                  <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(34, 137, 203, 255)" }}></span>
+                </div>
+                <div style={{ width: "85%", display: "flex", flexDirection: "column" }}>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px" }}>Active Trips</span>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px" }}>
+                    {isLoading ?
+                      <span style={{ color: "gray" }}>Loading...</span> :
+                      <span style={{ fontFamily: "Poppins" }}>{listData.activeTrips}</span>
+                    }
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* {sessionStorage.getItem("userType") === "AccountManager" && (
               <button
                 onClick={() => history.push("/new-registration")}
                 className={classes.newCorpButton}
               >
                 Add New Corporate
               </button>
-            )}
+            )} */}
           </header>
-          <div className={classes.cards}>
+          {/* <div className={classes.cards}>
             <div
               className={classes.text}
               title="Click to see Monthly Trip details"
@@ -244,8 +283,8 @@ const Main = (props) => {
                 </span>
               )}
             </div>
-          </div>
-          <div style={{ height: "70%", margin: "-15px" }}>
+          </div> */}
+          <div style={{ height: "90%", margin: "0 -15px" }}>
             <DriversData />
           </div>
         </div>
