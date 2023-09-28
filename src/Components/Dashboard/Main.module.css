@@ -46,13 +46,17 @@
 
 .adminName {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0.5px;
+  font-family: "Poppins";
+  font-weight: 500;
 }
 
 .adminText {
-  font-size: 14px;
+  font-size: 12px;
   color: gray;
+  font-family: "Poppins";
+  font-weight: 300;
 }
 
 .cards {

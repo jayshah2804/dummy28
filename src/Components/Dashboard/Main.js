@@ -164,11 +164,11 @@ const Main = (props) => {
                   <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(42, 149, 69, 255)" }}></span>
                 </div>
                 <div style={{ width: "85%", display: "flex", flexDirection: "column", height: "auto" }}>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Current Month Trips</span>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "10px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Current Month Trips</span>
                   <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px", height: "50%" }}>
                     {isLoading ?
                       <span style={{ color: "gray" }}>Loading...</span> :
-                      <span style={{ fontFamily: "Poppins" }}>{listData.trips}</span>
+                      <span style={{ fontFamily: "Poppins", fontWeight: "bold" }}>{listData.trips}</span>
                     }
                   </span>
                 </div>
@@ -178,11 +178,11 @@ const Main = (props) => {
                   <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(245, 174, 48, 255)" }}></span>
                 </div>
                 <div style={{ width: "85%", display: "flex", flexDirection: "column", height: "auto" }}>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Current Month Kilometers</span>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "10px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Current Month Kilometers</span>
                   <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px", height: "50%" }}>
                     {isLoading ?
                       <span style={{ color: "gray" }}>Loading...</span> :
-                      <span style={{ fontFamily: "Poppins" }}>{listData.tripKm}</span>
+                      <span style={{ fontFamily: "Poppins", fontWeight: "bold" }}>{listData.tripKm}</span>
                     }
                   </span>
                 </div>
@@ -192,11 +192,11 @@ const Main = (props) => {
                   <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(34, 137, 203, 255)" }}></span>
                 </div>
                 <div style={{ width: "85%", display: "flex", flexDirection: "column", height: "auto" }}>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Active Trips</span>
+                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "10px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Active Trips</span>
                   <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px", height: "50%" }}>
                     {isLoading ?
                       <span style={{ color: "gray" }}>Loading...</span> :
-                      <span style={{ fontFamily: "Poppins" }}>{listData.activeTrips}</span>
+                      <span style={{ fontFamily: "Poppins", fontWeight: "bold" }}>{listData.activeTrips}</span>
                     }
                   </span>
                 </div>

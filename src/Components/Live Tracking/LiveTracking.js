@@ -544,9 +544,10 @@ const LiveTracking = (props) => {
       >
         <div className="driverlist">
           <div className="header">
-            <h4>Driver List</h4>
+            {/* <h4>Driver List</h4> */}
+            <p style={{ fontFamily: "Poppins", fontSize: "16px", fontWeight: "300" }}>Driver List</p>
             <div className="driver-filter">
-              <Tabs variant='fullWidth' sx={{ button: { padding: "0" } }} style={{ cursor: "pointer" }} centered value={servicesTabbarValue} onChange={(e, newValue) => {
+              <Tabs variant='fullWidth' sx={{ button: { padding: "0", fontSize: "12px" }, div: { minHeight: "35px" }, span: { bottom: "5px" } }} style={{ cursor: "pointer" }} centered value={servicesTabbarValue} onChange={(e, newValue) => {
                 if (newValue == "0")
                   // setFilteredDriverData(props.driverData.filter(data => data.driverName.toLowerCase().includes(searchInputRef?.current?.value?.toLowerCase())));
                   setFilteredDriverData(props.driverData);
@@ -558,9 +559,9 @@ const LiveTracking = (props) => {
                 setOnTripDriverEmail("");
                 setServicesTabbarValue(newValue);
               }} aria-label="basic tabs example">
-                <Tab label="All" style={{ fontWeight: "bold" }} />
-                <Tab label="Online" style={{ fontWeight: "bold" }} />
-                <Tab label="On Trip" style={{ fontWeight: "bold" }} />
+                <Tab label="All" style={{ fontWeight: "bold" }} sx={{ button: { minHeight: "35px" } }} />
+                <Tab label="Online" style={{ fontWeight: "bold" }} sx={{ button: { minHeight: "35px" } }} />
+                <Tab label="On Trip" style={{ fontWeight: "bold" }} sx={{ button: { minHeight: "35px" } }} />
               </Tabs>
               {/* <TextField id="outlined-basic" size="small" inputRef={searchInputRef} label="Search Driver" variant="standard" onChange={driverSearchHandler} /> */}
               {/* <FormControl size="small" className="driverType" >
@@ -628,7 +629,7 @@ const LiveTracking = (props) => {
                       <span className="drivername">{ele.driverName}</span>
                       <span className="carnumber">{ele.carNumber.replaceAll("-", "")}</span>
                       {(ele.isOnTrip == "1" || (ele.isOnline == "1" && ele.isShiftStarted == "1")) &&
-                        <span style={{ fontSize: "12px", fontFamily: "Poppins", textTransform: "capitalize", color: "gray" }}>{ele.isOnTrip == "0" ? "private" : ele.tripType}</span>
+                        <span style={{ fontSize: "10px", fontFamily: "Poppins", textTransform: "capitalize", color: "gray" }}>{ele.isOnTrip == "0" ? "private" : ele.tripType}</span>
                       }
                       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                         {/* {(ele.isOnTrip == "1" || (ele.isOnline == "1" && ele.isShiftStarted == "1")) &&
@@ -671,7 +672,7 @@ const LiveTracking = (props) => {
         </div>
         <div className="privateDriverMap-container">
           <div className="mapText">
-            <span>Live Trip Tracker</span>
+            <span style={{ fontFamily: "Poppins", fontSize: "16px", fontWeight: "300" }} >Live Trip Tracker</span>
           </div>
           <div className="livetrip" id="live-map"></div>
           {riderDetails && (
