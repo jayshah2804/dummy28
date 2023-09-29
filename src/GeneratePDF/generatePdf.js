@@ -171,10 +171,11 @@ const generatePDF = (startDate, endDate, data, riderName, driverName, tripsCount
             function (data) {
                 doc.setFont('openSans');
                 doc.setFontSize(8);
-                doc.text(`${isSchedueBooking ? "Shifts Statement" : "Trips Statement"}` + (riderName ? `of rider ${riderName}` : "") +
+                doc.text(`${isSchedueBooking ? "Shifts Statement" : "Trips Statement"}` + (riderName ? ` of rider ${riderName}` : "") +
                     (driverName ? ` from driver ${driverName}` : "") +
                     (startDate ?
-                        ` from ${startDate.split("-")[2] + " " + months[+startDate.split("-")[1] - 1] + " " + startDate.split("-")[0]} to ${endDate.split("-")[2] + " " + months[+endDate.split("-")[1] - 1] + " " + endDate.split("-")[0]}` :
+                        ` from ${startDate} to ${endDate}` :
+                        // ` from ${startDate.split("-")[2] + " " + months[+startDate.split("-")[1] - 1] + " " + startDate.split("-")[0]} to ${endDate.split("-")[2] + " " + months[+endDate.split("-")[1] - 1] + " " + endDate.split("-")[0]}` :
                         ` till ${new Date().getDate() + " " + months[new Date().getMonth()] + " " + new Date().getFullYear()}`),
                     30, isSchedueBooking != "1" ? (pageCount === 0 ? 115 : 65) : (75));
                 doc.addImage(cpLogo, 'png', 190, 10, 70, 32);

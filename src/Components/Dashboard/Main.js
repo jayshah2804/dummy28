@@ -158,8 +158,8 @@ const Main = (props) => {
                 You can check all data of your Organization in Dashboard
               </p>
             </div>
-            <div style={{ display: "flex", gap: "2%", width: "50%", height: "100%", justifyContent: "space-between" }}>
-              <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "32.5%", display: "flex" }}>
+            <div className={classes.cardContainer}>
+              <div>
                 <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
                   <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(42, 149, 69, 255)" }}></span>
                 </div>
@@ -173,7 +173,7 @@ const Main = (props) => {
                   </span>
                 </div>
               </div>
-              <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "32.5%", display: "flex" }}>
+              <div>
                 <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
                   <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(245, 174, 48, 255)" }}></span>
                 </div>
@@ -187,7 +187,7 @@ const Main = (props) => {
                   </span>
                 </div>
               </div>
-              <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "32.5%", display: "flex" }}>
+              <div>
                 <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
                   <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(34, 137, 203, 255)" }}></span>
                 </div>
@@ -201,34 +201,6 @@ const Main = (props) => {
                   </span>
                 </div>
               </div>
-              {/* <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "100%", display: "flex" }}>
-                <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
-                  <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(245, 174, 48, 255)" }}></span>
-                </div>
-                <div style={{ width: "85%", display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px" }}>Current Month Kilometers</span>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px" }}>
-                    {isLoading ?
-                      <span style={{ color: "gray" }}>Loading...</span> :
-                      <span style={{ fontFamily: "Poppins" }}>{listData.tripKm}</span>
-                    }
-                  </span>
-                </div>
-              </div>
-              <div style={{ backgroundColor: "white", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)", padding: "10px 15px", borderRadius: "10px", height: "100%", width: "100%", display: "flex" }}>
-                <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
-                  <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(34, 137, 203, 255)" }}></span>
-                </div>
-                <div style={{ width: "85%", display: "flex", flexDirection: "column" }}>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "12px" }}>Active Trips</span>
-                  <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px" }}>
-                    {isLoading ?
-                      <span style={{ color: "gray" }}>Loading...</span> :
-                      <span style={{ fontFamily: "Poppins" }}>{listData.activeTrips}</span>
-                    }
-                  </span>
-                </div>
-              </div>*/}
             </div>
             {/* {sessionStorage.getItem("userType") === "AccountManager" && (
               <button

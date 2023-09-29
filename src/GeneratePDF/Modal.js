@@ -48,20 +48,20 @@ const Modal = (props) => {
         let totalKm = 0;
         let totalTrips = 0;
         for (let i = 0; i < data?.ReportDetails?.length; i++) {
-          totalKm += +(data.ReportDetails[i].TripDistance ?? data.ReportDetails[i].TripDistance);
+          totalKm += +(data.ReportDetails[i].TripDistance ?? data.ReportDetails[i].TripKm);
           totalTrips += data.ReportDetails[i]?.Totaltrip ? data.ReportDetails[i]?.Totaltrip : 0;
         }
-        if (!(selectedDriverData.name || selectedRiderData.name)) {
+        if (!(selectedDriverData.DriverName || selectedRiderData.OfficialName)) {
           for (let i = 0; i < data?.AdhocDriverList?.length; i++) {
             totalKm += +data.AdhocDriverList[i].kilometers;
           }
         }
         generatePDF(
-          new Date(startDateValue).getFullYear() + "/" + (+new Date(startDateValue).getMonth() + 1) + "/" + new Date(startDateValue).getDate(),
-          new Date(endDateValue).getFullYear() + "/" + (+new Date(endDateValue).getMonth() + 1) + "/" + new Date(endDateValue).getDate(),
+          new Date(startDateValue).getDate() + "/" + (+new Date(startDateValue).getMonth() + 1) + "/" + new Date(startDateValue).getFullYear(),
+          new Date(endDateValue).getDate() + "/" + (+new Date(endDateValue).getMonth() + 1) + "/" + new Date(endDateValue).getFullYear(),
           data.ReportDetails,
-          selectedRiderData.name ?? "",
-          selectedDriverData.name ?? "",
+          selectedRiderData?.OfficialName ?? "", //OfficialName
+          selectedDriverData?.DriverName ?? "", //DriverName
           totalTrips ? totalTrips : data.ReportDetails?.length,
           totalKm.toFixed(2),
           JSON.parse(data.CorporateLogo)[0].Image,
@@ -172,7 +172,6 @@ const Modal = (props) => {
       let endDate = endDateValue
         ? formatToMMDDYYYYfromYYYYMMDD(endDateValue)
         : "";
-      debugger;
       sendRequest(
         {
           url: "/api/v1/" + (selectedModule === "schedule" ? reportURLs["scheduleTrips"] : reportURLs[props.type]),
@@ -182,8 +181,8 @@ const Modal = (props) => {
           },
           body: {
             emailID: sessionStorage.getItem("user"),
-            driverEmailID: selectedDriverData.DriverEmailID ?? "",
-            riderMobileNumber: selectedRiderData.MobileNumber ?? "",
+            driverEmailID: selectedDriverData?.DriverEmailID ?? "",
+            riderMobileNumber: selectedRiderData?.MobileNumber ?? "",
             corporateID: props.type === "trips" ? selectedCoroparte.CorporateID : sessionStorage.getItem("adminDepartmentID"),
             isPrivateTrip: selectedModule === "private" ? "1" : "0",
             startDate: startDate,
@@ -301,7 +300,7 @@ const Modal = (props) => {
               />
             </div>
           </LocalizationProvider>
-          {(props.isShift != "1" && props.type !== "scheduleTrips" && props.type !== "bookingRequests") &&
+          {(props.type !== "scheduleTrips" && props.type !== "bookingRequests") &&
             <Autocomplete
               id="tags-standard"
               options={driverAndRiderData.driverList ?? []}
@@ -317,7 +316,7 @@ const Modal = (props) => {
               )}
             />
           }
-          {!(props.type === "scheduleTrips" || props.type === "bookingRequests") &&
+          {!(props.type === "scheduleTrips" || props.type === "bookingRequests" || props.isShift === "1") &&
             <Autocomplete
               id="tags-standard"
               options={driverAndRiderData?.riderList ?? []}
