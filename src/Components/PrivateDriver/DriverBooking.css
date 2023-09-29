@@ -40,6 +40,7 @@
   flex-direction: column;
   align-items: end;
   gap: 4px;
+  text-align: end;
 }
 
 .driverBooking-container .driverDetailsInfo {
@@ -240,17 +241,15 @@
   width: 100%;
   height: 100%;
   border-radius: 15px;
-  background-image: linear-gradient(
-    90deg,
-    #2289cb 0%,
-    #2289cb 25%,
-    #e22c1d 25%,
-    #e22c1d 50%,
-    #2a9545 50%,
-    #2a9545 75%,
-    #f5ae30 75%,
-    #f5ae30 100%
-  );
+  background-image: linear-gradient(90deg,
+      #2289cb 0%,
+      #2289cb 25%,
+      #e22c1d 25%,
+      #e22c1d 50%,
+      #2a9545 50%,
+      #2a9545 75%,
+      #f5ae30 75%,
+      #f5ae30 100%);
   background-position: 0 0;
   background-repeat: repeat-x;
   animation: movebar 5s linear infinite;
@@ -336,5 +335,19 @@
 
   to {
     background-position: 400px 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .driverBooking-container {
+    width: 300px;
+  }
+
+  .driverBooking-container main {
+    margin: 10px 20px;
+  }
+
+  .driverBooking-container footer {
+    margin-right: 20px;
   }
 }

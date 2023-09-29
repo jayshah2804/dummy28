@@ -138,7 +138,6 @@ const PrivateDriverBooking = (props) => {
 
     const riderList = (data) => {
         // console.log(data.RidersList);
-        debugger;
         data.RidersList.push({
             mobileNumber: "",
             OfficialName: "Guest"
@@ -154,7 +153,6 @@ const PrivateDriverBooking = (props) => {
     const { isLoading, sendRequest } = useHttp();
 
     useEffect(() => {
-        debugger;
         if (sessionStorage.getItem("corporateRiderList") && JSON.parse(sessionStorage.getItem("corporateRiderList"))[props.bookedDriver[0].activeShiftCorporateId]) {
             setRiderData(JSON.parse(sessionStorage.getItem("corporateRiderList"))[props.bookedDriver[0].activeShiftCorporateId]);
         } else
@@ -403,7 +401,6 @@ const PrivateDriverBooking = (props) => {
             setIsSearchedRidersData(false);
         }
         for (let i = 0; i < riderData.length; i++) {
-            debugger;
             if (
                 riderData[i].OfficialName.toLowerCase().includes(
                     riderInputSearchRef.current.value.toLowerCase()
