@@ -51,7 +51,7 @@ const Modal = (props) => {
           totalKm += +(data.ReportDetails[i].TripDistance ?? data.ReportDetails[i].TripKm);
           totalTrips += data.ReportDetails[i]?.Totaltrip ? data.ReportDetails[i]?.Totaltrip : 0;
         }
-        if (!(selectedDriverData.DriverName || selectedRiderData.OfficialName)) {
+        if (!(selectedDriverData?.DriverName || selectedRiderData?.OfficialName)) {
           for (let i = 0; i < data?.AdhocDriverList?.length; i++) {
             totalKm += +data.AdhocDriverList[i].kilometers;
           }
@@ -120,9 +120,9 @@ const Modal = (props) => {
             "Content-Type": "application/json",
           },
           body: {
-            emailID: sessionStorage.getItem("user"),
-            roleID: sessionStorage.getItem("roleId"),
-            corporateID: sessionStorage.getItem("roleId") === "1" ? selectedCoroparte.CorporateID : sessionStorage.getItem("corpId"),
+            emailID: localStorage.getItem("user"),
+            roleID: localStorage.getItem("roleId"),
+            corporateID: localStorage.getItem("roleId") === "1" ? selectedCoroparte.CorporateID : localStorage.getItem("corpId"),
             isRider: "1",
             isDriver: "1"
           },
@@ -133,7 +133,7 @@ const Modal = (props) => {
 
   useEffect(() => {
     let modules = "";
-    if (sessionStorage.getItem("roleId") === "1")
+    if (localStorage.getItem("roleId") === "1")
       modules = selectedCoroparte?.EnabledModule?.split(",");
     else
       modules = sessionStorage.getItem("enabledModule").split(",");
@@ -141,7 +141,7 @@ const Modal = (props) => {
   }, [selectedCoroparte]);
 
   useEffect(() => {
-    if (sessionStorage.getItem("roleId") === "1")
+    if (localStorage.getItem("roleId") === "1")
       sendRequest(
         {
           url: "/api/v1/Corporate/GetAllDepartmentByCorporate",
@@ -150,12 +150,12 @@ const Modal = (props) => {
             "Content-Type": "application/json",
           },
           body: {
-            emailID: sessionStorage.getItem("user")
+            emailID: localStorage.getItem("user")
           },
         },
         getCorporateList
       );
-    else selectedCoroparte.CorporateID = sessionStorage.getItem("corpId");
+    else selectedCoroparte.CorporateID = localStorage.getItem("corpId");
   }, [sendRequest]);
 
   useEffect(() => {
@@ -180,10 +180,10 @@ const Modal = (props) => {
             "Content-Type": "application/json",
           },
           body: {
-            emailID: sessionStorage.getItem("user"),
+            emailID: localStorage.getItem("user"),
             driverEmailID: selectedDriverData?.DriverEmailID ?? "",
             riderMobileNumber: selectedRiderData?.MobileNumber ?? "",
-            corporateID: props.type === "trips" ? selectedCoroparte.CorporateID : sessionStorage.getItem("adminDepartmentID"),
+            corporateID: props.type === "trips" ? selectedCoroparte.CorporateID : localStorage.getItem("adminDepartmentID"),
             isPrivateTrip: selectedModule === "private" ? "1" : "0",
             startDate: startDate,
             endDate: endDate,
@@ -249,8 +249,8 @@ const Modal = (props) => {
             id="tags-standard"
             options={corporatesData}
             getOptionLabel={(cp) => cp?.CorporateName}
-            disabled={sessionStorage.getItem("roleId") === "1" ? false : true}
-            defaultValue={sessionStorage.getItem("roleId") !== "1" ? { CorporateName: sessionStorage.getItem("cpName") } : { CorporateName: "" }}
+            disabled={localStorage.getItem("roleId") === "1" ? false : true}
+            defaultValue={localStorage.getItem("roleId") !== "1" ? { CorporateName: localStorage.getItem("cpName") } : { CorporateName: "" }}
             onChange={(e, newValue) => newValue && setSelectedCorporate(newValue)}
             renderInput={(params) => (
               <TextField
