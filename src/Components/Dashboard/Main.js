@@ -62,11 +62,11 @@ const Main = (props) => {
   useEffect(() => {
     // alert("hello")
     if (
-      sessonStorage.getItem("privateDriverFlag") == "true" &&
+      sessionStorage.getItem("privateDriverFlag") == "true" &&
       !isSwitchedToPrivateDriver
     )
       document.getElementById("checkbox")?.click();
-    // sessonStorage.setItem("privateDriverFlag", "false");
+    // sessionStorage.setItem("privateDriverFlag", "false");
   }, []);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const Main = (props) => {
         clearInterval(interval);
         window.removeEventListener("mousemove", clearSessionTimeout);
         // sessionStorage.setItem("login", false);
-        sessonStorage.setItem("login", false);
+        sessionStorage.setItem("login", false);
         sessionStorage.setItem("splashFlag", 0);
         history.push("/");
         props.setIsLoggedIn(false);
@@ -138,7 +138,7 @@ const Main = (props) => {
           "Content-Type": "application/json",
         },
         body: {
-          emailID: sessonStorage.getItem("user"),
+          emailID: sessionStorage.getItem("user"),
         },
       },
       authenticateUser
@@ -153,7 +153,7 @@ const Main = (props) => {
           <header>
             <div>
               <p className={classes.adminName}>
-                {"Welcome " + sessonStorage.getItem("adminName")},
+                {"Welcome " + sessionStorage.getItem("adminName")},
               </p>
               <p className={classes.adminText}>
                 You can check all data of your Organization in Dashboard
@@ -203,7 +203,7 @@ const Main = (props) => {
                 </div>
               </div>
             </div>
-            {/* {sessonStorage.getItem("userType") === "AccountManager" && (
+            {/* {sessionStorage.getItem("userType") === "AccountManager" && (
               <button
                 onClick={() => history.push("/new-registration")}
                 className={classes.newCorpButton}
