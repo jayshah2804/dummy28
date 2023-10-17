@@ -81,7 +81,8 @@ const Main = (props) => {
       if (current - initial > 1800) {
         clearInterval(interval);
         window.removeEventListener("mousemove", clearSessionTimeout);
-        sessionStorage.setItem("login", false);
+        // sessionStorage.setItem("login", false);
+        localStorage.setItem("login", false);
         sessionStorage.setItem("splashFlag", 0);
         history.push("/");
         props.setIsLoggedIn(false);
@@ -137,7 +138,7 @@ const Main = (props) => {
           "Content-Type": "application/json",
         },
         body: {
-          emailID: sessionStorage.getItem("user"),
+          emailID: localStorage.getItem("user"),
         },
       },
       authenticateUser
@@ -152,7 +153,7 @@ const Main = (props) => {
           <header>
             <div>
               <p className={classes.adminName}>
-                {"Welcome " + sessionStorage.getItem("adminName")},
+                {"Welcome " + localStorage.getItem("adminName")},
               </p>
               <p className={classes.adminText}>
                 You can check all data of your Organization in Dashboard
@@ -163,7 +164,7 @@ const Main = (props) => {
                 <div style={{ width: "15%", height: "15px", alignSelf: "center" }}>
                   <span style={{ display: "inline-block", width: "15px", height: "15px", borderRadius: "50%", backgroundColor: "rgba(42, 149, 69, 255)" }}></span>
                 </div>
-                <div style={{ width: "85%", display: "flex", flexDirection: "column", height: "auto" }}>
+                <div style={{ width: "85%", display: "flex", flexDirection: "column", height: "auto", cursor: "pointer" }} onClick={() => history.push("/trips")} >
                   <span style={{ fontFamily: 'Poppins', fontWeight: "300", fontSize: "10px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Current Month Trips</span>
                   <span style={{ fontFamily: 'Poppins', fontWeight: "500", fontSize: "16px", height: "50%" }}>
                     {isLoading ?
@@ -202,7 +203,7 @@ const Main = (props) => {
                 </div>
               </div>
             </div>
-            {/* {sessionStorage.getItem("userType") === "AccountManager" && (
+            {/* {localStorage.getItem("userType") === "AccountManager" && (
               <button
                 onClick={() => history.push("/new-registration")}
                 className={classes.newCorpButton}
